@@ -88,7 +88,6 @@ function ResponsiveDrawer(props) {
           { text: 'profile', icon: 'person' },
           { text: 'dashboard', icon: 'dashboard' },
           { text: 'people', icon: 'people' },
-          { text: 'map', icon: 'map' },
           { text: 'components', icon: 'apps' },
           { text: 'settings', icon: 'settings' }
         ].map(({ text, icon }, index) => (

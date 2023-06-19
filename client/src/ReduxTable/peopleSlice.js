@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 let nextIdVal = 0;
 
@@ -8,13 +8,14 @@ export function nextID() {
 }
 
 export const peopleSlice = createSlice({
-  name: "people",
+  name: 'people',
   initialState: {
     list: [
-      { name: "Joe", img: "/img/driver.png", id: nextID() },
-      { name: "Mary", img: "/img/driver2.png", id: nextID() },
+      { name: 'Joe', img: '/img/driver.png', id: nextID() },
+      { name: 'Mary', img: '/img/driver2.png', id: nextID() },
+      { name: 'Ryan', id: nextID() }
     ],
-    loading: false,
+    loading: false
   },
   reducers: {
     add: (state, action) => {
@@ -37,8 +38,8 @@ export const peopleSlice = createSlice({
         }
         return person;
       });
-    },
-  },
+    }
+  }
 });
 
 export const { add, remove, update } = peopleSlice.actions;

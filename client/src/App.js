@@ -1,29 +1,29 @@
-import React from "react";
-import AppBarAndDrawer from "./AppBarAndDrawer/AppBarAndDrawer";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { SignIn } from "./SignIn";
-import { Dashboard } from "./Dashboard/Dashboard";
-import { Home } from "./Home/Home";
-import { ThemeProvider } from "@material-ui/core/styles";
-import { useTheme } from "./theme";
-import { DataProvider } from "./Providers/DataProvider";
-import People from "./ReduxTable/people";
-import Trips from "./Trips/Trips";
+import { ThemeProvider } from '@material-ui/core/styles';
+import React from 'react';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import AppBarAndDrawer from './AppBarAndDrawer/AppBarAndDrawer';
+import { Dashboard } from './Dashboard/Dashboard';
+import { Home } from './Home/Home';
+import { DataProvider } from './Providers/DataProvider';
+import People from './ReduxTable/people';
+import { SignIn } from './SignIn';
+import Trips from './Trips/Trips';
+import { useTheme } from './theme';
 
-import Driver from "./People/Driver";
-import Components from "./Components/Components";
-import Settings from "./Settings/Settings";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import { configureStore } from "@reduxjs/toolkit";
-import peopleReducer from "./ReduxTable/peopleSlice";
-import { Provider } from "react-redux";
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import Components from './Components/Components';
+import Driver from './People/Driver';
+import peopleReducer from './ReduxTable/peopleSlice';
+import Settings from './Settings/Settings';
 
 export default function App() {
   const store = configureStore({
     reducer: {
-      people: peopleReducer,
-    },
+      people: peopleReducer
+    }
   });
   const [currentTheme, setCurrentTheme] = useTheme();
   return (
@@ -41,34 +41,34 @@ export default function App() {
                   {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
                   <Switch>
-                    <Route path="/login">
+                    <Route path='/login'>
                       <SignIn />
                     </Route>
-                    <Route path="/profile">
-                      <Driver id={1} />
+                    <Route path='/profile'>
+                      <Driver id={3} />
                     </Route>
-                    <Route path="/dashboard">
+                    <Route path='/dashboard'>
                       <Dashboard />
                     </Route>
-                    <Route exact path="/people">
+                    <Route exact path='/people'>
                       <People />
                     </Route>
                     <Route path={`/people/:driverId`}>
                       <Driver />
                     </Route>
-                    <Route path="/map">
+                    <Route path='/map'>
                       <Trips />
                     </Route>
-                    <Route path="/components">
+                    <Route path='/components'>
                       <Components />
                     </Route>
-                    <Route path="/settings">
+                    <Route path='/settings'>
                       <Settings
                         currentTheme={currentTheme}
                         setCurrentTheme={setCurrentTheme}
                       />
                     </Route>
-                    <Route path="/">
+                    <Route path='/'>
                       <Home />
                     </Route>
                   </Switch>
