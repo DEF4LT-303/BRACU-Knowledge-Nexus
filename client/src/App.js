@@ -7,7 +7,6 @@ import { Home } from './Home/Home';
 import { DataProvider } from './Providers/DataProvider';
 import People from './ReduxTable/people';
 import { SignIn } from './SignIn';
-import Trips from './Trips/Trips';
 import { useTheme } from './theme';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -38,8 +37,7 @@ export default function App() {
                     currentTheme={currentTheme}
                     setCurrentTheme={setCurrentTheme}
                   />
-                  {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+
                   <Switch>
                     <Route path='/login'>
                       <SignIn />
@@ -55,9 +53,6 @@ export default function App() {
                     </Route>
                     <Route path={`/people/:driverId`}>
                       <Driver />
-                    </Route>
-                    <Route path='/map'>
-                      <Trips />
                     </Route>
                     <Route path='/components'>
                       <Components />
