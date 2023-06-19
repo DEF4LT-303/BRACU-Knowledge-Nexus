@@ -17,7 +17,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link, Link as RouterLink, useLocation } from 'react-router-dom';
 import PalettePicker from '../Theme/PalettePicker';
 
 export const drawerWidth = 240;
@@ -80,6 +80,14 @@ function ResponsiveDrawer(props) {
   const drawer = (
     <div>
       <div className={classes.toolbar} />
+      {/* <IconButton
+        color='inherit'
+        aria-label='open drawer'
+        edge='end'
+        onClick={handleDrawerToggle}
+      >
+        <MenuIcon />
+      </IconButton> */}
       <Divider />
       <List>
         {[
@@ -154,12 +162,13 @@ function ResponsiveDrawer(props) {
             <MailIcon />
           </Badge>
           <IconButton
+            component={Link}
+            to='/profile'
             color='inherit'
             aria-label='open drawer'
             edge='end'
-            onClick={handleDrawerToggle}
           >
-            <Avatar src='/img/driver.png' />
+            <Avatar src='' />
           </IconButton>
         </Toolbar>
       </AppBar>
