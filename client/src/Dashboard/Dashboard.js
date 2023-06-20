@@ -1,78 +1,74 @@
-import React from "react";
-import clsx from "clsx";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
-import Chart from "./Chart";
-import TotalCard from "./TotalCard";
-import ExpensesTable from "./ExpensesTable";
-import { drawerWidth } from "../AppBarAndDrawer/AppBarAndDrawer";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Content from "./Content";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import CovidWarning from "./CovidWarning";
-import Tools from "./Tools";
+import AppBar from '@material-ui/core/AppBar';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import React from 'react';
+import { drawerWidth } from '../AppBarAndDrawer/AppBarAndDrawer';
+import Content from './Content';
+import TotalCard from './TotalCard';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://react.school/"></Link>{" "}
+    <Typography variant='body2' color='textSecondary' align='center'>
+      {'Copyright © '}
+      <Link color='inherit' href='https://react.school/'></Link>{' '}
       {new Date().getFullYear()}
-      {"."}
+      {'.'}
     </Typography>
   );
 }
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24 // keep right padding when drawer closed
   },
   toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+      duration: theme.transitions.duration.leavingScreen
+    })
   },
   appToolbar: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
+      marginLeft: drawerWidth
+    }
   },
   menuButton: {
-    marginRight: 36,
+    marginRight: 36
   },
   menuButtonHidden: {
-    display: "none",
+    display: 'none'
   },
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   paper: {
     padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column'
   },
   fixedHeight: {
-    height: 300,
+    height: 300
   },
   balanceCard: {
-    height: 200,
-  },
+    height: 200
+  }
 }));
 
 export default function SimpleTabs() {
@@ -86,18 +82,18 @@ export default function SimpleTabs() {
   return (
     <div className={classes.root}>
       <AppBar
-        color="secondary"
-        position="static"
+        color='secondary'
+        position='static'
         className={classes.appToolbar}
       >
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="simple tabs example"
+          aria-label='simple tabs example'
         >
-          <Tab label="Accounts" />
-          <Tab label="Portfolio" />
-          <Tab label="Pay & Transfer" />
+          <Tab label='Accounts' />
+          <Tab label='Portfolio' />
+          <Tab label='Pay & Transfer' />
         </Tabs>
       </AppBar>
     </div>
@@ -116,29 +112,6 @@ export function Dashboard() {
           <Grid item xs={12} md={7} lg={8}>
             <Paper className={balancePaper}>
               <TotalCard />
-            </Paper>
-          </Grid>
-          {/* Recent TotalCard */}
-          <Grid item xs={12} md={5} lg={4}>
-            <Paper className={balancePaper}>
-              <CovidWarning />
-            </Paper>
-          </Grid>
-          {/* Chart */}
-          <Grid item xs={12} md={8} lg={8}>
-            <Paper className={fixedHeightPaper}>
-              <Chart />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={5} lg={4}>
-            <Paper className={fixedHeightPaper}>
-              <Tools />
-            </Paper>
-          </Grid>
-          {/* ExpensesTable */}
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <ExpensesTable />
             </Paper>
           </Grid>
         </Grid>
