@@ -1,6 +1,11 @@
 import { ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  BrowserRouter as Router,
+  Switch
+} from 'react-router-dom';
 import AppBarAndDrawer from './AppBarAndDrawer/AppBarAndDrawer';
 import { Dashboard } from './Dashboard/Dashboard';
 import { Home } from './Home/Home';
@@ -25,6 +30,9 @@ export default function App() {
     }
   });
   const [currentTheme, setCurrentTheme] = useTheme();
+
+  const user = false; // TODO: set user selector
+
   return (
     <>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -43,19 +51,19 @@ export default function App() {
                       <SignIn />
                     </Route>
                     <Route path='/profile'>
-                      <Driver id={3} />
+                      {!user ? <Redirect to='/login' /> : <Driver id={3} />}
                     </Route>
                     <Route path='/dashboard'>
                       <Dashboard />
                     </Route>
                     <Route exact path='/people'>
-                      <People />
+                      {!user ? <Redirect to='/login' /> : <People />}
                     </Route>
                     <Route path={`/people/:driverId`}>
                       <Driver />
                     </Route>
                     <Route path='/components'>
-                      <Components />
+                      {!user ? <Redirect to='/login' /> : <Components />}
                     </Route>
                     <Route path='/settings'>
                       <Settings

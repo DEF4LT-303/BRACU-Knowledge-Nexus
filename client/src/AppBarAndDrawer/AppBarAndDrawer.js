@@ -70,6 +70,8 @@ function ResponsiveDrawer(props) {
   const isHome = false; // pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const user = true; // TODO: set user selector
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -92,12 +94,16 @@ function ResponsiveDrawer(props) {
       <List>
         {[
           { text: 'home', icon: 'home' },
-          { text: 'login', icon: 'lock' },
-          { text: 'profile', icon: 'person' },
           { text: 'dashboard', icon: 'dashboard' },
-          { text: 'people', icon: 'people' },
-          { text: 'components', icon: 'apps' },
-          { text: 'settings', icon: 'settings' }
+          ...(user
+            ? [
+                { text: 'profile', icon: 'person' },
+                { text: 'people', icon: 'people' },
+                { text: 'components', icon: 'apps' }
+              ]
+            : []),
+          { text: 'settings', icon: 'settings' },
+          ...(user ? [] : [{ text: 'login', icon: 'lock' }])
         ].map(({ text, icon }, index) => (
           <ListItem
             component={RouterLink}
