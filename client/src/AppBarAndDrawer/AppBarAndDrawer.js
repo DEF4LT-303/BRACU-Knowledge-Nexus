@@ -122,6 +122,22 @@ function ResponsiveDrawer(props) {
         ))}
       </List>
       <Divider />
+      {user && (
+        <List>
+          <ListItem
+            component={RouterLink}
+            selected={pathname === `/login`}
+            to={`/login`}
+            button
+            key={'login'}
+          >
+            <ListItemIcon>
+              <Icon>{'logout'}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={'LOGOUT'} />
+          </ListItem>
+        </List>
+      )}
     </div>
   );
 
@@ -167,18 +183,22 @@ function ResponsiveDrawer(props) {
               setCurrentTheme={setCurrentTheme}
               currentTheme={currentTheme}
             />
-            <Badge badgeContent={4} color='primary'>
-              <MailIcon />
-            </Badge>
-            <IconButton
-              component={Link}
-              to='/profile'
-              color='inherit'
-              aria-label='open drawer'
-              edge='end'
-            >
-              <Avatar src='' />
-            </IconButton>
+            {user && (
+              <Badge badgeContent={4} color='primary'>
+                <MailIcon />
+              </Badge>
+            )}
+            {user && (
+              <IconButton
+                component={Link}
+                to='/profile'
+                color='inherit'
+                aria-label='open drawer'
+                edge='end'
+              >
+                <Avatar src='' />
+              </IconButton>
+            )}
           </Toolbar>
         </AppBar>
       )}
