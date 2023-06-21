@@ -49,6 +49,13 @@ const useStyles = makeStyles((theme) => ({
   cardContent: {
     flexGrow: 1
   },
+  description: {
+    display: '-webkit-box',
+    '-webkit-box-orient': 'vertical',
+    '-webkit-line-clamp': 2 /* Maximum number of lines to show */,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6)
@@ -93,6 +100,8 @@ const cards = [
 export function Home() {
   const classes = useStyles();
 
+  const user = false; // TODO: set user selector
+
   return (
     <React.Fragment>
       <main>
@@ -120,14 +129,16 @@ export function Home() {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justifyContent='center'>
                 <Grid item>
-                  <Button
-                    component={RouterLink}
-                    to={'/login'}
-                    variant='contained'
-                    color='primary'
-                  >
-                    Sign In
-                  </Button>
+                  {!user && (
+                    <Button
+                      component={RouterLink}
+                      to={'/login'}
+                      variant='contained'
+                      color='primary'
+                    >
+                      Sign In
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -148,7 +159,9 @@ export function Home() {
                     <Typography gutterBottom variant='h5' component='h2'>
                       {card.name}
                     </Typography>
-                    <Typography>{card.description}</Typography>
+                    <Typography className={classes.description}>
+                      {card.description}
+                    </Typography>
                   </CardContent>
                   <CardActions>
                     <Button

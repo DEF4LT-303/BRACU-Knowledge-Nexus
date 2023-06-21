@@ -70,6 +70,10 @@ function ResponsiveDrawer(props) {
   const isHome = false; // pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const hideAppBar = pathname === '/login' || pathname === '/register';
+
+  const user = true; // TODO: set user selector
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -92,12 +96,16 @@ function ResponsiveDrawer(props) {
       <List>
         {[
           { text: 'home', icon: 'home' },
-          { text: 'login', icon: 'lock' },
-          { text: 'profile', icon: 'person' },
           { text: 'dashboard', icon: 'dashboard' },
-          { text: 'people', icon: 'people' },
-          { text: 'components', icon: 'apps' },
-          { text: 'settings', icon: 'settings' }
+          ...(user
+            ? [
+                { text: 'profile', icon: 'person' },
+                { text: 'people', icon: 'people' },
+                { text: 'components', icon: 'apps' }
+              ]
+            : []),
+          { text: 'settings', icon: 'settings' },
+          ...(user ? [] : [{ text: 'login', icon: 'lock' }])
         ].map(({ text, icon }, index) => (
           <ListItem
             component={RouterLink}
@@ -114,6 +122,22 @@ function ResponsiveDrawer(props) {
         ))}
       </List>
       <Divider />
+      {user && (
+        <List>
+          <ListItem
+            component={RouterLink}
+            selected={pathname === `/login`}
+            to={`/login`}
+            button
+            key={'login'}
+          >
+            <ListItemIcon>
+              <Icon>{'logout'}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={'LOGOUT'} />
+          </ListItem>
+        </List>
+      )}
     </div>
   );
 
@@ -133,77 +157,87 @@ function ResponsiveDrawer(props) {
           zIndex: -2
         }}
       />
-      <AppBar position='sticky' className={isHome ? '' : classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            edge='start'
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant='h6'
-            noWrap
-            to={'/'}
-            component={RouterLink}
-            className={classes.logo}
-          >
-            BRACU Discussion Forum
-          </Typography>
-          <div style={{ flexGrow: 1 }}></div>
-          <PalettePicker
-            setCurrentTheme={setCurrentTheme}
-            currentTheme={currentTheme}
-          />
-          <Badge badgeContent={4} color='primary'>
-            <MailIcon />
-          </Badge>
-          <IconButton
-            component={Link}
-            to='/profile'
-            color='inherit'
-            aria-label='open drawer'
-            edge='end'
-          >
-            <Avatar src='' />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      {!hideAppBar && (
+        <AppBar position='sticky' className={isHome ? '' : classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color='inherit'
+              aria-label='open drawer'
+              edge='start'
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant='h6'
+              noWrap
+              to={'/'}
+              component={RouterLink}
+              className={classes.logo}
+            >
+              BRACU Discussion Forum
+            </Typography>
+            <div style={{ flexGrow: 1 }}></div>
+            <PalettePicker
+              setCurrentTheme={setCurrentTheme}
+              currentTheme={currentTheme}
+            />
+            {user && (
+              <Badge badgeContent={4} color='primary'>
+                <MailIcon />
+              </Badge>
+            )}
+            {user && (
+              <IconButton
+                component={Link}
+                to='/profile'
+                color='inherit'
+                aria-label='open drawer'
+                edge='end'
+              >
+                <Avatar src='' />
+              </IconButton>
+            )}
+          </Toolbar>
+        </AppBar>
+      )}
       {isHome && !mobileOpen ? (
         <div />
       ) : (
         <nav aria-label='mailbox folders'>
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation='css'>
-            <Drawer
-              container={container}
-              variant='temporary'
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper
-              }}
-              ModalProps={{
-                keepMounted: true // Better open performance on mobile.
-              }}
-            >
-              {drawer}
-            </Drawer>
+            {!hideAppBar && (
+              <Drawer
+                container={container}
+                variant='temporary'
+                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper
+                }}
+                ModalProps={{
+                  keepMounted: true // Better open performance on mobile.
+                }}
+              >
+                {drawer}
+              </Drawer>
+            )}
           </Hidden>
           <Hidden xsDown implementation='css'>
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper
-              }}
-              variant='permanent'
-              open={mobileOpen}
-            >
-              {drawer}
-            </Drawer>
+            {!hideAppBar && (
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper
+                }}
+                variant='permanent'
+                open={mobileOpen}
+              >
+                {drawer}
+              </Drawer>
+            )}
           </Hidden>
         </nav>
       )}
