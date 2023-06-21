@@ -67,7 +67,7 @@ export function SignIn({ loggedIn, logout, login }) {
   return (
     <Grid container component='main' className={classes.root}>
       <CssBaseline />
-      <Grid container justify='center' className={classes.image}>
+      <Grid container justifyContent='center' className={classes.image}>
         <Grid
           item
           xs={12}
@@ -128,7 +128,7 @@ export function SignIn({ loggedIn, logout, login }) {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href='/Register' variant='body2'>
+                  <Link href='/register' variant='body2'>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
