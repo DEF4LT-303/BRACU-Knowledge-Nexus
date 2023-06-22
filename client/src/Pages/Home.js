@@ -9,6 +9,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 function Copyright() {
@@ -100,7 +101,8 @@ const cards = [
 export function Home() {
   const classes = useStyles();
 
-  const user = false; // TODO: set user selector
+  // const user = false; // TODO: set user selector
+  const user = useSelector((state) => state.user.currentUser);
 
   return (
     <React.Fragment>

@@ -52,7 +52,7 @@ export default function App() {
                     {!user ? <SignIn /> : <Redirect to='/' />}
                   </Route>
                   <Route path='/register'>
-                    <Register />
+                    {!user ? <Register /> : <Redirect to='/' />}
                   </Route>
                   <Route path='/profile'>
                     {!user ? <Redirect to='/login' /> : <Driver id={3} />}
