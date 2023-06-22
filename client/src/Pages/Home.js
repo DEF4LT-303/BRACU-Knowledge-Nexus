@@ -123,8 +123,7 @@ export function Home() {
               color='textSecondary'
               paragraph
             >
-              A place to discuss and share your thoughts and resources with
-              others.
+              A place for sharing thoughts and meaningful discussions.
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justifyContent='center'>

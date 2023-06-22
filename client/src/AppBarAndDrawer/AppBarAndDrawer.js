@@ -17,7 +17,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Link as RouterLink, useLocation } from 'react-router-dom';
+import { logout } from '../Redux/userRedux';
 import PalettePicker from '../Theme/PalettePicker';
 
 export const drawerWidth = 240;
@@ -72,10 +74,18 @@ function ResponsiveDrawer(props) {
 
   const hideAppBar = pathname === '/login' || pathname === '/register';
 
-  const user = true; // TODO: set user selector
+  const dispatch = useDispatch();
+
+  // const user = null; // TODO: set user selector
+  const user = useSelector((state) => state.user.currentUser);
+  console.log(user);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleClick = () => {
+    dispatch(logout());
   };
 
   /* Modifying the source code from the template example to use the react router pathname hook to set
@@ -127,9 +137,10 @@ function ResponsiveDrawer(props) {
           <ListItem
             component={RouterLink}
             selected={pathname === `/login`}
-            to={`/login`}
+            to={`/home`}
             button
             key={'login'}
+            onClick={handleClick}
           >
             <ListItemIcon>
               <Icon>{'logout'}</Icon>

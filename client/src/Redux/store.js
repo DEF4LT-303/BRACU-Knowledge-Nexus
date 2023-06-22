@@ -10,6 +10,7 @@ import {
   persistStore
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import peopleSlice from '../ReduxTable/peopleSlice';
 import userReducer from './userRedux';
 
 const persistConfig = {
@@ -18,7 +19,7 @@ const persistConfig = {
   storage
 };
 
-const rootReducer = combineReducers({ user: userReducer });
+const rootReducer = combineReducers({ user: userReducer, people: peopleSlice });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

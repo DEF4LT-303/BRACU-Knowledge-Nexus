@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../Redux/apiCalls';
 
 function Copyright() {
@@ -71,15 +71,12 @@ export function SignIn() {
 
   const dispatch = useDispatch();
 
-  // const { fetching, error } = useSelector((state) => state.user);
+  const { fetching, error } = useSelector((state) => state.user);
 
   const handleClicked = (e) => {
     e.preventDefault();
     login(dispatch, { email, password });
   };
-
-  // const user = useSelector((state) => state.user.currentUser);
-  // console.log(user);
 
   return (
     <Grid container component='main' className={classes.root}>
@@ -137,7 +134,7 @@ export function SignIn() {
                 color='primary'
                 className={classes.submit}
                 onClick={handleClicked}
-                // disabled={fetching}
+                disabled={fetching}
               >
                 Sign In
               </Button>
