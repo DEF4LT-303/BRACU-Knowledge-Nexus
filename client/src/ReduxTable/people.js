@@ -1,34 +1,34 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { add, remove, selectPeople, selectLoading } from "./peopleSlice";
-import MuiAlert from "@material-ui/lab/Alert";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import Checkbox from "@material-ui/core/Checkbox";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import PropTypes from "prop-types";
-import { lighten, makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
-import Content from "../Dashboard/Content";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import Toolbar from "@material-ui/core/Toolbar";
-import PeopleDialog from "../People/PeopleDialog";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Tooltip from "@material-ui/core/Tooltip";
-import DeletePeopleDialog from "../People/DeletePeopleDialog";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { SummaryCard } from "../People/Driver";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import Avatar from "@material-ui/core/Avatar";
-import TablePagination from "@material-ui/core/TablePagination";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import { makeStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import MuiAlert from '@material-ui/lab/Alert';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import Content from '../Dashboard/Content';
+import DeletePeopleDialog from '../People/DeletePeopleDialog';
+import { SummaryCard } from '../People/Driver';
+import PeopleDialog from '../People/PeopleDialog';
+import { remove, selectLoading, selectPeople } from './peopleSlice';
 
 function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
 
 function descendingComparator(a, b, orderBy) {
@@ -42,7 +42,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -59,19 +59,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "avatar",
+    id: 'avatar',
     numeric: false,
     disablePadding: true,
-    label: "",
+    label: ''
   },
   {
-    id: "name",
+    id: 'name',
     numeric: false,
     disablePadding: true,
-    label: "Name",
+    label: 'Name'
   },
-  { id: "id", numeric: true, disablePadding: false, label: "ID" },
-  { id: "trips", numeric: true, disablePadding: false, label: "Trips" },
+  { id: 'id', numeric: true, disablePadding: false, label: 'ID' },
+  { id: 'trips', numeric: true, disablePadding: false, label: 'Trips' }
 ];
 
 function EnhancedTableHead(props) {
@@ -82,7 +82,7 @@ function EnhancedTableHead(props) {
     orderBy,
     numSelected,
     rowCount,
-    onRequestSort,
+    onRequestSort
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -91,29 +91,29 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell padding='checkbox'>
           <Checkbox
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
+            inputProps={{ 'aria-label': 'select all desserts' }}
           />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "default"}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
+              direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
             </TableSortLabel>
@@ -129,45 +129,45 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
+  rowCount: PropTypes.number.isRequired
 };
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "100%",
+    width: '100%'
   },
   paper: {
-    width: "100%",
-    marginBottom: theme.spacing(2),
+    width: '100%',
+    marginBottom: theme.spacing(2)
   },
   table: {
-    minWidth: 750,
+    minWidth: 750
   },
   visuallyHidden: {
     border: 0,
-    clip: "rect(0 0 0 0)",
+    clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: 0,
-    position: "absolute",
+    position: 'absolute',
     top: 20,
-    width: 1,
+    width: 1
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   deleteButton: {
-    marginLeft: theme.spacing(1),
-  },
+    marginLeft: theme.spacing(1)
+  }
 }));
 
 export default function People() {
   const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
@@ -191,8 +191,8 @@ export default function People() {
   if (error) return `Error! ${error.message}`;
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
@@ -236,7 +236,7 @@ export default function People() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
   const snackClose = (event, reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -246,23 +246,23 @@ export default function People() {
   return (
     <Content>
       <Snackbar open={snackOpen} autoHideDuration={2000} onClose={snackClose}>
-        <Alert onClose={snackClose} severity="success">
+        <Alert onClose={snackClose} severity='success'>
           {snackOpen}
         </Alert>
       </Snackbar>
       <div className={classes.root}>
         <Toolbar>
-          <div edge="start" className={classes.grow} />
+          <div edge='start' className={classes.grow} />
           <PeopleDialog
-            edge="end"
+            edge='end'
             onSave={() => {
-              setSnackOpen("Person added");
+              setSnackOpen('Person added');
             }}
             render={(open) => (
               <Button
-                edge="end"
-                color="primary"
-                variant="contained"
+                edge='end'
+                color='primary'
+                variant='contained'
                 startIcon={<AddIcon />}
                 onClick={open}
               >
@@ -271,7 +271,7 @@ export default function People() {
             )}
           />
           {selected.length > 0 && (
-            <Tooltip title={"Delete"}>
+            <Tooltip title={'Delete'}>
               <DeletePeopleDialog
                 ids={selected}
                 onSave={() => {
@@ -279,7 +279,7 @@ export default function People() {
 
                   setSnackOpen(
                     `${selected.length} Driver${
-                      selected.length > 1 ? "s" : ""
+                      selected.length > 1 ? 's' : ''
                     } Deleted`
                   );
                   setSelected([]);
@@ -287,12 +287,12 @@ export default function People() {
                 render={(open) => (
                   <Button
                     className={classes.deleteButton}
-                    variant="contained"
-                    color="secondary"
+                    variant='contained'
+                    color='secondary'
                     startIcon={<DeleteIcon />}
                     onClick={open}
                   >
-                    {" "}
+                    {' '}
                     Delete {selected.length} selected
                   </Button>
                 )}
@@ -301,15 +301,15 @@ export default function People() {
           )}
         </Toolbar>
         <SummaryCard
-          title={"Drivers"}
+          title={'Drivers'}
           value={
             <>
               <TableContainer>
                 <Table
                   className={classes.table}
-                  aria-labelledby="tableTitle"
-                  size={"small"}
-                  aria-label="enhanced table"
+                  aria-labelledby='tableTitle'
+                  size={'small'}
+                  aria-label='enhanced table'
                 >
                   <EnhancedTableHead
                     classes={classes}
@@ -333,13 +333,13 @@ export default function People() {
                         return (
                           <TableRow
                             hover
-                            role="checkbox"
+                            role='checkbox'
                             aria-checked={isItemSelected}
                             tabIndex={-1}
                             onClick={(e) => {
                               if (
-                                e.target.type === "checkbox" ||
-                                e.target.className.indexOf("Checkbox") > 0
+                                e.target.type === 'checkbox' ||
+                                e.target.className.indexOf('Checkbox') > 0
                               ) {
                                 return;
                               }
@@ -347,17 +347,17 @@ export default function People() {
                             }}
                             key={`person-${row.id}`}
                             selected={isItemSelected}
-                            style={{ cursor: "pointer" }}
+                            style={{ cursor: 'pointer' }}
                           >
                             <TableCell
-                              padding="checkbox"
+                              padding='checkbox'
                               onClick={(e) => {
                                 selectTableRow(row.id);
                               }}
                             >
                               <Checkbox
                                 checked={isItemSelected}
-                                inputProps={{ "aria-labelledby": labelId }}
+                                inputProps={{ 'aria-labelledby': labelId }}
                                 onChange={(e) => {
                                   selectTableRow(row.id);
                                 }}
@@ -367,15 +367,15 @@ export default function People() {
                               <Avatar alt={row.name} src={row.img} />
                             </TableCell>
                             <TableCell
-                              component="th"
+                              component='th'
                               id={labelId}
-                              scope="row"
-                              padding="none"
+                              scope='row'
+                              padding='none'
                             >
                               {row.name}
                             </TableCell>
-                            <TableCell align="right">{row.id}</TableCell>
-                            <TableCell align="right">{row.trips}</TableCell>
+                            <TableCell align='right'>{row.id}</TableCell>
+                            <TableCell align='right'>{row.trips}</TableCell>
                           </TableRow>
                         );
                       })}
@@ -384,7 +384,7 @@ export default function People() {
               </TableContainer>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
-                component="div"
+                component='div'
                 count={rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}

@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { register } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -64,6 +66,18 @@ const useStyles = makeStyles((theme) => ({
 export function Register({ loggedIn, logout, login }) {
   const classes = useStyles();
 
+  const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const dispatch = useDispatch();
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+
+    register(dispatch, { username, email, password });
+  };
+
   return (
     <Grid container component='main' className={classes.root}>
       <CssBaseline />
@@ -96,6 +110,8 @@ export function Register({ loggedIn, logout, login }) {
                 name='Username'
                 autoComplete='Username'
                 autoFocus
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
               />
               <TextField
                 variant='outlined'
@@ -107,6 +123,8 @@ export function Register({ loggedIn, logout, login }) {
                 name='email'
                 autoComplete='email'
                 autoFocus
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
               />
               <TextField
                 variant='outlined'
@@ -118,6 +136,8 @@ export function Register({ loggedIn, logout, login }) {
                 type='password'
                 id='password'
                 autoComplete='current-password'
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
               />
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
@@ -128,7 +148,7 @@ export function Register({ loggedIn, logout, login }) {
                 variant='contained'
                 color='primary'
                 className={classes.submit}
-                onClick={login}
+                onClick={handleRegister}
               >
                 Register
               </Button>

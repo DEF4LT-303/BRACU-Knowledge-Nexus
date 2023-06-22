@@ -11,7 +11,9 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -61,8 +63,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export function SignIn({ loggedIn, logout, login }) {
+export function SignIn() {
   const classes = useStyles();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+
+  const { fetching, error } = useSelector((state) => state.user);
+
+  const handleClicked = (e) => {
+    e.preventDefault();
+    login(dispatch, { email, password });
+  };
 
   return (
     <Grid container component='main' className={classes.root}>
@@ -96,6 +110,7 @@ export function SignIn({ loggedIn, logout, login }) {
                 name='email'
                 autoComplete='email'
                 autoFocus
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 variant='outlined'
@@ -107,6 +122,7 @@ export function SignIn({ loggedIn, logout, login }) {
                 type='password'
                 id='password'
                 autoComplete='current-password'
+                onChange={(e) => setPassword(e.target.value)}
               />
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
@@ -117,7 +133,8 @@ export function SignIn({ loggedIn, logout, login }) {
                 variant='contained'
                 color='primary'
                 className={classes.submit}
-                onClick={login}
+                onClick={handleClicked}
+                disabled={fetching}
               >
                 Sign In
               </Button>
