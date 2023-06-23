@@ -60,19 +60,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'avatar',
+    _id: 'avatar',
     numeric: false,
     disablePadding: true,
     label: ''
   },
   {
-    id: 'name',
+    _id: 'name',
     numeric: false,
     disablePadding: true,
     label: 'Name'
   },
-  { id: 'id', numeric: true, disablePadding: false, label: 'ID' },
-  { id: 'trips', numeric: true, disablePadding: false, label: 'Trips' }
+  { _id: '_id', numeric: true, disablePadding: false, label: 'ID' },
+  { _id: 'role', numeric: true, disablePadding: false, label: 'Role' }
 ];
 
 function EnhancedTableHead(props) {
@@ -101,19 +101,19 @@ function EnhancedTableHead(props) {
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
-            key={headCell.id}
+            key={headCell._id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
+            sortDirection={orderBy === headCell._id ? order : false}
           >
             <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              active={orderBy === headCell._id}
+              direction={orderBy === headCell._id ? order : 'asc'}
+              onClick={createSortHandler(headCell._id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
+              {orderBy === headCell._id ? (
+                <span className={classes.visuallyH_idden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
@@ -137,25 +137,25 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%'
+    w_idth: '100%'
   },
   paper: {
-    width: '100%',
+    w_idth: '100%',
     marginBottom: theme.spacing(2)
   },
   table: {
-    minWidth: 750
+    minW_idth: 750
   },
-  visuallyHidden: {
+  visuallyH_idden: {
     border: 0,
     clip: 'rect(0 0 0 0)',
     height: 1,
     margin: -1,
-    overflow: 'hidden',
+    overflow: 'h_idden',
     padding: 0,
     position: 'absolute',
     top: 20,
-    width: 1
+    w_idth: 1
   },
   grow: {
     flexGrow: 1
@@ -203,19 +203,19 @@ export default function People() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = rows.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const selectTableRow = (id) => {
-    const selectedIndex = selected.indexOf(id);
+  const selectTableRow = (_id) => {
+    const selectedIndex = selected.indexOf(_id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, _id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -239,7 +239,7 @@ export default function People() {
     setPage(0);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (_id) => selected.indexOf(_id) !== -1;
   const snackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -250,7 +250,7 @@ export default function People() {
 
   return (
     <Content>
-      <Snackbar open={snackOpen} autoHideDuration={2000} onClose={snackClose}>
+      <Snackbar open={snackOpen} autoH_ideDuration={2000} onClose={snackClose}>
         <Alert onClose={snackClose} severity='success'>
           {snackOpen}
         </Alert>
@@ -278,7 +278,7 @@ export default function People() {
           {selected.length > 0 && (
             <Tooltip title={'Delete'}>
               <DeletePeopleDialog
-                ids={selected}
+                _ids={selected}
                 onSave={() => {
                   dispatch(remove(selected));
 
@@ -332,8 +332,8 @@ export default function People() {
                         page * rowsPerPage + rowsPerPage
                       )
                       .map((row, index) => {
-                        const isItemSelected = isSelected(row.id);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+                        const isItemSelected = isSelected(row._id);
+                        const label_Id = `enhanced-table-checkbox-${index}`;
 
                         return (
                           <TableRow
@@ -348,39 +348,39 @@ export default function People() {
                               ) {
                                 return;
                               }
-                              history.push(`/people/${row.id}`);
+                              history.push(`/people/${row._id}`);
                             }}
-                            key={`person-${row.id}`}
+                            key={`person-${row._id}`}
                             selected={isItemSelected}
                             style={{ cursor: 'pointer' }}
                           >
                             <TableCell
                               padding='checkbox'
                               onClick={(e) => {
-                                selectTableRow(row.id);
+                                selectTableRow(row._id);
                               }}
                             >
                               <Checkbox
                                 checked={isItemSelected}
-                                inputProps={{ 'aria-labelledby': labelId }}
+                                inputProps={{ 'aria-labelledby': label_Id }}
                                 onChange={(e) => {
-                                  selectTableRow(row.id);
+                                  selectTableRow(row._id);
                                 }}
                               />
                             </TableCell>
                             <TableCell>
-                              <Avatar alt={row.name} src={row.img} />
+                              <Avatar alt={row.username} src={row.img} />
                             </TableCell>
                             <TableCell
                               component='th'
-                              id={labelId}
+                              _id={label_Id}
                               scope='row'
                               padding='none'
                             >
-                              {row.name}
+                              {row.username}
                             </TableCell>
-                            <TableCell align='right'>{row.id}</TableCell>
-                            <TableCell align='right'>{row.trips}</TableCell>
+                            <TableCell align='right'>{row._id}</TableCell>
+                            <TableCell align='right'>{row.role}</TableCell>
                           </TableRow>
                         );
                       })}
