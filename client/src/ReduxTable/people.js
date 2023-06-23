@@ -23,8 +23,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Content from '../Dashboard/Content';
 import DeletePeopleDialog from '../People/DeletePeopleDialog';
-import { SummaryCard } from '../People/Driver';
 import PeopleDialog from '../People/PeopleDialog';
+import { SummaryCard } from '../People/Profile';
 import { remove, selectLoading, selectPeople } from './peopleSlice';
 
 function Alert(props) {

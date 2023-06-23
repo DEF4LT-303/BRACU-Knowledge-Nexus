@@ -18,7 +18,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { useSelector } from 'react-redux';
 import Components from './Components/Components';
 import { Register } from './Pages/Register';
-import Driver from './People/Driver';
+import Profile from './People/Profile';
 import { DataProvider } from './Providers/DataProvider';
 import Settings from './Settings/Settings';
 
@@ -48,7 +48,7 @@ export default function App() {
                     {!user ? <Register /> : <Redirect to='/' />}
                   </Route>
                   <Route path='/profile'>
-                    {!user ? <Redirect to='/login' /> : <Driver id={3} />}
+                    {!user ? <Redirect to='/login' /> : <Profile id={3} />}
                   </Route>
                   <Route path='/dashboard'>
                     <Dashboard />
@@ -56,8 +56,8 @@ export default function App() {
                   <Route exact path='/people'>
                     {!user ? <Redirect to='/login' /> : <People />}
                   </Route>
-                  <Route path={`/people/:driverId`}>
-                    <Driver />
+                  <Route path={`/people/:ProfileId`}>
+                    <Profile />
                   </Route>
                   <Route path='/components'>
                     {!user ? <Redirect to='/login' /> : <Components />}
