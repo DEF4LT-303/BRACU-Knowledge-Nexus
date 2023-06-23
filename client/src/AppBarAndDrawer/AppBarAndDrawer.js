@@ -78,7 +78,6 @@ function ResponsiveDrawer(props) {
 
   // const user = null; // TODO: set user selector
   const user = useSelector((state) => state.user.currentUser);
-  console.log(user);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

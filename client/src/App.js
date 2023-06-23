@@ -15,21 +15,14 @@ import { useTheme } from './theme';
 
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { configureStore } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import Components from './Components/Components';
 import { Register } from './Pages/Register';
 import Driver from './People/Driver';
 import { DataProvider } from './Providers/DataProvider';
-import peopleReducer from './ReduxTable/peopleSlice';
 import Settings from './Settings/Settings';
 
 export default function App() {
-  const store = configureStore({
-    reducer: {
-      people: peopleReducer
-    }
-  });
   const [currentTheme, setCurrentTheme] = useTheme();
 
   // const user = true; // TODO: set user selector
