@@ -15,9 +15,25 @@ export const peopleSlice = createSlice({
       { name: 'Mary', img: '/img/driver2.png', id: nextID() },
       { name: 'Ryan', id: nextID() }
     ],
-    loading: false
+    isFetching: false,
+    error: false
   },
   reducers: {
+    getUsersStart: (state) => {
+      state.isFetching = true;
+      state.error = false;
+    },
+
+    getUsersSuccess: (state, action) => {
+      state.isFetching = false;
+      state.list = action.payload;
+    },
+
+    getUsersFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
+    },
+
     add: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
@@ -42,7 +58,14 @@ export const peopleSlice = createSlice({
   }
 });
 
-export const { add, remove, update } = peopleSlice.actions;
+export const {
+  add,
+  remove,
+  update,
+  getUsersStart,
+  getUsersSuccess,
+  getUsersFailure
+} = peopleSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

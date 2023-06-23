@@ -10,9 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import PersonIcon from '@material-ui/icons/Person';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Content from '../Dashboard/Content';
-import { selectPeople } from '../ReduxTable/peopleSlice';
 import DeletePeopleDialog from './DeletePeopleDialog';
 import PeopleDialog from './PeopleDialog';
 
@@ -79,13 +77,15 @@ export function SummaryCard({ title, value, component }) {
 }
 
 export default function Driver({ id }) {
-  const { driverId } = useParams();
-  id = id ? id : driverId;
-  const rows = useSelector(selectPeople);
-  let driver = rows.find((row) => row.id === +id);
-  if (!driver) {
-    driver = { name: 'hello', id: 3, img: 'foo' };
-  }
+  const user = useSelector((state) => state.user.currentUser);
+
+  // const { driverId } = useParams();
+  // id = id ? id : driverId;
+  // const rows = useSelector(selectPeople);
+  // let driver = rows.find((row) => row.id === +id);
+  // if (!driver) {
+  //   driver = { name: 'hello', id: 3, img: 'foo' };
+  // }
   const classes = useStyles();
   const loading = false;
 
@@ -111,17 +111,17 @@ export default function Driver({ id }) {
       <div className={classes.headerContainer}>
         <div className={classes.header}>
           <Avatar
-            alt={driver.name}
-            src={driver.img}
+            alt={user.name}
+            src={user.photo}
             classes={{ root: classes.avatar, circle: classes.circle }}
           />
-          <Typography variant={'h5'}>{driver.name}</Typography>
+          <Typography variant={'h5'}>{user.username}</Typography>
           <Chip variant={'outlined'} icon={<PersonIcon />} label='Student' />
 
           <div className={classes.spacer} />
           <div className={classes.actionGroup}>
             <PeopleDialog
-              data={driver}
+              data={user}
               render={(open) => (
                 <Button
                   color='primary'
@@ -134,7 +134,7 @@ export default function Driver({ id }) {
               )}
             />
             <DeletePeopleDialog
-              ids={[driver.id]}
+              ids={[user._id]}
               render={(open) => (
                 <Button
                   variant='outlined'
@@ -149,9 +149,9 @@ export default function Driver({ id }) {
         </div>
       </div>
       <div className={classes.summaryCards}>
-        <SummaryCard title={'Posts'} value={3} />
-        <SummaryCard title={'Favorites'} value={2} />
-        <SummaryCard title={'Reputation'} value={4.32} />
+        <SummaryCard title={'Posts'} value={user.materialCount} />
+        <SummaryCard title={'Favorites'} value={user.favourites.length} />
+        <SummaryCard title={'Reputation'} value={user.reputation} />
       </div>
     </Content>
   );

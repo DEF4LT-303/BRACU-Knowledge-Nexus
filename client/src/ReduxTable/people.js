@@ -18,13 +18,14 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MuiAlert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Content from '../Dashboard/Content';
 import DeletePeopleDialog from '../People/DeletePeopleDialog';
 import PeopleDialog from '../People/PeopleDialog';
 import { SummaryCard } from '../People/Profile';
+import { getUsers } from '../Redux/apiCalls';
 import { remove, selectLoading, selectPeople } from './peopleSlice';
 
 function Alert(props) {
@@ -177,6 +178,10 @@ export default function People() {
   // todo with snacks
   const [snackOpen, setSnackOpen] = React.useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    getUsers(dispatch);
+  }, [dispatch]);
 
   let history = useHistory();
 

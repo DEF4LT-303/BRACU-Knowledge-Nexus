@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
 
   photo: {
     type: String,
-    default: process.env.DEFAULT_PROFILE_PIC
+    default: ''
   },
 
   password: {
@@ -89,7 +89,7 @@ const userSchema = new mongoose.Schema({
 
   reputation: {
     type: Number,
-    default: 0
+    default: 0.0
   }
 });
 
