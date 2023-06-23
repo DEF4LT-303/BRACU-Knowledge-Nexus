@@ -30,7 +30,7 @@ export const getUsers = async (dispatch) => {
   dispatch(getUsersStart());
   try {
     const res = await userRequest.get('/users');
-    dispatch(getUsersSuccess(res.data));
+    await dispatch(getUsersSuccess(res.data));
   } catch (err) {
     dispatch(getUsersFailure());
   }

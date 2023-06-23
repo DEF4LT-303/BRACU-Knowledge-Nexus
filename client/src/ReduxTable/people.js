@@ -306,7 +306,7 @@ export default function People() {
           )}
         </Toolbar>
         <SummaryCard
-          title={'Drivers'}
+          title={'All Users'}
           value={
             <>
               <TableContainer>

@@ -78,6 +78,7 @@ function ResponsiveDrawer(props) {
 
   // const user = null; // TODO: set user selector
   const user = useSelector((state) => state.user.currentUser);
+  const admin = user?.role === 'admin';
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -109,7 +110,9 @@ function ResponsiveDrawer(props) {
           ...(user
             ? [
                 { text: 'profile', icon: 'person' },
-                { text: 'people', icon: 'people' },
+                ...(user.role === 'admin'
+                  ? [{ text: 'people', icon: 'people' }]
+                  : []),
                 { text: 'components', icon: 'apps' }
               ]
             : []),

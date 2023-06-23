@@ -28,6 +28,8 @@ export default function App() {
   // const user = true; // TODO: set user selector
   const user = useSelector((state) => state.user.currentUser);
 
+  const admin = user?.role === 'admin';
+
   return (
     <>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -48,13 +50,13 @@ export default function App() {
                     {!user ? <Register /> : <Redirect to='/' />}
                   </Route>
                   <Route path='/profile'>
-                    {!user ? <Redirect to='/login' /> : <Profile id={3} />}
+                    {!user ? <Redirect to='/login' /> : <Profile />}
                   </Route>
                   <Route path='/dashboard'>
                     <Dashboard />
                   </Route>
                   <Route exact path='/people'>
-                    {!user ? <Redirect to='/login' /> : <People />}
+                    {user && admin ? <People /> : <Redirect to='/' />}
                   </Route>
                   <Route path={`/people/:ProfileId`}>
                     <Profile />
