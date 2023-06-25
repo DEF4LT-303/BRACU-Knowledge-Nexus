@@ -53,9 +53,51 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3)
   },
-  tripCard: {
+  card: {
     margin: theme.spacing(1),
-    padding: theme.spacing(2)
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    background: '#f0f0f0',
+    borderRadius: '5px'
+  },
+  cardTitle: {
+    marginBottom: theme.spacing(1),
+    display: 'inline-block',
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
+    paddingBottom: theme.spacing(0.1),
+    fontWeight: 'bold'
+  },
+  underline: {
+    width: '20%',
+    height: '2px',
+    background: theme.palette.primary.main,
+    marginBottom: theme.spacing(2)
+  },
+  cardContent: {
+    marginLeft: theme.spacing(2)
+  },
+  skillsContainer: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  skillChip: {
+    margin: theme.spacing(0.5)
+  },
+  sectionContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(4)
+  },
+
+  linkTitle: {
+    marginBottom: theme.spacing(-1),
+    fontWeight: 'bold',
+    color: '#000'
+  },
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -76,18 +118,50 @@ export function SummaryCard({ title, value, component }) {
   );
 }
 
-export default function Driver({ id }) {
-  const user = useSelector((state) => state.user.currentUser);
-
-  // const { driverId } = useParams();
-  // id = id ? id : driverId;
-  // const rows = useSelector(selectPeople);
-  // let driver = rows.find((row) => row.id === +id);
-  // if (!driver) {
-  //   driver = { name: 'hello', id: 3, img: 'foo' };
-  // }
+export function BioCard({ title, content }) {
   const classes = useStyles();
-  const loading = false;
+
+  return (
+    <div className={classes.card}>
+      <Typography variant='h5' className={classes.cardTitle}>
+        {title}
+      </Typography>
+      <Typography variant='body1' className={classes.cardContent}>
+        {content}
+      </Typography>
+    </div>
+  );
+}
+
+export function SkillsCard({ title, skills }) {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.card}>
+      <Typography variant='h5' className={classes.cardTitle}>
+        {title}
+      </Typography>
+      <div className={classes.skillsContainer}>
+        {skills.map((skill, index) => (
+          <Chip
+            key={index}
+            label={skill}
+            variant='outlined'
+            className={classes.skillChip}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function Profile() {
+  const user = useSelector((state) => state.user.currentUser);
+  const loading = useSelector((state) => state.user.isFetching);
+
+  const classes = useStyles();
+
+  const roleLabel = user.role.toUpperCase();
 
   if (loading) {
     return (
@@ -105,7 +179,8 @@ export default function Driver({ id }) {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           filter: 'contrast(75%)',
-          backgroundImage: 'url(/img/wallpaper.jpeg)'
+          backgroundImage:
+            'url(https://png.pngtree.com/background/20210709/original/pngtree-full-aesthetic-nebula-starry-sky-banner-background-picture-image_916071.jpg)'
         }}
       />
       <div className={classes.headerContainer}>
@@ -115,8 +190,13 @@ export default function Driver({ id }) {
             src={user.photo}
             classes={{ root: classes.avatar, circle: classes.circle }}
           />
-          <Typography variant={'h5'}>{user.username}</Typography>
-          <Chip variant={'outlined'} icon={<PersonIcon />} label='Student' />
+          <div>
+            <Typography variant={'h5'}>{user.username}</Typography>
+            <Typography variant='caption' color='textSecondary'>
+              {user.displayName}
+            </Typography>
+          </div>
+          <Chip variant={'outlined'} icon={<PersonIcon />} label={roleLabel} />
 
           <div className={classes.spacer} />
           <div className={classes.actionGroup}>
@@ -152,6 +232,41 @@ export default function Driver({ id }) {
         <SummaryCard title={'Posts'} value={user.materialCount} />
         <SummaryCard title={'Favorites'} value={user.favourites.length} />
         <SummaryCard title={'Reputation'} value={user.reputation} />
+      </div>
+
+      <BioCard title='About' content={user.about} />
+      <div className={classes.summaryCards}>
+        <BioCard title='Gender' content={user.gender} />
+        <SkillsCard title='Skills' skills={user.technicalSkills} />
+      </div>
+      <div className={classes.card}>
+        <Typography variant='h5' className={classes.cardTitle}>
+          Links:
+        </Typography>
+        <div className={classes.githubLink}>
+          <Typography variant='h6' className={classes.linkTitle}>
+            GitHub Link:
+          </Typography>
+          {user.githubLink ? (
+            <a href={user.githubLink} className={classes.link}>
+              {user.githubLink}
+            </a>
+          ) : (
+            <Typography variant='body1'>N/A</Typography>
+          )}
+        </div>
+        <div className={classes.linkedinLink}>
+          <Typography variant='h6' className={classes.linkTitle}>
+            LinkedIn Link:
+          </Typography>
+          {user.linkedInLink ? (
+            <a href={user.linkedInLink} className={classes.link}>
+              {user.linkedInLink}
+            </a>
+          ) : (
+            <Typography variant='body1'>N/A</Typography>
+          )}
+        </div>
       </div>
     </Content>
   );

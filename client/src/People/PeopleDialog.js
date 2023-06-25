@@ -1,24 +1,35 @@
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../Redux/apiCalls'; // Import the updateUser API call
+import { updateUser } from '../Redux/apiCalls';
 
 export default function PeopleDialog({ data, render, onSave }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
-  const defaultImg = data && data.img;
-  const defaultName = data && data.name;
+  const defaultImg = data && data.photo;
+  const defaultName = data && data.username;
   // Existing ID or random ID
   const id = data && data.id;
 
-  const [img, setImg] = React.useState(defaultImg);
-  const [name, setName] = React.useState(defaultName);
+  const [img, setImg] = useState(defaultImg);
+  const [name, setName] = useState(defaultName);
+  const [displayName, setDisplayName] = useState(data && data.displayName);
+  const [about, setAbout] = useState(data && data.about);
+  const [gender, setGender] = useState(data && data.gender);
+  const [githubLink, setGithubLink] = useState(data && data.githubLink);
+  const [linkedInLink, setLinkedInLink] = useState(data && data.linkedInLink);
+  const [technicalSkills, setTechnicalSkills] = useState(
+    data && data.technicalSkills
+  );
+
+  const genders = ['Male', 'Female'];
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,12 +44,20 @@ export default function PeopleDialog({ data, render, onSave }) {
   const handleSave = async () => {
     const updatedUserData = {
       username: name,
-      photo: img
+      displayName: displayName,
+      photo: img,
+      about: about,
+      gender: gender,
+      githubLink: githubLink,
+      linkedInLink: linkedInLink,
+      technicalSkills:
+        typeof technicalSkills === 'string' && technicalSkills.trim() !== ''
+          ? technicalSkills.split(',').map((skill) => skill.trim())
+          : data && data.technicalSkills
     };
 
     try {
       if (data) {
-        // If data exists, it means we are updating an existing user
         await updateUser(data._id, updatedUserData, dispatch);
       }
 
@@ -46,7 +65,8 @@ export default function PeopleDialog({ data, render, onSave }) {
       handleClose();
     } catch (error) {
       console.error('Failed to update user:', error);
-      // Handle error scenario, e.g., show an error message to the user
+      const errorMessage = 'An error occurred while saving the user.';
+      alert(errorMessage);
     }
   };
 
@@ -59,7 +79,7 @@ export default function PeopleDialog({ data, render, onSave }) {
         aria-labelledby='form-dialog-title'
       >
         <DialogTitle id='form-dialog-title'>
-          {data ? 'Edit' : 'Add'} Driver{' '}
+          {data ? 'Edit' : 'Add'} Profile{' '}
         </DialogTitle>
         <DialogContent>
           <TextField
@@ -81,6 +101,73 @@ export default function PeopleDialog({ data, render, onSave }) {
             value={img}
             onChange={(e) => {
               setImg(e.target.value);
+            }}
+          />
+          <TextField
+            autoFocus
+            margin='dense'
+            id='name'
+            label='Display Name'
+            fullWidth
+            value={displayName}
+            onChange={(e) => {
+              setDisplayName(e.target.value);
+            }}
+          />
+          <FormControl fullWidth>
+            <InputLabel id='gender-label'>Gender</InputLabel>
+            <Select
+              autoFocus
+              margin='dense'
+              labelId='gender-label'
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+            >
+              {genders.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            autoFocus
+            margin='dense'
+            label='About'
+            fullWidth
+            value={about}
+            onChange={(e) => {
+              setAbout(e.target.value);
+            }}
+          />
+          <TextField
+            autoFocus
+            margin='dense'
+            label='GitHub Link'
+            fullWidth
+            value={githubLink}
+            onChange={(e) => {
+              setGithubLink(e.target.value);
+            }}
+          />
+          <TextField
+            autoFocus
+            margin='dense'
+            label='LinkedIn Link'
+            fullWidth
+            value={linkedInLink}
+            onChange={(e) => {
+              setLinkedInLink(e.target.value);
+            }}
+          />
+          <TextField
+            autoFocus
+            margin='dense'
+            label='Technical Skills'
+            fullWidth
+            value={technicalSkills}
+            onChange={(e) => {
+              setTechnicalSkills(e.target.value);
             }}
           />
         </DialogContent>

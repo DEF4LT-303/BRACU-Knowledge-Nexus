@@ -209,7 +209,7 @@ function ResponsiveDrawer(props) {
                 aria-label='open drawer'
                 edge='end'
               >
-                <Avatar src='' />
+                <Avatar src={user.photo} />
               </IconButton>
             )}
           </Toolbar>
