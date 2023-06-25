@@ -4,7 +4,14 @@ import {
   getUsersSuccess
 } from '../ReduxTable/peopleSlice';
 import { publicRequest, userRequest } from '../requestMethods';
-import { loginFailure, loginStart, loginSuccess } from './userRedux';
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess
+} from './userRedux';
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
@@ -33,5 +40,15 @@ export const getUsers = async (dispatch) => {
     await dispatch(getUsersSuccess(res.data));
   } catch (err) {
     dispatch(getUsersFailure());
+  }
+};
+
+export const updateUser = async (id, user, dispatch) => {
+  dispatch(updateUserStart());
+  try {
+    const res = await userRequest.put(`/users/${id}`, user);
+    dispatch(updateUserSuccess(res.data));
+  } catch (err) {
+    dispatch(updateUserFailure());
   }
 };

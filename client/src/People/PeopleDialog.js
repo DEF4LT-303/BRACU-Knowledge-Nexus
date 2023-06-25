@@ -1,13 +1,12 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { add, update } from "../ReduxTable/peopleSlice";
-import { useDispatch } from "react-redux";
-import { nextID } from "../ReduxTable/peopleSlice";
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { updateUser } from '../Redux/apiCalls'; // Import the updateUser API call
 
 export default function PeopleDialog({ data, render, onSave }) {
   const [open, setOpen] = React.useState(false);
@@ -31,11 +30,24 @@ export default function PeopleDialog({ data, render, onSave }) {
     setOpen(false);
   };
 
-  const handleSave = () => {
-    const action = data ? update : add;
-    dispatch(action({ name, id: id || nextID(), img }));
-    onSave && onSave();
-    handleClose();
+  const handleSave = async () => {
+    const updatedUserData = {
+      username: name,
+      photo: img
+    };
+
+    try {
+      if (data) {
+        // If data exists, it means we are updating an existing user
+        await updateUser(data._id, updatedUserData, dispatch);
+      }
+
+      onSave && onSave();
+      handleClose();
+    } catch (error) {
+      console.error('Failed to update user:', error);
+      // Handle error scenario, e.g., show an error message to the user
+    }
   };
 
   return (
@@ -44,17 +56,17 @@ export default function PeopleDialog({ data, render, onSave }) {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby='form-dialog-title'
       >
-        <DialogTitle id="form-dialog-title">
-          {data ? "Edit" : "Add"} Driver{" "}
+        <DialogTitle id='form-dialog-title'>
+          {data ? 'Edit' : 'Add'} Driver{' '}
         </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
+            margin='dense'
+            id='name'
+            label='Name'
             fullWidth
             value={name}
             onChange={(e) => {
@@ -63,8 +75,8 @@ export default function PeopleDialog({ data, render, onSave }) {
           />
           <TextField
             autoFocus
-            margin="dense"
-            label="Image URL"
+            margin='dense'
+            label='Image URL'
             fullWidth
             value={img}
             onChange={(e) => {
@@ -73,10 +85,10 @@ export default function PeopleDialog({ data, render, onSave }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color='primary'>
             Cancel
           </Button>
-          <Button onClick={handleSave} color="primary">
+          <Button onClick={handleSave} color='primary'>
             Save
           </Button>
         </DialogActions>
