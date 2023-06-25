@@ -62,6 +62,11 @@ const userSchema = new mongoose.Schema({
     default: 'user'
   },
 
+  // isAdmin: {
+  //   type: Boolean,
+  //   default: false
+  // },
+
   posts: {
     type: mongoose.Schema.ObjectId,
     ref: 'Post'

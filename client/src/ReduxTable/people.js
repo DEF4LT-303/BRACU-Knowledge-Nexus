@@ -369,7 +369,7 @@ export default function People() {
                               />
                             </TableCell>
                             <TableCell>
-                              <Avatar alt={row.username} src={row.img} />
+                              <Avatar alt={row.username} src={row.photo} />
                             </TableCell>
                             <TableCell
                               component='th'
