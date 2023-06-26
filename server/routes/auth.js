@@ -3,20 +3,43 @@ const User = require('../models/User');
 const CryptoJS = require('crypto-js');
 const jwt = require('jsonwebtoken');
 
-//Register
+// Register
 router.post('/register', async (req, res) => {
-  const newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: CryptoJS.AES.encrypt(
-      req.body.password,
-      process.env.PASS_SEC
-    ).toString()
-  });
+  const { username, email, password } = req.body;
 
   try {
-    const user = await newUser.save();
-    res.status(200).json(user);
+    // Check if the email is already registered
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json('Email already exists');
+    }
+
+    // Encrypt the password
+    const encryptedPassword = CryptoJS.AES.encrypt(
+      password,
+      process.env.PASS_SEC
+    ).toString();
+
+    // Create a new user
+    const newUser = new User({
+      username,
+      email,
+      password: encryptedPassword
+    });
+
+    // Save the new user to the database
+    const savedUser = await newUser.save();
+
+    // Generate an access token
+    const accessToken = jwt.sign(
+      { id: savedUser._id, role: savedUser.role },
+      process.env.JWT_SEC,
+      { expiresIn: '3d' } // Token expires in 3 days
+    );
+
+    // Return the user info and access token
+    const { password: savedPassword, ...user } = savedUser._doc;
+    res.status(200).json({ ...user, accessToken });
   } catch (err) {
     res.status(500).json(err);
   }

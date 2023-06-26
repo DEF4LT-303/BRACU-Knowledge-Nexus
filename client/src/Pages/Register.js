@@ -71,7 +71,7 @@ export function Register() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [submitted, setSubmitted] = React.useState(false);
-  const [serverError, setServerError] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const error = useSelector((state) => state.user.error);
 
@@ -90,12 +90,6 @@ export function Register() {
 
   const isFieldEmpty = (value) => {
     return value.trim() === '' && submitted;
-  };
-
-  const isRegisterDisabled = () => {
-    return (
-      isFieldEmpty(username) || isFieldEmpty(email) || isFieldEmpty(password)
-    );
   };
 
   return (
@@ -174,7 +168,6 @@ export function Register() {
                 color='primary'
                 className={classes.submit}
                 onClick={handleRegister}
-                disabled={isRegisterDisabled()}
               >
                 Register
               </Button>

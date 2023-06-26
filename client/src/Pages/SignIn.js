@@ -7,10 +7,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import MuiAlert from '@material-ui/lab/Alert';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../Redux/apiCalls';
@@ -68,14 +70,45 @@ export function SignIn() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [submitted, setSubmitted] = React.useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
 
   const { fetching, error } = useSelector((state) => state.user);
 
-  const handleClicked = (e) => {
+  const handleClicked = async (e) => {
     e.preventDefault();
-    login(dispatch, { email, password });
+    setSubmitted(true);
+
+    // Check if email and password are not empty
+    if (email.trim() === '' || password.trim() === '') {
+      return;
+    }
+
+    try {
+      await login(dispatch, { email, password });
+    } catch (error) {
+      if (error.message === 'Invalid email or password') {
+        setErrorMessage('Invalid email or password');
+      } else {
+        setErrorMessage('An error occurred during login');
+      }
+      setOpenSnackbar(true);
+    }
+  };
+
+  const isFieldEmpty = (value) => {
+    return value.trim() === '' && submitted;
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
@@ -111,6 +144,8 @@ export function SignIn() {
                 autoComplete='email'
                 autoFocus
                 onChange={(e) => setEmail(e.target.value)}
+                error={isFieldEmpty(email)}
+                helperText={isFieldEmpty(email) && 'Email is required'}
               />
               <TextField
                 variant='outlined'
@@ -123,6 +158,8 @@ export function SignIn() {
                 id='password'
                 autoComplete='current-password'
                 onChange={(e) => setPassword(e.target.value)}
+                error={isFieldEmpty(password)}
+                helperText={isFieldEmpty(password) && 'Password is required'}
               />
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
@@ -156,6 +193,21 @@ export function SignIn() {
             </form>
           </Grid>
         </Grid>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant='filled'
+            onClose={handleCloseSnackbar}
+            severity='error'
+          >
+            {errorMessage}
+          </MuiAlert>
+        </Snackbar>
       </Grid>
     </Grid>
   );

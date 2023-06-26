@@ -13,13 +13,17 @@ import {
   updateUserSuccess
 } from './userRedux';
 
-export const login = async (dispatch, user) => {
+export const login = async (dispatch, userCredentials) => {
   dispatch(loginStart());
   try {
-    const res = await publicRequest.post('/auth/login', user);
+    const res = await publicRequest.post('/auth/login', userCredentials);
     dispatch(loginSuccess(res.data));
-  } catch (err) {
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      throw new Error('Invalid email or password'); // Throw an error for incorrect password
+    }
     dispatch(loginFailure());
+    throw error;
   }
 };
 
