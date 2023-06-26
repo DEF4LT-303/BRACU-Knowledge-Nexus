@@ -12,7 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { register } from '../Redux/apiCalls';
 
 function Copyright() {
@@ -63,19 +64,38 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export function Register({ loggedIn, logout, login }) {
+export function Register() {
   const classes = useStyles();
 
   const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [submitted, setSubmitted] = React.useState(false);
+  const [serverError, setServerError] = React.useState('');
+
+  const error = useSelector((state) => state.user.error);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleRegister = (e) => {
     e.preventDefault();
 
     register(dispatch, { username, email, password });
+    setSubmitted(true);
+    if (!error) {
+      history.push('/login');
+    }
+  };
+
+  const isFieldEmpty = (value) => {
+    return value.trim() === '' && submitted;
+  };
+
+  const isRegisterDisabled = () => {
+    return (
+      isFieldEmpty(username) || isFieldEmpty(email) || isFieldEmpty(password)
+    );
   };
 
   return (
@@ -112,6 +132,8 @@ export function Register({ loggedIn, logout, login }) {
                 autoFocus
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
+                error={isFieldEmpty(username)}
+                helperText={isFieldEmpty(username) ? 'Required' : ''}
               />
               <TextField
                 variant='outlined'
@@ -125,6 +147,8 @@ export function Register({ loggedIn, logout, login }) {
                 autoFocus
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
+                error={isFieldEmpty(email)}
+                helperText={isFieldEmpty(email) ? 'Required' : ''}
               />
               <TextField
                 variant='outlined'
@@ -137,7 +161,8 @@ export function Register({ loggedIn, logout, login }) {
                 id='password'
                 autoComplete='current-password'
                 onChange={(e) => setPassword(e.target.value)}
-                value={password}
+                error={isFieldEmpty(password)}
+                helperText={isFieldEmpty(password) ? 'Required' : ''}
               />
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
@@ -149,6 +174,7 @@ export function Register({ loggedIn, logout, login }) {
                 color='primary'
                 className={classes.submit}
                 onClick={handleRegister}
+                disabled={isRegisterDisabled()}
               >
                 Register
               </Button>
