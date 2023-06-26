@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -90,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   linkTitle: {
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(-1),
     fontWeight: 'bold',
     color: '#000'
@@ -98,6 +100,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     textDecoration: 'none',
     marginBottom: theme.spacing(1)
+  },
+  emailSection: {
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(2),
+    display: 'flex',
+    alignItems: 'center',
+    '& svg': {
+      marginRight: theme.spacing(1)
+    }
   }
 }));
 
@@ -243,7 +254,11 @@ export default function Profile() {
         <Typography variant='h5' className={classes.cardTitle}>
           Links:
         </Typography>
-        <div className={classes.githubLink}>
+        <div className={classes.emailSection}>
+          <EmailIcon />
+          <Typography variant='h6'>{user.email}</Typography>
+        </div>
+        <div>
           <Typography variant='h6' className={classes.linkTitle}>
             GitHub Link:
           </Typography>
@@ -255,7 +270,7 @@ export default function Profile() {
             <Typography variant='body1'>N/A</Typography>
           )}
         </div>
-        <div className={classes.linkedinLink}>
+        <div>
           <Typography variant='h6' className={classes.linkTitle}>
             LinkedIn Link:
           </Typography>

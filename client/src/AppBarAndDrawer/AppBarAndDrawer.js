@@ -163,7 +163,8 @@ function ResponsiveDrawer(props) {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           filter: 'contrast(75%)',
-          backgroundImage: 'url(/img/wallpaper.jpeg)',
+          backgroundImage:
+            'url(https://png.pngtree.com/background/20210709/original/pngtree-full-aesthetic-nebula-starry-sky-banner-background-picture-image_916071.jpg)',
           position: 'absolute',
           top: '0px',
           width: '100%',
@@ -189,7 +190,7 @@ function ResponsiveDrawer(props) {
               component={RouterLink}
               className={classes.logo}
             >
-              BRACU Discussion Forum
+              BRACU Knowledge Nexus
             </Typography>
             <div style={{ flexGrow: 1 }}></div>
             <PalettePicker
