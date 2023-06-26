@@ -7,10 +7,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import MuiAlert from '@material-ui/lab/Alert';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -74,22 +76,46 @@ export function Register() {
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const error = useSelector((state) => state.user.error);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-
-    register(dispatch, { username, email, password });
     setSubmitted(true);
-    if (!error) {
+
+    // Check if any field is empty
+    if (
+      username.trim() === '' ||
+      email.trim() === '' ||
+      password.trim() === ''
+    ) {
+      return;
+    }
+
+    try {
+      await register(dispatch, { username, email, password });
       history.push('/login');
+    } catch (error) {
+      if (error.message === 'Email already exists') {
+        setErrorMessage('Email already exists');
+      } else {
+        setErrorMessage('An error occurred during registration');
+      }
+      setOpenSnackbar(true);
     }
   };
 
   const isFieldEmpty = (value) => {
     return value.trim() === '' && submitted;
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
@@ -184,6 +210,21 @@ export function Register() {
             </form>
           </Grid>
         </Grid>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant='filled'
+            onClose={handleCloseSnackbar}
+            severity='error'
+          >
+            {errorMessage}
+          </MuiAlert>
+        </Snackbar>
       </Grid>
     </Grid>
   );

@@ -32,8 +32,12 @@ export const register = async (dispatch, user) => {
   try {
     const res = await publicRequest.post('/auth/register', user);
     dispatch(loginSuccess(res.data));
-  } catch (err) {
+  } catch (error) {
+    if (error.response && error.response.status === 409) {
+      throw new Error('Email already exists'); // Throw an error for invalid email or password
+    }
     dispatch(loginFailure());
+    throw error;
   }
 };
 
