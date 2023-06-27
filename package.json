@@ -4,8 +4,8 @@
   "description": "# Lessons",
   "main": "index.js",
   "scripts": {
-    "build": "cd backend && npm install  && cd ../frontend && npm install && npm run build",
-    "start": "node backend/server.js",
+    "build": "cd backend && npm install  && cd ../client && npm install && npm run build",
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
