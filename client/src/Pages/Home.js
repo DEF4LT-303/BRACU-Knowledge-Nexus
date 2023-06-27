@@ -77,11 +77,11 @@ const cards = [
     path: 'profile'
   },
   {
-    name: 'Dashboard',
+    name: 'Forum',
     description:
       'A detailed analysis of business revenue with actions and integrated expense adding.',
     img: 'Dashboard.PNG',
-    path: 'dashboard'
+    path: 'forum'
   },
   {
     name: 'Redux Table',

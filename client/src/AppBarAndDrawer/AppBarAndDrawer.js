@@ -106,7 +106,7 @@ function ResponsiveDrawer(props) {
       <List>
         {[
           { text: 'home', icon: 'home' },
-          { text: 'dashboard', icon: 'dashboard' },
+          { text: 'forum', icon: 'forum' },
           ...(user
             ? [
                 { text: 'profile', icon: 'person' },
