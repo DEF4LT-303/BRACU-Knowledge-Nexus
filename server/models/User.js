@@ -39,15 +39,21 @@ const userSchema = new mongoose.Schema({
 
   email: {
     type: String,
-    required: [true, 'user must provide an email'],
+    required: [true, 'User must provide an email'],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, 'please provide a valid email']
+    validate: {
+      validator: async function (email) {
+        const user = await this.constructor.findOne({ email });
+        return !user; // Return true if user is not found (i.e., email is not taken)
+      },
+      message: 'Email address is already taken'
+    }
   },
 
   photo: {
     type: String,
-    default: process.env.DEFAULT_PROFILE_PIC
+    default: ''
   },
 
   password: {
@@ -58,9 +64,14 @@ const userSchema = new mongoose.Schema({
 
   role: {
     type: String,
-    enum: ['user', 'faculty', 'admin'],
-    default: 'user'
+    enum: ['student', 'faculty', 'admin'],
+    default: 'student'
   },
+
+  // isAdmin: {
+  //   type: Boolean,
+  //   default: false
+  // },
 
   posts: {
     type: mongoose.Schema.ObjectId,
@@ -89,7 +100,7 @@ const userSchema = new mongoose.Schema({
 
   reputation: {
     type: Number,
-    default: 0
+    default: 0.0
   }
 });
 

@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
+import Typewriter from 'typewriter-effect';
 
 function Copyright() {
   return (
@@ -77,11 +78,11 @@ const cards = [
     path: 'profile'
   },
   {
-    name: 'Dashboard',
+    name: 'Forum',
     description:
       'A detailed analysis of business revenue with actions and integrated expense adding.',
     img: 'Dashboard.PNG',
-    path: 'dashboard'
+    path: 'forum'
   },
   {
     name: 'Redux Table',
@@ -117,15 +118,30 @@ export function Home() {
               color='textPrimary'
               gutterBottom
             >
-              BRACU Discussion Forum
+              BRACU Knowledge Nexus
             </Typography>
+          </Container>
+          <Container maxWidth='lg'>
             <Typography
               variant='h5'
               align='center'
               color='textSecondary'
               paragraph
             >
-              A place for sharing thoughts and meaningful discussions.
+              {/* A place for sharing thoughts and meaningful discussions. */}
+              <Typewriter
+                options={{
+                  strings: [
+                    'Welcome to BRACU Knowledge Nexus!',
+                    'A place for sharing thoughts and meaningful discussions.',
+                    'Explore and expand your knowledge.'
+                  ],
+                  autoStart: true,
+                  loop: true,
+                  delay: 50,
+                  pauseFor: 3000
+                }}
+              />
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justifyContent='center'>
