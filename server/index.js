@@ -15,6 +15,7 @@ const dotenv = require('dotenv');
 const allowedOrigins = [
   'http://localhost:3000',
   'https://knowledge-nexus-lime.vercel.app',
+  'https://knowledge-nexus-oi9p6y342-def4lt-303.vercel.app',
   'https://knowledge-nexus-static.onrender.com'
 ];
 
