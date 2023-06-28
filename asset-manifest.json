@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.js": "/BRACU-Discussion-Forum/static/js/main.fd440762.chunk.js",
+    "main.js.map": "/BRACU-Discussion-Forum/static/js/main.fd440762.chunk.js.map",
+    "runtime-main.js": "/BRACU-Discussion-Forum/static/js/runtime-main.83f6bcba.js",
+    "runtime-main.js.map": "/BRACU-Discussion-Forum/static/js/runtime-main.83f6bcba.js.map",
+    "static/js/2.47ddc7a2.chunk.js": "/BRACU-Discussion-Forum/static/js/2.47ddc7a2.chunk.js",
+    "static/js/2.47ddc7a2.chunk.js.map": "/BRACU-Discussion-Forum/static/js/2.47ddc7a2.chunk.js.map",
+    "index.html": "/BRACU-Discussion-Forum/index.html",
+    "precache-manifest.41e3fd96b4d31949b7350e98c8efe86f.js": "/BRACU-Discussion-Forum/precache-manifest.41e3fd96b4d31949b7350e98c8efe86f.js",
+    "service-worker.js": "/BRACU-Discussion-Forum/service-worker.js",
+    "static/js/2.47ddc7a2.chunk.js.LICENSE": "/BRACU-Discussion-Forum/static/js/2.47ddc7a2.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.83f6bcba.js",
+    "static/js/2.47ddc7a2.chunk.js",
+    "static/js/main.fd440762.chunk.js"
+  ]
+}
