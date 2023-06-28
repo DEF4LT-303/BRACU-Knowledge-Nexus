@@ -7,7 +7,7 @@ import {
   Switch
 } from 'react-router-dom';
 import AppBarAndDrawer from './AppBarAndDrawer/AppBarAndDrawer';
-import { Dashboard } from './Pages/Dashboard';
+import { Forum } from './Pages/Forum';
 import { Home } from './Pages/Home';
 import { SignIn } from './Pages/SignIn';
 import People from './ReduxTable/people';
@@ -52,8 +52,8 @@ export default function App() {
                   <Route path='/profile'>
                     {!user ? <Redirect to='/login' /> : <Profile />}
                   </Route>
-                  <Route path='/dashboard'>
-                    <Dashboard />
+                  <Route path='/forum'>
+                    <Forum />
                   </Route>
                   <Route exact path='/people'>
                     {user && admin ? <People /> : <Redirect to='/' />}

@@ -2,6 +2,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +15,17 @@ import { useSelector } from 'react-redux';
 import Content from '../Dashboard/Content';
 import DeletePeopleDialog from './DeletePeopleDialog';
 import PeopleDialog from './PeopleDialog';
+
+function Copyright() {
+  return (
+    <Typography variant='body2' color='textSecondary' align='center'>
+      {'Copyright © '}
+      <Link color='inherit' href='https://react.school/'></Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
@@ -283,6 +295,7 @@ export default function Profile() {
           )}
         </div>
       </div>
+      <Copyright />
     </Content>
   );
 }
