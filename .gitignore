@@ -11,8 +11,8 @@ yarn-error.log
 .env.production.local
 
 # Ignore build output
-# build/
-# dist/
+build/
+dist/
 
 # Ignore logs and generated files
 *.log
