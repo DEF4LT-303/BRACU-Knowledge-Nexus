@@ -12,20 +12,41 @@ const dotenv = require('dotenv');
 //   next();
 // });
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://knowledge-nexus-lime.vercel.app',
-  'https://knowledge-nexus-oi9p6y342-def4lt-303.vercel.app',
-  'https://knowledge-nexus-static.onrender.com'
-];
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'https://knowledge-nexus-lime.vercel.app',
+//   'https://knowledge-nexus-oi9p6y342-def4lt-303.vercel.app',
+//   'https://knowledge-nexus-static.onrender.com'
+// ];
 
-const cors = require('cors');
-const corsOptions = {
-  origin: allowedOrigins,
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200
-};
-app.use(cors(corsOptions));
+// const cors = require('cors');
+// const corsOptions = {
+//   origin: allowedOrigins,
+//   credentials: true, //access-control-allow-credentials:true
+//   optionSuccessStatus: 200
+// };
+// app.use(cors(corsOptions));
+
+app.use(function (req, res, next) {
+  // res.header("Access-Control-Allow-Origin", "*");
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://knowledge-nexus-lime.vercel.app',
+    'https://knowledge-nexus-oi9p6y342-def4lt-303.vercel.app',
+    'https://knowledge-nexus-static.onrender.com'
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.header('Access-Control-Allow-credentials', true);
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, UPDATE');
+  next();
+});
 
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
