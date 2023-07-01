@@ -55,7 +55,7 @@ export default function App() {
                   <Route path='/forum'>
                     <Forum />
                   </Route>
-                  <Route exact path='/people'>
+                  <Route path='/people'>
                     {user && admin ? <People /> : <Redirect to='/' />}
                   </Route>
                   <Route path={`/people/:ProfileId`}>

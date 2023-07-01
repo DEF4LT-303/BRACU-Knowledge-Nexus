@@ -13,9 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import MuiAlert from '@material-ui/lab/Alert';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../Redux/apiCalls';
+import { loginFailure } from '../Redux/userRedux';
 
 function Copyright() {
   return (
@@ -77,7 +78,7 @@ export function SignIn() {
 
   const dispatch = useDispatch();
 
-  const { fetching, error } = useSelector((state) => state.user);
+  const { isFetching, error } = useSelector((state) => state.user);
 
   const handleClicked = async (e) => {
     e.preventDefault();
@@ -90,12 +91,14 @@ export function SignIn() {
 
     try {
       await login(dispatch, { email, password });
+      window.location.reload();
     } catch (error) {
       if (error.message === 'Invalid email or password') {
         setErrorMessage('Invalid email or password');
       } else {
         setErrorMessage('An error occurred during login');
       }
+      dispatch(loginFailure());
       setOpenSnackbar(true);
     }
   };
@@ -110,6 +113,21 @@ export function SignIn() {
     }
     setOpenSnackbar(false);
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Dispatch the loginFailure action when the page is refreshed
+      dispatch(loginFailure());
+    };
+
+    // Add the event listener for beforeunload
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [dispatch]);
 
   return (
     <Grid container component='main' className={classes.root}>
@@ -171,7 +189,7 @@ export function SignIn() {
                 color='primary'
                 className={classes.submit}
                 onClick={handleClicked}
-                disabled={fetching}
+                disabled={isFetching}
               >
                 Sign In
               </Button>
