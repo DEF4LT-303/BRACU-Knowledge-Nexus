@@ -13,10 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import MuiAlert from '@material-ui/lab/Alert';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { register } from '../Redux/apiCalls';
+import { loginFailure } from '../Redux/userRedux';
 
 function Copyright() {
   return (
@@ -75,7 +76,7 @@ export function Register() {
   const [submitted, setSubmitted] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const error = useSelector((state) => state.user.error);
+  const { isFetching, error } = useSelector((state) => state.user);
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const dispatch = useDispatch();
@@ -104,6 +105,7 @@ export function Register() {
         setErrorMessage('An error occurred during registration');
       }
       setOpenSnackbar(true);
+      dispatch(loginFailure());
     }
   };
 
@@ -117,6 +119,21 @@ export function Register() {
     }
     setOpenSnackbar(false);
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Dispatch the loginFailure action when the page is refreshed
+      dispatch(loginFailure());
+    };
+
+    // Add the event listener for beforeunload
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Clean up the event listener when the component is unmounted
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [dispatch]);
 
   return (
     <Grid container component='main' className={classes.root}>
@@ -194,6 +211,7 @@ export function Register() {
                 color='primary'
                 className={classes.submit}
                 onClick={handleRegister}
+                disabled={isFetching}
               >
                 Register
               </Button>
