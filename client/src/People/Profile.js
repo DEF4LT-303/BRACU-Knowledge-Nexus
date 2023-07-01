@@ -30,18 +30,28 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   headerContainer: {
     position: 'relative',
-    height: '100px'
+    height: '100px',
+    marginBottom: theme.spacing(10), // Add margin at the bottom for mobile view
+    [theme.breakpoints.up('sm')]: {
+      marginBottom: 0 // Remove margin for larger screens
+    }
   },
   header: {
     display: 'flex',
     position: 'absolute',
     width: 'calc(100%)',
     top: '-70px',
-    alignItems: 'flex-end',
-    '& > *': {
-      margin: `${theme.spacing(3)}px ${theme.spacing(1)}px`
+    flexDirection: 'column', // Display items in a column on mobile view
+    alignItems: 'center', // Center items horizontally on mobile view
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row', // Reset to row layout for larger screens
+      alignItems: 'flex-end', // Align items to the bottom of the row
+      '& > *': {
+        margin: `${theme.spacing(3)}px ${theme.spacing(1)}px`
+      }
     }
   },
+
   spacer: {
     flexGrow: '1'
   },
