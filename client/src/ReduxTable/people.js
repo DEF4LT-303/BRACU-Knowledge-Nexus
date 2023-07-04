@@ -348,7 +348,7 @@ export default function People() {
                               ) {
                                 return;
                               }
-                              history.push(`/people/${row._id}`);
+                              history.push(`/userprofile/${row._id}`);
                             }}
                             key={`person-${row._id}`}
                             selected={isItemSelected}

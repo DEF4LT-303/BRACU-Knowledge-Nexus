@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import Components from './Components/Components';
 import { Register } from './Pages/Register';
 import Profile from './People/Profile';
+import UserProfile from './People/UserProfile';
 import { DataProvider } from './Providers/DataProvider';
 import Settings from './Settings/Settings';
 
@@ -51,6 +52,9 @@ export default function App() {
                   </Route>
                   <Route path='/profile'>
                     {!user ? <Redirect to='/login' /> : <Profile />}
+                  </Route>
+                  <Route path='/userprofile'>
+                    {!admin ? <Redirect to='/home' /> : <UserProfile />}
                   </Route>
                   <Route path='/forum'>
                     <Forum />

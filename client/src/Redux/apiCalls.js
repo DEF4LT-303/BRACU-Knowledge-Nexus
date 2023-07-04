@@ -1,7 +1,10 @@
 import {
   getUsersFailure,
   getUsersStart,
-  getUsersSuccess
+  getUsersSuccess,
+  update,
+  updateFailure,
+  updateStart
 } from '../ReduxTable/peopleSlice';
 import { publicRequest, userRequest } from '../requestMethods';
 import {
@@ -58,5 +61,25 @@ export const updateUser = async (id, user, dispatch) => {
     dispatch(updateUserSuccess(res.data));
   } catch (err) {
     dispatch(updateUserFailure());
+  }
+};
+
+export const updateOtherUser = async (id, user, dispatch) => {
+  dispatch(updateStart());
+  try {
+    const res = await userRequest.put(`/users/${id}`, user);
+    dispatch(update(res.data));
+  } catch (err) {
+    dispatch(updateFailure());
+  }
+};
+
+export const findUser = async (id, dispatch) => {
+  dispatch(getUsersStart());
+  try {
+    const res = await userRequest.get(`/users/find/${id}`);
+    await dispatch(getUsersSuccess(res.data));
+  } catch (err) {
+    dispatch(getUsersFailure());
   }
 };

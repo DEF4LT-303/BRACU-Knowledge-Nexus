@@ -6,12 +6,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateUser } from '../Redux/apiCalls';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateOtherUser, updateUser } from '../Redux/apiCalls';
 
 export default function PeopleDialog({ data, render, onSave }) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const defaultImg = data && data.photo;
   const defaultName = data && data.username;
@@ -57,8 +59,11 @@ export default function PeopleDialog({ data, render, onSave }) {
     };
 
     try {
-      if (data) {
+      if (data._id === currentUser._id) {
+        console.log('Updating user:', data._id, currentUser._id);
         await updateUser(data._id, updatedUserData, dispatch);
+      } else {
+        updateOtherUser(data._id, updatedUserData, dispatch);
       }
 
       onSave && onSave();
