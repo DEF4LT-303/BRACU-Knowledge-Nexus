@@ -12,9 +12,9 @@ import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import DeletePeopleDialog from '../Components/DeletePeopleDialog';
+import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
-import DeletePeopleDialog from './DeletePeopleDialog';
-import PeopleDialog from './PeopleDialog';
 
 function Copyright() {
   return (

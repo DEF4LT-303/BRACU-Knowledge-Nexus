@@ -10,7 +10,7 @@ import {
   persistStore
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import peopleSlice from '../ReduxTable/peopleSlice';
+import peopleSlice from './peopleRedux';
 import userReducer from './userRedux';
 
 const persistConfig = {
