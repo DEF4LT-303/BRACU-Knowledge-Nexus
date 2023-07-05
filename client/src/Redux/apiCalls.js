@@ -1,9 +1,5 @@
-import {
-  getUsersFailure,
-  getUsersStart,
-  getUsersSuccess
-} from '../ReduxTable/peopleSlice';
 import { publicRequest, userRequest } from '../requestMethods';
+import { getUsersFailure, getUsersStart, getUsersSuccess } from './peopleRedux';
 import {
   loginFailure,
   loginStart,

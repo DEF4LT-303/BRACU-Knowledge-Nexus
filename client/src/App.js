@@ -10,17 +10,17 @@ import AppBarAndDrawer from './AppBarAndDrawer/AppBarAndDrawer';
 import { Forum } from './Pages/Forum';
 import { Home } from './Pages/Home';
 import { SignIn } from './Pages/SignIn';
-import People from './ReduxTable/people';
+import People from './Pages/people';
 import { useTheme } from './theme';
 
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { useSelector } from 'react-redux';
 import Components from './Components/Components';
+import Profile from './Pages/Profile';
 import { Register } from './Pages/Register';
-import Profile from './People/Profile';
+import Settings from './Pages/Settings';
 import { DataProvider } from './Providers/DataProvider';
-import Settings from './Settings/Settings';
 
 export default function App() {
   const [currentTheme, setCurrentTheme] = useTheme();
