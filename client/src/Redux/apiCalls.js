@@ -3,6 +3,7 @@ import {
   getUsersFailure,
   getUsersStart,
   getUsersSuccess,
+  remove,
   update,
   updateFailure,
   updateStart
@@ -81,5 +82,15 @@ export const findUser = async (id, dispatch) => {
     await dispatch(getUsersSuccess(res.data));
   } catch (err) {
     dispatch(getUsersFailure());
+  }
+};
+
+export const deleteUser = async (id, dispatch) => {
+  dispatch(updateStart());
+  try {
+    await userRequest.delete(`/users/${id}`);
+    dispatch(remove(id));
+  } catch (err) {
+    dispatch(updateFailure());
   }
 };

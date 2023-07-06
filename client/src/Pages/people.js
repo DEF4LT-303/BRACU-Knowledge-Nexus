@@ -278,7 +278,7 @@ export default function People() {
           {selected.length > 0 && (
             <Tooltip title={'Delete'}>
               <DeletePeopleDialog
-                _ids={selected}
+                ids={selected}
                 onSave={() => {
                   dispatch(remove(selected));
 

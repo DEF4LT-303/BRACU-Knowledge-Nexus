@@ -59,6 +59,7 @@ export const peopleSlice = createSlice({
         }
         return person;
       });
+      state.isFetching = false;
     },
     updateFailure: (state) => {
       state.isFetching = false;
