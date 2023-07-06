@@ -21,12 +21,12 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import DeletePeopleDialog from '../Components/DeletePeopleDialog';
+import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
-import DeletePeopleDialog from '../People/DeletePeopleDialog';
-import PeopleDialog from '../People/PeopleDialog';
-import { SummaryCard } from '../People/Profile';
 import { getUsers } from '../Redux/apiCalls';
-import { remove, selectLoading, selectPeople } from './peopleSlice';
+import { remove, selectLoading, selectPeople } from '../Redux/peopleRedux';
+import { SummaryCard } from './Profile';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
