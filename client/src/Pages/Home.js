@@ -12,6 +12,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
+import Content from '../Dashboard/Content';
 
 function Copyright() {
   return (
@@ -110,107 +111,114 @@ export function Home() {
       <main>
         {/* Hero unit */}
         <div className={classes.heroContent}>
-          <Container maxWidth='sm'>
-            <Typography
-              component='h1'
-              variant='h2'
-              align='center'
-              color='textPrimary'
-              gutterBottom
-            >
-              BRACU Knowledge Nexus
-            </Typography>
-          </Container>
-          <Container maxWidth='lg'>
-            <Typography
-              variant='h5'
-              align='center'
-              color='textSecondary'
-              paragraph
-            >
-              {/* A place for sharing thoughts and meaningful discussions. */}
-              <Typewriter
-                options={{
-                  strings: [
-                    'Welcome to BRACU Knowledge Nexus!',
-                    'A place for sharing thoughts and meaningful discussions.',
-                    'Explore and expand your knowledge.'
-                  ],
-                  autoStart: true,
-                  loop: true,
-                  delay: 50,
-                  pauseFor: 3000
-                }}
-              />
-            </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justifyContent='center'>
-                <Grid item>
-                  {!user && (
-                    <Button
-                      component={RouterLink}
-                      to={'/login'}
-                      variant='contained'
-                      color='primary'
-                    >
-                      Sign In
-                    </Button>
-                  )}
+          <Content>
+            <Container maxWidth='sm'>
+              <Typography
+                component='h1'
+                variant='h2'
+                align='center'
+                color='textPrimary'
+                gutterBottom
+              >
+                BRACU Knowledge Nexus
+              </Typography>
+            </Container>
+            <Container maxWidth='lg'>
+              <Typography
+                variant='h5'
+                align='center'
+                color='textSecondary'
+                paragraph
+              >
+                {/* A place for sharing thoughts and meaningful discussions. */}
+                <Typewriter
+                  options={{
+                    strings: [
+                      'Welcome to BRACU Knowledge Nexus!',
+                      'A place for sharing thoughts and meaningful discussions.',
+                      'Explore and expand your knowledge.'
+                    ],
+                    autoStart: true,
+                    loop: true,
+                    delay: 50,
+                    pauseFor: 3000
+                  }}
+                />
+              </Typography>
+
+              <div className={classes.heroButtons}>
+                <Grid container spacing={2} justifyContent='center'>
+                  <Grid item>
+                    {!user && (
+                      <Button
+                        component={RouterLink}
+                        to={'/login'}
+                        variant='contained'
+                        color='primary'
+                      >
+                        Sign In
+                      </Button>
+                    )}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </div>
-          </Container>
+              </div>
+            </Container>
+          </Content>
         </div>
-        <Container className={classes.cardGrid} maxWidth='md'>
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card.name} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image={`img/${card.img}`}
-                    title='Image title'
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant='h5' component='h2'>
-                      {card.name}
-                    </Typography>
-                    <Typography className={classes.description}>
-                      {card.description}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      color='secondary'
-                      variant='outlined'
-                      component={RouterLink}
-                      to={`/${card.path}`}
-                      fullWidth
-                    >
-                      View
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
+        <Content>
+          <Container className={classes.cardGrid} maxWidth='md'>
+            {/* End hero unit */}
+            <Grid container spacing={4}>
+              {cards.map((card) => (
+                <Grid item key={card.name} xs={12} sm={6} md={4}>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={`img/${card.img}`}
+                      title='Image title'
+                    />
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant='h5' component='h2'>
+                        {card.name}
+                      </Typography>
+                      <Typography className={classes.description}>
+                        {card.description}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        color='secondary'
+                        variant='outlined'
+                        component={RouterLink}
+                        to={`/${card.path}`}
+                        fullWidth
+                      >
+                        View
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </Content>
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
-        <Typography variant='h6' align='center' gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant='subtitle1'
-          align='center'
-          color='textSecondary'
-          component='p'
-        >
-          Footer Content
-        </Typography>
-        <Copyright />
+        <Content>
+          <Typography variant='h6' align='center' gutterBottom>
+            Footer
+          </Typography>
+          <Typography
+            variant='subtitle1'
+            align='center'
+            color='textSecondary'
+            component='p'
+          >
+            Footer Content
+          </Typography>
+          <Copyright />
+        </Content>
       </footer>
       {/* End footer */}
     </React.Fragment>
