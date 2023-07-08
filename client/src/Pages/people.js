@@ -261,7 +261,7 @@ export default function People() {
           <PeopleDialog
             edge='end'
             onSave={() => {
-              setSnackOpen('Person added');
+              setSnackOpen('User added');
             }}
             render={(open) => (
               <Button
@@ -283,7 +283,7 @@ export default function People() {
                   dispatch(remove(selected));
 
                   setSnackOpen(
-                    `${selected.length} Driver${
+                    `${selected.length} User${
                       selected.length > 1 ? 's' : ''
                     } Deleted`
                   );
