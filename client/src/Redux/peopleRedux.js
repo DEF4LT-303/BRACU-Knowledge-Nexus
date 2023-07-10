@@ -47,6 +47,11 @@ export const peopleSlice = createSlice({
         return !removedIds.includes(person.id);
       });
     },
+
+    updateStart: (state) => {
+      state.isFetching = true;
+      state.error = false;
+    },
     update: (state, action) => {
       state.list = state.list.map((person) => {
         if (person.id === action.payload.id) {
@@ -54,6 +59,11 @@ export const peopleSlice = createSlice({
         }
         return person;
       });
+      state.isFetching = false;
+    },
+    updateFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
     }
   }
 });
@@ -64,7 +74,9 @@ export const {
   update,
   getUsersStart,
   getUsersSuccess,
-  getUsersFailure
+  getUsersFailure,
+  updateStart,
+  updateFailure
 } = peopleSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It

@@ -21,6 +21,18 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.error = true;
     },
+    registrationStart: (state) => {
+      state.isFetching = true;
+      state.error = false; // Reset error to false when starting login
+    },
+    registrationSuccess: (state) => {
+      state.isFetching = false;
+      state.error = false; // Reset error to false on successful login
+    },
+    registrationFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
+    },
     logout: (state) => {
       state.currentUser = null;
       state.error = false; // Reset error to false on logout
@@ -33,9 +45,21 @@ const userSlice = createSlice({
       state.isFetching = false;
       state.currentUser = action.payload;
       state.error = false; // Reset error to false on successful update
-      console.log('Updated currentUser:', state.currentUser);
     },
     updateUserFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
+    },
+    findUserStart: (state) => {
+      state.isFetching = true;
+      state.error = false; // Reset error to false when starting find
+    },
+    findUserSuccess: (state, action) => {
+      state.isFetching = false;
+      state.currentUser = action.payload;
+      state.error = false; // Reset error to false on successful find
+    },
+    findUserFailure: (state) => {
       state.isFetching = false;
       state.error = true;
     }
@@ -49,7 +73,12 @@ export const {
   logout,
   updateUserStart,
   updateUserSuccess,
-  updateUserFailure
+  updateUserFailure,
+  findUserStart,
+  findUserSuccess,
+  registrationFailure,
+  registrationStart,
+  registrationSuccess
 } = userSlice.actions;
 
 export default userSlice.reducer;

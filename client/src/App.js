@@ -20,6 +20,7 @@ import Components from './Components/Components';
 import Profile from './Pages/Profile';
 import { Register } from './Pages/Register';
 import Settings from './Pages/Settings';
+import UserProfile from './Pages/UserProfile';
 import { DataProvider } from './Providers/DataProvider';
 
 export default function App() {
@@ -51,6 +52,9 @@ export default function App() {
                   </Route>
                   <Route path='/profile'>
                     {!user ? <Redirect to='/login' /> : <Profile />}
+                  </Route>
+                  <Route path='/userprofile'>
+                    {!admin ? <Redirect to='/home' /> : <UserProfile />}
                   </Route>
                   <Route path='/forum'>
                     <Forum />

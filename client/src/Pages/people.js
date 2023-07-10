@@ -261,7 +261,7 @@ export default function People() {
           <PeopleDialog
             edge='end'
             onSave={() => {
-              setSnackOpen('Person added');
+              setSnackOpen('User added');
             }}
             render={(open) => (
               <Button
@@ -278,12 +278,12 @@ export default function People() {
           {selected.length > 0 && (
             <Tooltip title={'Delete'}>
               <DeletePeopleDialog
-                _ids={selected}
+                ids={selected}
                 onSave={() => {
                   dispatch(remove(selected));
 
                   setSnackOpen(
-                    `${selected.length} Driver${
+                    `${selected.length} User${
                       selected.length > 1 ? 's' : ''
                     } Deleted`
                   );
@@ -348,7 +348,7 @@ export default function People() {
                               ) {
                                 return;
                               }
-                              history.push(`/people/${row._id}`);
+                              history.push(`/userprofile/${row._id}`);
                             }}
                             key={`person-${row._id}`}
                             selected={isItemSelected}

@@ -1,9 +1,20 @@
 import { publicRequest, userRequest } from '../requestMethods';
-import { getUsersFailure, getUsersStart, getUsersSuccess } from './peopleRedux';
+import {
+  getUsersFailure,
+  getUsersStart,
+  getUsersSuccess,
+  remove,
+  update,
+  updateFailure,
+  updateStart
+} from './peopleRedux';
 import {
   loginFailure,
   loginStart,
   loginSuccess,
+  registrationFailure,
+  registrationStart,
+  registrationSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess
@@ -24,15 +35,17 @@ export const login = async (dispatch, userCredentials) => {
 };
 
 export const register = async (dispatch, user) => {
-  dispatch(loginStart());
+  dispatch(registrationStart());
   try {
     const res = await publicRequest.post('/auth/register', user);
-    dispatch(loginSuccess(res.data));
+    setTimeout(() => {
+      dispatch(registrationSuccess());
+    }, 3000);
   } catch (error) {
     if (error.response && error.response.status === 409) {
       throw new Error('Email already exists'); // Throw an error for invalid email or password
     }
-    dispatch(loginFailure());
+    dispatch(registrationFailure());
     throw error;
   }
 };
@@ -54,5 +67,35 @@ export const updateUser = async (id, user, dispatch) => {
     dispatch(updateUserSuccess(res.data));
   } catch (err) {
     dispatch(updateUserFailure());
+  }
+};
+
+export const updateOtherUser = async (id, user, dispatch) => {
+  dispatch(updateStart());
+  try {
+    const res = await userRequest.put(`/users/${id}`, user);
+    dispatch(update(res.data));
+  } catch (err) {
+    dispatch(updateFailure());
+  }
+};
+
+export const findUser = async (id, dispatch) => {
+  dispatch(getUsersStart());
+  try {
+    const res = await userRequest.get(`/users/find/${id}`);
+    await dispatch(getUsersSuccess(res.data));
+  } catch (err) {
+    dispatch(getUsersFailure());
+  }
+};
+
+export const deleteUser = async (id, dispatch) => {
+  dispatch(updateStart());
+  try {
+    await userRequest.delete(`/users/${id}`);
+    dispatch(remove(id));
+  } catch (err) {
+    dispatch(updateFailure());
   }
 };
