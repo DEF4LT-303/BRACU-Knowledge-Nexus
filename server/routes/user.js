@@ -51,9 +51,12 @@ router.get('/find/:id', verifyTokenAdmin, async (req, res) => {
 router.get('/', verifyTokenAdmin, async (req, res) => {
   const query = req.query.new;
   try {
-    const users = query
-      ? await User.find().sort({ _id: -1 }).limit(5)
-      : await User.find();
+    let users;
+    if (query) {
+      users = await User.find().sort({ _id: -1 }).limit(5).select('-password');
+    } else {
+      users = await User.find().select('-password');
+    }
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
