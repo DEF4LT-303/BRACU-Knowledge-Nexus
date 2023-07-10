@@ -37,6 +37,12 @@ export default function PeopleDialog({ data, render, onSave }) {
     setOpen(true);
     setName(defaultName);
     setImg(defaultImg);
+    setDisplayName(data && data.displayName);
+    setAbout(data && data.about);
+    setGender(data && data.gender);
+    setGithubLink(data && data.githubLink);
+    setLinkedInLink(data && data.linkedInLink);
+    setTechnicalSkills(data && data.technicalSkills);
   };
 
   const handleClose = () => {
