@@ -120,6 +120,13 @@ export function Register() {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Invalid email format');
+      setOpenSnackbar(true);
+      return;
+    }
+
     try {
       await register(dispatch, { username, email, password });
       // dispatch(logout());
