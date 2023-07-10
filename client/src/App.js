@@ -48,8 +48,7 @@ export default function App() {
                     {!user ? <SignIn /> : <Redirect to='/' />}
                   </Route>
                   <Route path='/register'>
-                    {/* {!user ? <Register /> : <Redirect to='/' />} */}
-                    <Register />
+                    {!user ? <Register /> : <Redirect to='/' />}
                   </Route>
                   <Route path='/profile'>
                     {!user ? <Redirect to='/login' /> : <Profile />}

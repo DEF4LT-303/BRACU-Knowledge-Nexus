@@ -36,6 +36,8 @@ export default function DeletePeopleDialog({ ids, render, onSave }) {
           dispatch(logout());
 
           history.push('/home');
+        } else {
+          history.push('/people');
         }
       } catch (err) {
         console.log(err);

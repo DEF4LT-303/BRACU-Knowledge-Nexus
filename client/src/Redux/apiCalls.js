@@ -12,6 +12,9 @@ import {
   loginFailure,
   loginStart,
   loginSuccess,
+  registrationFailure,
+  registrationStart,
+  registrationSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess
@@ -32,15 +35,17 @@ export const login = async (dispatch, userCredentials) => {
 };
 
 export const register = async (dispatch, user) => {
-  dispatch(loginStart());
+  dispatch(registrationStart());
   try {
     const res = await publicRequest.post('/auth/register', user);
-    dispatch(loginSuccess(res.data));
+    setTimeout(() => {
+      dispatch(registrationSuccess());
+    }, 3000);
   } catch (error) {
     if (error.response && error.response.status === 409) {
       throw new Error('Email already exists'); // Throw an error for invalid email or password
     }
-    dispatch(loginFailure());
+    dispatch(registrationFailure());
     throw error;
   }
 };
