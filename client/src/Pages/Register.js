@@ -67,6 +67,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+export function CustomSnackbar({
+  message,
+  severity,
+  openSnackbar,
+  handleCloseSnackbar
+}) {
+  return (
+    <Snackbar
+      open={openSnackbar}
+      autoHideDuration={3000}
+      onClose={handleCloseSnackbar}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+    >
+      <MuiAlert
+        elevation={6}
+        variant='filled'
+        onClose={handleCloseSnackbar}
+        severity={severity}
+      >
+        {message}
+      </MuiAlert>
+    </Snackbar>
+  );
+}
+
 export function Register() {
   const classes = useStyles();
 
@@ -97,7 +122,12 @@ export function Register() {
 
     try {
       await register(dispatch, { username, email, password });
-      history.push('/login');
+      // dispatch(logout());
+      setErrorMessage('Registration successful');
+      setOpenSnackbar(true);
+      setTimeout(() => {
+        history.push('/login');
+      }, 3000);
     } catch (error) {
       if (error.message === 'Email already exists') {
         setErrorMessage('Email already exists');
@@ -228,21 +258,12 @@ export function Register() {
             </form>
           </Grid>
         </Grid>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={3000}
-          onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        >
-          <MuiAlert
-            elevation={6}
-            variant='filled'
-            onClose={handleCloseSnackbar}
-            severity='error'
-          >
-            {errorMessage}
-          </MuiAlert>
-        </Snackbar>
+        <CustomSnackbar
+          message={errorMessage || 'Registration successful'}
+          severity={error ? 'error' : 'success'}
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+        />
       </Grid>
     </Grid>
   );
