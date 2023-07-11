@@ -61,7 +61,7 @@ export default function PeopleDialog({ data, render, onSave }) {
       technicalSkills:
         typeof technicalSkills === 'string' && technicalSkills.trim() !== ''
           ? technicalSkills.split(',').map((skill) => skill.trim())
-          : data && data.technicalSkills
+          : []
     };
 
     try {
@@ -146,6 +146,8 @@ export default function PeopleDialog({ data, render, onSave }) {
             margin='dense'
             label='About'
             fullWidth
+            multiline
+            rows={4}
             value={about}
             onChange={(e) => {
               setAbout(e.target.value);

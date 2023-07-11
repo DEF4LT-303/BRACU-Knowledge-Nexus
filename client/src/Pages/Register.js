@@ -46,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     width: '100%',
-    paddingTop: '40px'
+    paddingTop: '40px',
+    backgroundAttachment: 'fixed'
   },
   paper: {
     margin: theme.spacing(8, 8),
