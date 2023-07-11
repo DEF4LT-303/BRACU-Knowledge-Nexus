@@ -196,12 +196,12 @@ export default function Profile() {
   const user = useSelector((state) =>
     state.people.list.find((person) => person._id === userId)
   );
-  const currentUser = useSelector((state) => state.user.currentUser);
+
   const loading = useSelector((state) => state.user.isFetching);
 
   const classes = useStyles();
 
-  const roleLabel = user.role.toUpperCase();
+  const roleLabel = user ? user.role.toUpperCase() : '';
 
   if (loading) {
     return (
@@ -213,106 +213,118 @@ export default function Profile() {
 
   return (
     <Content>
-      <div
-        style={{
-          height: '200px',
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          filter: 'contrast(75%)',
-          backgroundImage:
-            'url(https://png.pngtree.com/background/20210709/original/pngtree-full-aesthetic-nebula-starry-sky-banner-background-picture-image_916071.jpg)'
-        }}
-      />
-      <div className={classes.headerContainer}>
-        <div className={classes.header}>
-          <Avatar
-            alt={user.name}
-            src={user.photo}
-            classes={{ root: classes.avatar, circle: classes.circle }}
-          />
-          <div>
-            <Typography variant={'h5'}>{user.username}</Typography>
-            <Typography variant='caption' color='textSecondary'>
-              {user.displayName}
-            </Typography>
-          </div>
-          <Chip variant={'outlined'} icon={<PersonIcon />} label={roleLabel} />
-
-          <div className={classes.spacer} />
-          <div className={classes.actionGroup}>
-            <PeopleDialog
-              data={user}
-              render={(open) => (
-                <Button
-                  color='primary'
-                  variant='contained'
-                  startIcon={<EditIcon />}
-                  onClick={open}
-                >
-                  Edit
-                </Button>
-              )}
-            />
-            <DeletePeopleDialog
-              ids={[user._id]}
-              render={(open) => (
-                <Button
-                  variant='outlined'
-                  startIcon={<DeleteIcon />}
-                  onClick={open}
-                >
-                  Delete
-                </Button>
-              )}
-            />
-          </div>
-        </div>
-      </div>
-      <div className={classes.summaryCards}>
-        <SummaryCard title={'Posts'} value={user.materialCount} />
-        <SummaryCard title={'Favorites'} value={user.favourites.length} />
-        <SummaryCard title={'Reputation'} value={user.reputation} />
-      </div>
-
-      <BioCard title='About' content={user.about} />
-      <div className={classes.summaryCards}>
-        <BioCard title='Gender' content={user.gender} />
-        <SkillsCard title='Skills' skills={user.technicalSkills} />
-      </div>
-      <div className={classes.card}>
-        <Typography variant='h5' className={classes.cardTitle}>
-          Links:
+      {!user ? (
+        <Typography variant='body1' color='error'>
+          Invalid User
         </Typography>
-        <div className={classes.emailSection}>
-          <EmailIcon />
-          <Typography variant='h6'>{user.email}</Typography>
-        </div>
-        <div>
-          <Typography variant='h6' className={classes.linkTitle}>
-            GitHub Link:
-          </Typography>
-          {user.githubLink ? (
-            <a href={user.githubLink} className={classes.link}>
-              {user.githubLink}
-            </a>
-          ) : (
-            <Typography variant='body1'>N/A</Typography>
-          )}
-        </div>
-        <div>
-          <Typography variant='h6' className={classes.linkTitle}>
-            LinkedIn Link:
-          </Typography>
-          {user.linkedInLink ? (
-            <a href={user.linkedInLink} className={classes.link}>
-              {user.linkedInLink}
-            </a>
-          ) : (
-            <Typography variant='body1'>N/A</Typography>
-          )}
-        </div>
-      </div>
-      <Copyright />
+      ) : (
+        <>
+          <div
+            style={{
+              height: '200px',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              filter: 'contrast(75%)',
+              backgroundImage:
+                'url(https://png.pngtree.com/background/20210709/original/pngtree-full-aesthetic-nebula-starry-sky-banner-background-picture-image_916071.jpg)'
+            }}
+          />
+          <div className={classes.headerContainer}>
+            <div className={classes.header}>
+              <Avatar
+                alt={user.name}
+                src={user.photo}
+                classes={{ root: classes.avatar, circle: classes.circle }}
+              />
+              <div>
+                <Typography variant={'h5'}>{user.username}</Typography>
+                <Typography variant='caption' color='textSecondary'>
+                  {user.displayName}
+                </Typography>
+              </div>
+              <Chip
+                variant={'outlined'}
+                icon={<PersonIcon />}
+                label={roleLabel}
+              />
+
+              <div className={classes.spacer} />
+              <div className={classes.actionGroup}>
+                <PeopleDialog
+                  data={user}
+                  render={(open) => (
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      startIcon={<EditIcon />}
+                      onClick={open}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                />
+                <DeletePeopleDialog
+                  ids={[user._id]}
+                  render={(open) => (
+                    <Button
+                      variant='outlined'
+                      startIcon={<DeleteIcon />}
+                      onClick={open}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={classes.summaryCards}>
+            <SummaryCard title={'Posts'} value={user.materialCount} />
+            <SummaryCard title={'Favorites'} value={user.favourites.length} />
+            <SummaryCard title={'Reputation'} value={user.reputation} />
+          </div>
+
+          <BioCard title='About' content={user.about} />
+          <div className={classes.summaryCards}>
+            <BioCard title='Gender' content={user.gender} />
+            <SkillsCard title='Skills' skills={user.technicalSkills} />
+          </div>
+          <div className={classes.card}>
+            <Typography variant='h5' className={classes.cardTitle}>
+              Links:
+            </Typography>
+            <div className={classes.emailSection}>
+              <EmailIcon />
+              <Typography variant='h6'>{user.email}</Typography>
+            </div>
+            <div>
+              <Typography variant='h6' className={classes.linkTitle}>
+                GitHub Link:
+              </Typography>
+              {user.githubLink ? (
+                <a href={user.githubLink} className={classes.link}>
+                  {user.githubLink}
+                </a>
+              ) : (
+                <Typography variant='body1'>N/A</Typography>
+              )}
+            </div>
+            <div>
+              <Typography variant='h6' className={classes.linkTitle}>
+                LinkedIn Link:
+              </Typography>
+              {user.linkedInLink ? (
+                <a href={user.linkedInLink} className={classes.link}>
+                  {user.linkedInLink}
+                </a>
+              ) : (
+                <Typography variant='body1'>N/A</Typography>
+              )}
+            </div>
+          </div>
+          <Copyright />
+        </>
+      )}
     </Content>
   );
 }
