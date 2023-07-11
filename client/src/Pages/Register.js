@@ -98,6 +98,8 @@ export function Register() {
   const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = React.useState('');
+
   const [submitted, setSubmitted] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
@@ -123,6 +125,12 @@ export function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setErrorMessage('Invalid email format');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
       setOpenSnackbar(true);
       return;
     }
@@ -237,6 +245,22 @@ export function Register() {
                 onChange={(e) => setPassword(e.target.value)}
                 error={isFieldEmpty(password)}
                 helperText={isFieldEmpty(password) ? 'Required' : ''}
+              />
+              <TextField
+                variant='outlined'
+                margin='normal'
+                required
+                fullWidth
+                name='confirmPassword'
+                label='Confirm Password'
+                type='password'
+                id='confirmPassword'
+                autoComplete='new-password'
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                error={password !== confirmPassword}
+                helperText={
+                  password !== confirmPassword ? 'Passwords do not match' : ''
+                }
               />
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
