@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const doubtSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true,"Title cannot be empty"]
+    required: [true,"Title cannot be empty"],
   },
   content: {
     type: String,
-    required: [true,"Post cannot be empty"]
+    required: [true,"Post cannot be empty"],
   },
   creator: {
     type: mongoose.Schema.ObjectId,
