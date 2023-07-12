@@ -11,7 +11,7 @@ const replySchema = new mongoose.Schema({
     },
     replyToPost: {
         type: mongoose.Schema.ObjectId,
-        ref: "doubt",
+        ref: "Forum",
     },
     createdAt: {
         type: Date,
