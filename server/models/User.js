@@ -75,7 +75,7 @@ const userSchema = new mongoose.Schema({
 
   posts: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Post'
+    ref: 'Forum'
   },
 
   favourites: {
