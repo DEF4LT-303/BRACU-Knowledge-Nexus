@@ -34,6 +34,18 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#1772cd07',
     borderRadius: '0.3rem'
   },
+  spacer: {
+    display: 'flex',
+    gap: '1rem',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column', // Stack buttons on top of each other for small screens
+      alignItems: 'center' // Center buttons horizontally for small screens
+    }
+  },
+  right_hand_side: {
+    display: 'flex',
+    alignItems: 'center'
+  },
   sectionWrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -146,6 +158,9 @@ const useStyles = makeStyles((theme) => ({
   customChip: {
     backgroundColor: '#1772cd27 !important',
     color: '#000000 !important'
+  },
+  custom_btn: {
+    width: '125px'
   }
 }));
 
@@ -259,16 +274,18 @@ export function Thread() {
                 Back
               </Button>
               <div className={classes.threadTitle}>
-                <h2>How to use React?</h2>
+                <h2>How to use React? And much more longer texttt</h2>
               </div>
             </div>
-            <div className='right_hand_side'>
-              <div className='btn_group'>
+            <div className={classes.rightSide}>
+              <div className={classes.spacer}>
                 {user && (
                   <Button
                     onClick={() => setEdit(true)}
-                    className='custom_btn black_dull'
+                    className={classes.custom_btn}
                     startIcon={<EditIcon />}
+                    variant='contained'
+                    color='primary'
                   >
                     Edit
                   </Button>
@@ -277,8 +294,10 @@ export function Thread() {
                 {user && (
                   <Button
                     onClick={() => setEdit(true)}
-                    className='custom_btn black_dull'
+                    className={classes.custom_btn}
                     startIcon={<DeleteIcon />}
+                    variant='outlined'
+                    width='100%'
                   >
                     Delete
                   </Button>
