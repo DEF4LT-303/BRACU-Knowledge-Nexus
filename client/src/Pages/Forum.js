@@ -122,7 +122,7 @@ function ForumCard({ post }) {
         <CardHeader
           avatar={
             <Link to={`/profile`} className={classes.links}>
-              <Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
+              <Avatar sx={{ bgcolor: red[500] }} aria-label='forum'>
                 R
               </Avatar>
             </Link>
