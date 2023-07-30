@@ -32,6 +32,7 @@ app.use(cors());
 
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
+const forumRoute = require('./routes/forum');
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ mongoose
 app.use(express.json());
 app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/forum', forumRoute);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)
