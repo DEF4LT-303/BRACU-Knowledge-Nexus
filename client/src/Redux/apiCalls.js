@@ -1,4 +1,5 @@
 import { publicRequest, userRequest } from '../requestMethods';
+import { getForumFailure, getForumStart, getForumSuccess } from './forumRedux';
 import {
   getUsersFailure,
   getUsersStart,
@@ -19,6 +20,8 @@ import {
   updateUserStart,
   updateUserSuccess
 } from './userRedux';
+
+// *User API Calls*
 
 export const login = async (dispatch, userCredentials) => {
   dispatch(loginStart());
@@ -97,5 +100,17 @@ export const deleteUser = async (id, dispatch) => {
     dispatch(remove(id));
   } catch (err) {
     dispatch(updateFailure());
+  }
+};
+
+// *Forum API Calls*
+
+export const getForums = async (dispatch) => {
+  dispatch(getForumStart());
+  try {
+    const res = await publicRequest.get('/forums');
+    await dispatch(getForumSuccess(res.data));
+  } catch (err) {
+    dispatch(getForumFailure());
   }
 };

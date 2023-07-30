@@ -14,9 +14,11 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import Content from '../Dashboard/Content';
+import { getForums } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -112,7 +114,7 @@ function ForumCard({ post }) {
     // Check if the card area itself is clicked
     if (!event.target.closest('.no-navigation')) {
       // Navigate to the home page
-      history.push('/');
+      history.push('/thread');
     }
   };
 
@@ -121,10 +123,15 @@ function ForumCard({ post }) {
       <CardActionArea onClick={handleClick} disableRipple>
         <CardHeader
           avatar={
-            <Link to={`/profile`} className={classes.links}>
-              <Avatar sx={{ bgcolor: red[500] }} aria-label='forum'>
-                R
-              </Avatar>
+            <Link
+              to={`/userprofile/${post.creator._id}`}
+              className={classes.links}
+            >
+              <Avatar
+                sx={{ bgcolor: red[500] }}
+                aria-label='forum'
+                src={post.creator.photo}
+              ></Avatar>
             </Link>
           }
           action={
@@ -134,8 +141,11 @@ function ForumCard({ post }) {
           }
           title={post.title}
           subheader={
-            <Link to={`/profile`} className={classes.links}>
-              {post.author}
+            <Link
+              to={`/userprofile/${post.creator._id}`}
+              className={classes.links}
+            >
+              @{post.creator.displayName}
             </Link>
           }
           className='no-navigation'
@@ -151,13 +161,13 @@ function ForumCard({ post }) {
               <ThumbUpIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.upvotes}
+              {post.upvotes || 0}
             </Typography>
             <IconButton aria-label='downvote'>
               <ThumbDownIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.downvotes}
+              {post.downvotes || 0}
             </Typography>
           </div>
           <div className={classes.favIcon}>
@@ -172,7 +182,14 @@ function ForumCard({ post }) {
 }
 
 export function Forum() {
+  const dispatch = useDispatch();
   const classes = useStyles();
+
+  useEffect(() => {
+    getForums(dispatch);
+  }, [dispatch]);
+
+  const forums = useSelector((state) => state.forums.forums);
 
   return (
     <>
@@ -185,7 +202,7 @@ export function Forum() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Grid container spacing={3}>
-              {forumPosts.map((post) => (
+              {forums.map((post) => (
                 <Grid item xs={12} key={post.id}>
                   <ForumCard post={post} />
                 </Grid>
