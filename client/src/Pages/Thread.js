@@ -13,10 +13,11 @@ import StarIcon from '@mui/icons-material/Star';
 import { Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import JoditEditor from 'jodit-react';
-import React, { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import Content from '../Dashboard/Content';
+import { getForumsById } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,14 +33,15 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
     backgroundColor: '#1772cd07',
-    borderRadius: '0.3rem'
+    borderRadius: '0.3rem',
+    width: '100%'
   },
   spacer: {
     display: 'flex',
     gap: '1rem',
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column', // Stack buttons on top of each other for small screens
-      alignItems: 'center' // Center buttons horizontally for small screens
+      flexDirection: 'column',
+      alignItems: 'center'
     }
   },
   right_hand_side: {
@@ -114,10 +116,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100% !important',
     backgroundColor: 'rgba(0, 0, 0, 0.03) !important',
     borderRadius: '0.3rem !important',
-    padding: '0.1rem'
+    padding: '0.1rem',
+    [theme.breakpoints.down('sm')]: {
+      width: '80% !important'
+    }
   },
   doubt_description_wrapper: {
-    width: '90% !important',
+    width: '70% !important',
     margin: '0.1rem 2rem !important'
   },
 
@@ -161,6 +166,19 @@ const useStyles = makeStyles((theme) => ({
   },
   custom_btn: {
     width: '125px'
+  },
+  doubt_posted_time: {
+    [theme.breakpoints.down('sm')]: {
+      wordWrap: 'break-word',
+      marginTop: theme.spacing(1)
+    }
+  },
+  createdAtContainer: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
   }
 }));
 
@@ -233,6 +251,15 @@ export function Thread() {
 
   const history = useHistory();
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const forumId = location.pathname.split('/')[2];
+
+  useEffect(() => {
+    getForumsById(forumId, dispatch);
+  }, [forumId, dispatch]);
+
+  const thread = useSelector((state) => state.thread.thread);
 
   const commentConfig = useMemo(
     () => ({
@@ -274,7 +301,7 @@ export function Thread() {
                 Back
               </Button>
               <div className={classes.threadTitle}>
-                <h2>How to use React? And much more longer texttt</h2>
+                <h2>{thread.title}</h2>
               </div>
             </div>
             <div className={classes.rightSide}>
@@ -316,7 +343,7 @@ export function Thread() {
               >
                 <ArrowDropUpIcon style={{ scale: '1.5' }} />
               </Button>
-              <div className={classes.vote_count}>5</div>
+              <div className={classes.vote_count}>{thread.upVotes.length}</div>
               <Button
                 onClick={null}
                 className={`custom_btn active ${
@@ -330,9 +357,9 @@ export function Thread() {
             <div className={classes.doubt_main_wrapper}>
               <div className={classes.owner_info_outer}>
                 <div className={classes.owner_info_wrapper}>
-                  <Avatar src={threadPosts[0].avatar} />
+                  <Avatar src={thread.creator.photo} />
                   <div onClick={null} className={classes.doubt_owner_name}>
-                    {threadPosts[0].author}
+                    {thread.creator.username}
                   </div>
 
                   <div className='owner_reputation'>
@@ -342,62 +369,53 @@ export function Thread() {
                       style={{ fontFamily: 'Segoe UI', fontWeight: 500 }}
                       startIcon={<StarIcon />}
                     >
-                      3
+                      {thread.creator.reputation}
                     </Button>
                   </div>
 
-                  {Math.floor(
-                    Math.abs(Date.now() - Date.parse(createdAt)) / (1000 * 60)
-                  ) < 60 ? (
-                    <div
-                      className={classes.doubt_posted_time}
-                    >{`created ${Math.floor(
+                  <div className={classes.doubt_posted_time}>
+                    {Math.floor(
                       Math.abs(Date.now() - Date.parse(createdAt)) / (1000 * 60)
-                    )} minutes ago`}</div>
-                  ) : Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60)
-                    ) < 24 ? (
-                    <div
-                      className={classes.doubt_posted_time}
-                    >{`created ${Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60)
-                    )} Hours ago`}</div>
-                  ) : Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60 * 24)
-                    ) < 30 ? (
-                    <div
-                      className={classes.doubt_posted_time}
-                    >{`created ${Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60 * 24)
-                    )} Days ago`}</div>
-                  ) : Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60 * 24 * 30)
-                    ) < 12 ? (
-                    <div
-                      className={classes.doubt_posted_time}
-                    >{`created ${Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60 * 24 * 30)
-                    )} Months ago`}</div>
-                  ) : (
-                    <div
-                      className={classes.doubt_posted_time}
-                    >{`created ${Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) /
-                        (1000 * 60 * 60 * 24 * 30 * 12)
-                    )} Years ago`}</div>
-                  )}
+                    ) < 60
+                      ? `created ${Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60)
+                        )} minutes ago`
+                      : Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60)
+                        ) < 24
+                      ? `created ${Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60)
+                        )} Hours ago`
+                      : Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60 * 24)
+                        ) < 30
+                      ? `created ${Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60 * 24)
+                        )} Days ago`
+                      : Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60 * 24 * 30)
+                        ) < 12
+                      ? `created ${Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60 * 24 * 30)
+                        )} Months ago`
+                      : `created ${Math.floor(
+                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                            (1000 * 60 * 60 * 24 * 30 * 12)
+                        )} Years ago`}
+                  </div>
                 </div>
               </div>
 
               <div className={classes.doubt_description_outer}>
                 <div className={classes.doubt_description_wrapper}>
-                  {threadPosts[0].content}
+                  {thread.description}
                 </div>
               </div>
 

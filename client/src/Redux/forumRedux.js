@@ -42,6 +42,11 @@ const forumSlice = createSlice({
       state.forums = action.payload;
       state.error = false; // Reset error to false on successful find
     },
+    getForumByIdSuccess: (state, action) => {
+      state.isFetching = false;
+      state.forums = action.payload;
+      state.error = false; // Reset error to false on successful find
+    },
     getForumFailure: (state) => {
       state.isFetching = false;
       state.error = true;
@@ -58,7 +63,8 @@ export const {
   createForumFailure,
   createForumStart,
   createForumSuccess,
-  getForumFailure
+  getForumFailure,
+  getForumByIdSuccess
 } = forumSlice.actions;
 
 export default forumSlice.reducer;

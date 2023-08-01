@@ -10,6 +10,11 @@ import {
   updateStart
 } from './peopleRedux';
 import {
+  getThreadByIdSuccess,
+  getThreadFailure,
+  getthreadStart
+} from './threadRedux';
+import {
   loginFailure,
   loginStart,
   loginSuccess,
@@ -112,5 +117,15 @@ export const getForums = async (dispatch) => {
     await dispatch(getForumSuccess(res.data));
   } catch (err) {
     dispatch(getForumFailure());
+  }
+};
+
+export const getForumsById = async (id, dispatch) => {
+  dispatch(getthreadStart());
+  try {
+    const res = await publicRequest.get(`/forums/find/${id}`);
+    await dispatch(getThreadByIdSuccess(res.data));
+  } catch (err) {
+    dispatch(getThreadFailure());
   }
 };
