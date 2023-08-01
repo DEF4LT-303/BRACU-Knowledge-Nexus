@@ -5,7 +5,7 @@ const forumSlice = createSlice({
   initialState: {
     forums: [],
     isFetching: false,
-    error: false
+    error: true
   },
   reducers: {
     createForumStart: (state) => {

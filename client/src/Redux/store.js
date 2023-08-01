@@ -23,7 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   people: peopleSlice,
-  forums: forumSlice
+  forum: forumSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
