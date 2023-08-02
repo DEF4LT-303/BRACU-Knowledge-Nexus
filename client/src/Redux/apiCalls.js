@@ -1,5 +1,11 @@
 import { publicRequest, userRequest } from '../requestMethods';
-import { getForumFailure, getForumStart, getForumSuccess } from './forumRedux';
+import {
+  getForumFailure,
+  getForumStart,
+  getForumSuccess,
+  updateForumStart,
+  updateForumSuccess
+} from './forumRedux';
 import {
   getUsersFailure,
   getUsersStart,
@@ -127,5 +133,15 @@ export const getForumsById = async (id, dispatch) => {
     await dispatch(getThreadByIdSuccess(res.data));
   } catch (err) {
     dispatch(getThreadFailure());
+  }
+};
+
+export const updateForum = async (id, dispatch) => {
+  dispatch(updateForumStart());
+  try {
+    const res = await userRequest.put(`/forums/${id}`);
+    dispatch(updateForumSuccess(res.data));
+  } catch (err) {
+    dispatch(updateFailure());
   }
 };
