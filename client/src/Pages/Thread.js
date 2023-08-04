@@ -43,16 +43,13 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center'
     }
   },
-  right_hand_side: {
-    display: 'flex',
-    alignItems: 'center'
-  },
   sectionWrapper: {
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'left',
+    columnGap: '2rem'
   },
   sectionWrapper_2: {
     display: 'flex',
@@ -62,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
     columnGap: '2rem',
     width: '100% !important'
   },
+  right_hand_side: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexwrap: 'wrap'
+  },
   leftSide: {
     display: 'flex',
     flexDirection: 'row',
@@ -70,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   threadTitle: {
+    marginLeft: '1rem',
     fontFamily: 'Segoe UI',
     fontWeight: 600,
     fontSize: 'large',
@@ -164,8 +168,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#000000 !important'
   },
   custom_btn: {
-    width: '125px'
+    width: '100px'
+    // backgroundColor: '#1772cd07 !important'
   },
+
   doubt_posted_time: {
     [theme.breakpoints.down('sm')]: {
       wordWrap: 'break-word',
@@ -258,8 +264,6 @@ export function Thread() {
     state.forums.forums.find((forum) => forum._id === forumId)
   );
 
-  console.log(user._id == thread.creator._id);
-
   const commentConfig = useMemo(
     () => ({
       readonly: false,
@@ -290,25 +294,21 @@ export function Thread() {
           elevation={0}
         >
           <div className={classes.sectionWrapper}>
-            <div className={classes.leftSide}>
-              <Button
-                onClick={() => history.push('/forum')}
-                size='small'
-                startIcon={<ArrowBackIosIcon />}
-                className='custom_btn active black_dull'
-              >
-                Back
-              </Button>
-              <div className={classes.threadTitle}>
-                <h2>{thread.title}</h2>
-              </div>
-            </div>
-            <div className={classes.rightSide}>
+            <Button
+              onClick={() => history.push('/forum')}
+              size='small'
+              startIcon={<ArrowBackIosIcon />}
+              className={classes.custom_btn}
+            >
+              Back
+            </Button>
+            <div className={classes.right_hand_side}>
               <div className={classes.spacer}>
-                {user._id == thread.creator._id && (
+                {user?._id == thread.creator._id && (
                   <Button
                     onClick={() => setEdit(true)}
-                    className={classes.custom_btn}
+                    // className={classes.custom_btn}
+                    style={{ width: '125px' }}
                     startIcon={<EditIcon />}
                     variant='contained'
                     color='primary'
@@ -317,10 +317,10 @@ export function Thread() {
                   </Button>
                 )}
 
-                {(user._id === thread.creator._id || admin) && (
+                {(user?._id === thread.creator._id || admin) && (
                   <Button
                     onClick={() => setEdit(true)}
-                    className={classes.custom_btn}
+                    style={{ width: '125px' }}
                     startIcon={<DeleteIcon />}
                     variant='outlined'
                     width='100%'
@@ -331,24 +331,19 @@ export function Thread() {
               </div>
             </div>
           </div>
+          <div className={classes.sectionWrapper}>
+            <div className={classes.threadTitle}>
+              <h2>{thread.title}</h2>
+            </div>
+          </div>
 
           <div className={classes.sectionWrapper_2}>
             <div className={classes.votes_wrapper}>
-              <Button
-                onClick={null}
-                className={`custom_btn active ${
-                  -1 === -1 ? 'black_dull' : 'black'
-                }`}
-              >
+              <Button disabled={!user} onClick={null}>
                 <ArrowDropUpIcon style={{ scale: '1.5' }} />
               </Button>
               <div className={classes.vote_count}>{thread.upVotes.length}</div>
-              <Button
-                onClick={null}
-                className={`custom_btn active ${
-                  2 === -1 ? 'black_dull' : 'black'
-                }`}
-              >
+              <Button disabled={!user} onClick={null}>
                 <ArrowDropDownIcon style={{ scale: '1.5' }} />
               </Button>
             </div>

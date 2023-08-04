@@ -196,8 +196,8 @@ export default function Profile() {
   const user = useSelector((state) =>
     state.people.list.find((person) => person._id === userId)
   );
-  const admin = useSelector((state) => state.user.currentUser.role === 'admin');
   const currentUser = useSelector((state) => state.user.currentUser);
+  const admin = currentUser?.role === 'admin';
 
   const loading = useSelector((state) => state.user.isFetching);
 
@@ -251,7 +251,7 @@ export default function Profile() {
               />
 
               <div className={classes.spacer} />
-              {(admin || userId == currentUser._id) && (
+              {(admin || userId == currentUser?._id) && (
                 <div className={classes.actionGroup}>
                   <PeopleDialog
                     data={user}
