@@ -99,7 +99,7 @@ function ForumCard({ post }) {
     // Check if the card area itself is clicked
     if (!event.target.closest('.no-navigation')) {
       // Navigate to the home page
-      history.push('/thread');
+      history.push(`/thread/${post._id}`);
     }
   };
 
@@ -148,7 +148,7 @@ function ForumCard({ post }) {
               <ArrowDropUpIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.upvotes || 0}
+              {post.upVotes.length}
             </Typography>
             <IconButton aria-label='replies' className={classes.icon}>
               <ChatIcon />
