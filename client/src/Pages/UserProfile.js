@@ -251,36 +251,35 @@ export default function Profile() {
               />
 
               <div className={classes.spacer} />
-              {admin ||
-                (userId == currentUser._id && (
-                  <div className={classes.actionGroup}>
-                    <PeopleDialog
-                      data={user}
-                      render={(open) => (
-                        <Button
-                          color='primary'
-                          variant='contained'
-                          startIcon={<EditIcon />}
-                          onClick={open}
-                        >
-                          Edit
-                        </Button>
-                      )}
-                    />
-                    <DeletePeopleDialog
-                      ids={[user._id]}
-                      render={(open) => (
-                        <Button
-                          variant='outlined'
-                          startIcon={<DeleteIcon />}
-                          onClick={open}
-                        >
-                          Delete
-                        </Button>
-                      )}
-                    />
-                  </div>
-                ))}
+              {(admin || userId == currentUser._id) && (
+                <div className={classes.actionGroup}>
+                  <PeopleDialog
+                    data={user}
+                    render={(open) => (
+                      <Button
+                        color='primary'
+                        variant='contained'
+                        startIcon={<EditIcon />}
+                        onClick={open}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  />
+                  <DeletePeopleDialog
+                    ids={[user._id]}
+                    render={(open) => (
+                      <Button
+                        variant='outlined'
+                        startIcon={<DeleteIcon />}
+                        onClick={open}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className={classes.summaryCards}>

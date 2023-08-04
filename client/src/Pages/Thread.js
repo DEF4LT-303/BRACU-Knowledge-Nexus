@@ -241,6 +241,7 @@ const replies = [
 
 export function Thread() {
   const user = useSelector((state) => state.user.currentUser);
+  const admin = user?.role === 'admin';
 
   const [disableDelete, setDisableDelete] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -256,6 +257,8 @@ export function Thread() {
   const thread = useSelector((state) =>
     state.forums.forums.find((forum) => forum._id === forumId)
   );
+
+  console.log(user._id == thread.creator._id);
 
   const commentConfig = useMemo(
     () => ({
@@ -302,7 +305,7 @@ export function Thread() {
             </div>
             <div className={classes.rightSide}>
               <div className={classes.spacer}>
-                {user && (
+                {user._id == thread.creator._id && (
                   <Button
                     onClick={() => setEdit(true)}
                     className={classes.custom_btn}
@@ -314,7 +317,7 @@ export function Thread() {
                   </Button>
                 )}
 
-                {user && (
+                {(user._id === thread.creator._id || admin) && (
                   <Button
                     onClick={() => setEdit(true)}
                     className={classes.custom_btn}
