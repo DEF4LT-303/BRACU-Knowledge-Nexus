@@ -55,7 +55,7 @@ export default function App() {
                     {!user ? <Redirect to='/login' /> : <Profile />}
                   </Route>
                   <Route path='/userprofile'>
-                    {!admin ? <Redirect to='/home' /> : <UserProfile />}
+                    <UserProfile />
                   </Route>
                   <Route path='/forum'>
                     <Forum />
