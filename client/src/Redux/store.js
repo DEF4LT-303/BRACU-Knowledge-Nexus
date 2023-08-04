@@ -12,7 +12,6 @@ import {
 import storage from 'redux-persist/lib/storage';
 import forumSlice from './forumRedux';
 import peopleSlice from './peopleRedux';
-import threadSlice from './threadRedux';
 import userReducer from './userRedux';
 
 const persistConfig = {
@@ -24,8 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   people: peopleSlice,
-  forums: forumSlice,
-  thread: threadSlice
+  forums: forumSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

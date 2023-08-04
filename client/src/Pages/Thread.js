@@ -13,11 +13,10 @@ import StarIcon from '@mui/icons-material/Star';
 import { Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import JoditEditor from 'jodit-react';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import Content from '../Dashboard/Content';
-import { getForumsById } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -251,15 +250,12 @@ export function Thread() {
 
   const history = useHistory();
   const classes = useStyles();
-  const dispatch = useDispatch();
   const location = useLocation();
   const forumId = location.pathname.split('/')[2];
 
-  useEffect(() => {
-    getForumsById(forumId, dispatch);
-  }, [forumId, dispatch]);
-
-  const thread = useSelector((state) => state.thread.thread);
+  const thread = useSelector((state) =>
+    state.forums.forums.find((forum) => forum._id === forumId)
+  );
 
   const commentConfig = useMemo(
     () => ({
