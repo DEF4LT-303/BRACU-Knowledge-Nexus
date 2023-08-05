@@ -4,7 +4,7 @@
   "description": "# Lessons",
   "main": "index.js",
   "scripts": {
-    "build": "cd server && npm install  && cd ../client && npm install && npm run build",
+    "build": "cd server && npm install",
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
