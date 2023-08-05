@@ -19,6 +19,7 @@ import { Fab } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import CreateForum from '../Components/CreateForum';
 import Content from '../Dashboard/Content';
 import { getForums } from '../Redux/apiCalls';
 
@@ -72,7 +73,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function AddForum({ onClick }) {
+function AddForum() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
   return (
     <div
       style={{
@@ -84,9 +91,10 @@ function AddForum({ onClick }) {
       }}
     >
       {/* You can customize the Fab component as needed */}
-      <Fab color='primary' aria-label='create forum' onClick={onClick}>
+      <Fab color='primary' aria-label='create forum' onClick={handleClick}>
         <CreateIcon />
       </Fab>
+      {open && <CreateForum />}
     </div>
   );
 }
@@ -179,10 +187,10 @@ export function Forum() {
 
   const forums = useSelector((state) => state.forums.forums);
 
-  const handleCreateForumClick = () => {
-    // Add your logic here for handling the "create forum" button click
-    history.push('/thread');
-  };
+  // const handleCreateForumClick = () => {
+  //   // Add your logic here for handling the "create forum" button click
+  //   return <CreateForum />;
+  // };
 
   return (
     <>
@@ -204,7 +212,7 @@ export function Forum() {
           </Grid>
         </Grid>
         <Box pt={4}>
-          <AddForum onClick={handleCreateForumClick} />
+          <AddForum />
           <Copyright />
         </Box>
       </Content>

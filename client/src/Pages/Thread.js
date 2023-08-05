@@ -304,7 +304,7 @@ export function Thread() {
             </Button>
             <div className={classes.right_hand_side}>
               <div className={classes.spacer}>
-                {user?._id == thread.creator._id && (
+                {user?._id == thread?.creator._id && (
                   <Button
                     onClick={() => setEdit(true)}
                     // className={classes.custom_btn}
