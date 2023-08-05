@@ -16,6 +16,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ChatIcon from '@mui/icons-material/Chat';
 import CreateIcon from '@mui/icons-material/Create';
 import { Fab } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -146,9 +147,11 @@ function ForumCard({ post }) {
           }
         />
         <CardContent>
-          <Typography variant='body2' color='text.secondary'>
-            {post.description}
-          </Typography>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            dangerouslySetInnerHTML={{ __html: post.description }}
+          />
         </CardContent>
         <CardActions disableSpacing>
           <div className={classes.icons}>
@@ -178,8 +181,8 @@ function ForumCard({ post }) {
 
 export function Forum() {
   const dispatch = useDispatch();
-  const classes = useStyles();
-  const history = useHistory();
+  const user = useSelector((state) => state.user.currentUser);
+  const loading = useSelector((state) => state.forums.isFetching);
 
   useEffect(() => {
     getForums(dispatch);
@@ -187,10 +190,13 @@ export function Forum() {
 
   const forums = useSelector((state) => state.forums.forums);
 
-  // const handleCreateForumClick = () => {
-  //   // Add your logic here for handling the "create forum" button click
-  //   return <CreateForum />;
-  // };
+  if (loading) {
+    return (
+      <Content>
+        <CircularProgress />
+      </Content>
+    );
+  }
 
   return (
     <>
@@ -212,7 +218,7 @@ export function Forum() {
           </Grid>
         </Grid>
         <Box pt={4}>
-          <AddForum />
+          {user && <AddForum />}
           <Copyright />
         </Box>
       </Content>

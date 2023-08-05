@@ -5,9 +5,11 @@ const router = require('express').Router();
 
 // Create a new forum post
 router.post('/', verifyTokenAuth, async (req, res) => {
+  const newForumPost = new Forum(req.body);
+
   try {
-    const newForumPost = await Forum.create(req.body);
-    res.status(201).json(newForumPost);
+    const savedForumPost = await newForumPost.save();
+    res.status(201).json(savedForumPost);
   } catch (err) {
     res.status(500).json(err);
   }

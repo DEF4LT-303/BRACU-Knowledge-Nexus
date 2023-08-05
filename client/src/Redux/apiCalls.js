@@ -1,5 +1,8 @@
 import { publicRequest, userRequest } from '../requestMethods';
 import {
+  createForumFailure,
+  createForumStart,
+  createForumSuccess,
   getForumFailure,
   getForumStart,
   getForumSuccess,
@@ -110,6 +113,16 @@ export const deleteUser = async (id, dispatch) => {
 };
 
 // *Forum API Calls*
+
+export const createForum = async (dispatch, forum) => {
+  dispatch(createForumStart());
+  try {
+    const res = await userRequest.post('/forums', forum);
+    dispatch(createForumSuccess(res.data));
+  } catch (err) {
+    dispatch(createForumFailure());
+  }
+};
 
 export const getForums = async (dispatch) => {
   dispatch(getForumStart());

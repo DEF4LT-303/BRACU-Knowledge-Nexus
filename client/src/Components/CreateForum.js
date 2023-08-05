@@ -10,6 +10,8 @@ import {
 import JoditEditor from 'jodit-react';
 import { SnackbarProvider } from 'notistack';
 import React, { useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createForum } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   customBtn: {
     minWidth: '100px',
+    height: '40px',
     margin: theme.spacing(1)
   },
 
@@ -64,10 +67,11 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignItems: 'left',
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
+    gap: theme.spacing(1)
   },
   homePostTags: {
-    margin: theme.spacing(0.5),
+    margin: theme.spacing(1),
     cursor: 'pointer',
     '&.active': {
       backgroundColor: theme.palette.primary.main,
@@ -88,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function CreateForum({ existingDoubt }) {
+export default function CreateForum() {
   // const userToken = useSelector((state) => state?.user?.token);
 
   const descriptionConfig = useMemo(
@@ -128,12 +132,23 @@ export default function CreateForum({ existingDoubt }) {
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [status, setStaus] = useState('Post');
 
+  const dispatch = useDispatch();
   const classes = useStyles();
-  // const [fetchTagsFunction] = useFetchTagsMutation();
-  // const [createDoubtFunction] = useCreateDoubtMutation();
+
+  const user = useSelector((state) => state.user.currentUser);
 
   const handleSubmit = async () => {
     // TODO: Add your logic here for handling the "submit" button click
+    try {
+      await createForum(dispatch, {
+        title: doubtTitle,
+        description: newDescription,
+        tags: postTags,
+        creator: user?._id
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -177,11 +192,7 @@ export default function CreateForum({ existingDoubt }) {
                   disabled={disableSubmit}
                   onClick={handleSubmit}
                   endIcon={
-                    disableSubmit ? (
-                      <CircularProgress style={{ width: 17, height: 17 }} />
-                    ) : (
-                      <SendRounded />
-                    )
+                    disableSubmit ? <CircularProgress /> : <SendRounded />
                   }
                   className={classes.customBtn}
                 >

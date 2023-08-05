@@ -408,9 +408,10 @@ export function Thread() {
               </div>
 
               <div className={classes.doubt_description_outer}>
-                <div className={classes.doubt_description_wrapper}>
-                  {thread.description}
-                </div>
+                <div
+                  className={classes.doubt_description_wrapper}
+                  dangerouslySetInnerHTML={{ __html: thread.description }}
+                />
               </div>
 
               <div className={classes.doubt_tags_wrapper}>
