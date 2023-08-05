@@ -10,6 +10,7 @@ import {
   persistStore
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import forumSlice from './forumRedux';
 import peopleSlice from './peopleRedux';
 import userReducer from './userRedux';
 
@@ -19,7 +20,11 @@ const persistConfig = {
   storage
 };
 
-const rootReducer = combineReducers({ user: userReducer, people: peopleSlice });
+const rootReducer = combineReducers({
+  user: userReducer,
+  people: peopleSlice,
+  forums: forumSlice
+});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

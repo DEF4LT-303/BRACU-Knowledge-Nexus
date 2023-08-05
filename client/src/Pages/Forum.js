@@ -12,11 +12,17 @@ import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import React from 'react';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import ChatIcon from '@mui/icons-material/Chat';
+import CreateIcon from '@mui/icons-material/Create';
+import { Fab } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import CreateForum from '../Components/CreateForum';
 import Content from '../Dashboard/Content';
+import { getForums } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -59,8 +65,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginRight: 'auto'
   },
-  favIcon: {
-    marginLeft: 'auto'
+  icon: {
+    pointerEvents: 'none'
   },
   links: {
     textDecoration: 'none',
@@ -68,41 +74,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const forumPosts = [
-  {
-    id: 1,
-    title: 'Introduction to React Hooks',
-    description:
-      'React Hooks provide a simpler and more intuitive way to manage state in React applications. By introducing the useState and useEffect hooks, developers can easily handle stateful logic without relying on class components. useState allows for the creation of state variables within functional components, while useEffect enables the execution of side effects based on component lifecycle events. With Hooks, developers can streamline their code, improve reusability, and enhance the readability of their applications. By embracing Hooks, developers can easily grasp the fundamentals of state management in React and leverage its benefits to build more efficient and maintainable applications.',
-    author: 'John Doe',
-    avatar: '/avatars/avatar1.jpg',
-    favorites: 10,
-    upvotes: 25,
-    downvotes: 5
-  },
-  {
-    id: 2,
-    title: 'Getting Started with Node.js',
-    description:
-      'Explore the fundamentals of Node.js and build your first server-side applications using JavaScript.',
-    author: 'Jane Smith',
-    avatar: '/avatars/avatar2.jpg',
-    favorites: 15,
-    upvotes: 20,
-    downvotes: 3
-  },
-  {
-    id: 3,
-    title: 'Mastering CSS Flexbox',
-    description:
-      'Dive deep into CSS Flexbox and learn how to create flexible and responsive layouts for your web projects.',
-    author: 'Mike Johnson',
-    avatar: '/avatars/avatar3.jpg',
-    favorites: 5,
-    upvotes: 18,
-    downvotes: 7
-  }
-];
+function AddForum() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        bottom: '30px',
+        right: '30px',
+        borderRadius: '50%',
+        zIndex: 999
+      }}
+    >
+      {/* You can customize the Fab component as needed */}
+      <Fab color='primary' aria-label='create forum' onClick={handleClick}>
+        <CreateIcon />
+      </Fab>
+      {open && <CreateForum />}
+    </div>
+  );
+}
 
 function ForumCard({ post }) {
   const classes = useStyles();
@@ -112,55 +108,67 @@ function ForumCard({ post }) {
     // Check if the card area itself is clicked
     if (!event.target.closest('.no-navigation')) {
       // Navigate to the home page
-      history.push('/');
+      history.push(`/thread/${post._id}`);
     }
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} elevation={3}>
       <CardActionArea onClick={handleClick} disableRipple>
         <CardHeader
           avatar={
-            <Link to={`/profile`} className={classes.links}>
-              <Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
-                R
-              </Avatar>
+            <Link
+              to={`/userprofile/${post.creator._id}`}
+              className={classes.links}
+            >
+              <Avatar
+                className='no-navigation'
+                sx={{ bgcolor: red[500] }}
+                aria-label='forum'
+                src={post.creator.photo}
+              ></Avatar>
             </Link>
           }
           action={
-            <IconButton aria-label='settings'>
+            <IconButton aria-label='settings' className='no-navigation'>
               <MoreVertIcon />
             </IconButton>
           }
           title={post.title}
           subheader={
-            <Link to={`/profile`} className={classes.links}>
-              {post.author}
-            </Link>
+            <div className='no-navigation'>
+              <Link
+                to={`/userprofile/${post.creator._id}`}
+                className={classes.links}
+              >
+                @{post.creator.displayName}
+              </Link>
+            </div>
           }
-          className='no-navigation'
         />
         <CardContent>
-          <Typography variant='body2' color='text.secondary'>
-            {post.description}
-          </Typography>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            dangerouslySetInnerHTML={{ __html: post.description }}
+          />
         </CardContent>
-        <CardActions disableSpacing className='no-navigation'>
+        <CardActions disableSpacing>
           <div className={classes.icons}>
-            <IconButton aria-label='upvote'>
-              <ThumbUpIcon />
+            <IconButton aria-label='upvotes' className={classes.icon}>
+              <ArrowDropUpIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.upvotes}
+              {post.upVotes.length}
             </Typography>
-            <IconButton aria-label='downvote'>
-              <ThumbDownIcon />
+            <IconButton aria-label='replies' className={classes.icon}>
+              <ChatIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.downvotes}
+              {post.downvotes || 0}
             </Typography>
           </div>
-          <div className={classes.favIcon}>
+          <div className='no-navigation'>
             <IconButton aria-label='add to favorites'>
               <FavoriteIcon />
             </IconButton>
@@ -172,7 +180,23 @@ function ForumCard({ post }) {
 }
 
 export function Forum() {
-  const classes = useStyles();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
+  const loading = useSelector((state) => state.forums.isFetching);
+
+  useEffect(() => {
+    getForums(dispatch);
+  }, [dispatch]);
+
+  const forums = useSelector((state) => state.forums.forums);
+
+  if (loading) {
+    return (
+      <Content>
+        <CircularProgress />
+      </Content>
+    );
+  }
 
   return (
     <>
@@ -185,7 +209,7 @@ export function Forum() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Grid container spacing={3}>
-              {forumPosts.map((post) => (
+              {forums.map((post) => (
                 <Grid item xs={12} key={post.id}>
                   <ForumCard post={post} />
                 </Grid>
@@ -194,6 +218,7 @@ export function Forum() {
           </Grid>
         </Grid>
         <Box pt={4}>
+          {user && <AddForum />}
           <Copyright />
         </Box>
       </Content>

@@ -1,5 +1,15 @@
 import { publicRequest, userRequest } from '../requestMethods';
 import {
+  createForumFailure,
+  createForumStart,
+  createForumSuccess,
+  getForumFailure,
+  getForumStart,
+  getForumSuccess,
+  updateForumStart,
+  updateForumSuccess
+} from './forumRedux';
+import {
   getUsersFailure,
   getUsersStart,
   getUsersSuccess,
@@ -19,6 +29,8 @@ import {
   updateUserStart,
   updateUserSuccess
 } from './userRedux';
+
+// *User API Calls*
 
 export const login = async (dispatch, userCredentials) => {
   dispatch(loginStart());
@@ -95,6 +107,38 @@ export const deleteUser = async (id, dispatch) => {
   try {
     await userRequest.delete(`/users/${id}`);
     dispatch(remove(id));
+  } catch (err) {
+    dispatch(updateFailure());
+  }
+};
+
+// *Forum API Calls*
+
+export const createForum = async (dispatch, forum) => {
+  dispatch(createForumStart());
+  try {
+    const res = await userRequest.post('/forums', forum);
+    dispatch(createForumSuccess(res.data));
+  } catch (err) {
+    dispatch(createForumFailure());
+  }
+};
+
+export const getForums = async (dispatch) => {
+  dispatch(getForumStart());
+  try {
+    const res = await publicRequest.get('/forums');
+    await dispatch(getForumSuccess(res.data));
+  } catch (err) {
+    dispatch(getForumFailure());
+  }
+};
+
+export const updateForum = async (id, dispatch) => {
+  dispatch(updateForumStart());
+  try {
+    const res = await userRequest.put(`/forums/${id}`);
+    dispatch(updateForumSuccess(res.data));
   } catch (err) {
     dispatch(updateFailure());
   }

@@ -196,6 +196,8 @@ export default function Profile() {
   const user = useSelector((state) =>
     state.people.list.find((person) => person._id === userId)
   );
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const admin = currentUser?.role === 'admin';
 
   const loading = useSelector((state) => state.user.isFetching);
 
@@ -249,33 +251,35 @@ export default function Profile() {
               />
 
               <div className={classes.spacer} />
-              <div className={classes.actionGroup}>
-                <PeopleDialog
-                  data={user}
-                  render={(open) => (
-                    <Button
-                      color='primary'
-                      variant='contained'
-                      startIcon={<EditIcon />}
-                      onClick={open}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                />
-                <DeletePeopleDialog
-                  ids={[user._id]}
-                  render={(open) => (
-                    <Button
-                      variant='outlined'
-                      startIcon={<DeleteIcon />}
-                      onClick={open}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                />
-              </div>
+              {(admin || userId == currentUser?._id) && (
+                <div className={classes.actionGroup}>
+                  <PeopleDialog
+                    data={user}
+                    render={(open) => (
+                      <Button
+                        color='primary'
+                        variant='contained'
+                        startIcon={<EditIcon />}
+                        onClick={open}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  />
+                  <DeletePeopleDialog
+                    ids={[user._id]}
+                    render={(open) => (
+                      <Button
+                        variant='outlined'
+                        startIcon={<DeleteIcon />}
+                        onClick={open}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className={classes.summaryCards}>

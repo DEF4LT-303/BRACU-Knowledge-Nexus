@@ -16,11 +16,29 @@ const verify = (req, res, next) => {
 
 const verifyTokenAuth = (req, res, next) => {
   verify(req, res, () => {
-    if (req.user.role === 'admin' || req.user.id === req.params.id) {
-      next();
-    } else {
-      res.status(403).json('You are not allowed!');
+    // Allow access for admins without checking the id
+    if (req.user.role === 'admin') {
+      return next();
     }
+
+    // For GET requests without a specific id, allow access
+    if (
+      req.method === 'GET' ||
+      req.method === 'POST' ||
+      req.method === 'PUT' ||
+      (req.method === 'DELETE' && !req.params.id)
+    ) {
+      return next();
+    }
+
+    // For other requests (e.g., POST) or GET requests with a specific id,
+    // verify the user's id against the resource id (if applicable)
+    if (req.user.id === req.params.id) {
+      return next();
+    }
+
+    // If none of the above conditions are met, user is not allowed
+    res.status(403).json('You are not allowed!');
   });
 };
 
