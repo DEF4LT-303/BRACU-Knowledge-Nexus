@@ -47,7 +47,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     width: '60%',
     margin: theme.spacing(1),
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    }
   },
 
   btnGroup: {
@@ -75,7 +78,11 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     '&.active': {
       backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white
+      color: theme.palette.common.white,
+      '&:hover': {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.common.white
+      }
     }
   },
   joditWrapper: {
