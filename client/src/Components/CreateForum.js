@@ -1,15 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { SendRounded } from '@mui/icons-material';
-import {
-  Button,
-  Chip,
-  CircularProgress,
-  Dialog,
-  TextField
-} from '@mui/material';
+import { Button, Chip, Dialog, TextField } from '@mui/material';
 import JoditEditor from 'jodit-react';
 import { SnackbarProvider } from 'notistack';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createForum } from '../Redux/apiCalls';
 
@@ -192,7 +186,10 @@ export default function CreateForum() {
   const user = useSelector((state) => state.user.currentUser);
 
   const handleSubmit = async () => {
-    // TODO: Add your logic here for handling the "submit" button click
+    if (doubtTitle.trim() === '') {
+      return; // Return early if the title is empty
+    }
+
     try {
       await createForum(dispatch, {
         title: doubtTitle,
@@ -203,7 +200,14 @@ export default function CreateForum() {
     } catch (err) {
       console.log(err);
     }
+
+    setDoubtTitle('');
+    setPostTags([]);
   };
+
+  useEffect(() => {
+    setDisableSubmit(doubtTitle.trim() === '');
+  }, [doubtTitle]);
 
   return (
     <>
@@ -245,9 +249,7 @@ export default function CreateForum() {
                 <Button
                   disabled={disableSubmit}
                   onClick={handleSubmit}
-                  endIcon={
-                    disableSubmit ? <CircularProgress /> : <SendRounded />
-                  }
+                  endIcon={<SendRounded />}
                   className={classes.customBtn}
                 >
                   {status}
