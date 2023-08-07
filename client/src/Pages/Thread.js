@@ -133,7 +133,7 @@ const useStyles = makeStyles((theme) => ({
     gap: '0.5rem',
     margin: '0.7rem 0',
     display: 'flex',
-    flexwrap: 'wrap'
+    flexWrap: 'wrap'
   },
   sectionWrapper_3: {
     display: 'flex',
@@ -228,8 +228,6 @@ const threadPosts = [
   }
 ];
 
-const createdAt = '2023-07-28T12:34:56.789Z';
-const tags = ['C++', 'Python'];
 const replies = [
   {
     id: 1,
@@ -369,38 +367,39 @@ export function Thread() {
 
                   <div className={classes.doubt_posted_time}>
                     {Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) / (1000 * 60)
+                      Math.abs(Date.now() - Date.parse(thread.createdAt)) /
+                        (1000 * 60)
                     ) < 60
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60)
                         )} minutes ago`
                       : Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60)
                         ) < 24
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60)
                         )} Hours ago`
                       : Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24)
                         ) < 30
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24)
                         )} Days ago`
                       : Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24 * 30)
                         ) < 12
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24 * 30)
                         )} Months ago`
                       : `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24 * 30 * 12)
                         )} Years ago`}
                   </div>
@@ -415,7 +414,7 @@ export function Thread() {
               </div>
 
               <div className={classes.doubt_tags_wrapper}>
-                {tags?.map((tag, idx) => (
+                {thread.tags?.map((tag, idx) => (
                   <Chip
                     key={idx}
                     label={tag}
@@ -515,50 +514,68 @@ export function Thread() {
                             </IconButton>
                           </div>
                           {Math.floor(
-                            Math.abs(Date.now() - Date.parse(createdAt)) /
+                            Math.abs(
+                              Date.now() - Date.parse(thread.createdAt)
+                            ) /
                               (1000 * 60)
                           ) < 60 ? (
                             <div className={classes.doubt_posted_time}>
                               {`created ${Math.floor(
-                                Math.abs(Date.now() - Date.parse(createdAt)) /
+                                Math.abs(
+                                  Date.now() - Date.parse(thread.createdAt)
+                                ) /
                                   (1000 * 60)
                               )} minutes ago`}
                             </div>
                           ) : Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60)
                             ) < 24 ? (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60)
                             )} Hours ago`}</div>
                           ) : Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24)
                             ) < 30 ? (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24)
                             )} Days ago`}</div>
                           ) : Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24 * 30)
                             ) < 12 ? (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24 * 30)
                             )} Months ago`}</div>
                           ) : (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24 * 30 * 12)
                             )} Years ago`}</div>
                           )}

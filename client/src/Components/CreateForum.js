@@ -123,7 +123,54 @@ export default function CreateForum() {
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [newDescription, setNewDescription] = useState('');
 
-  const [tags, setTags] = useState(['Python', 'C++']);
+  const [tags, setTags] = useState([
+    'JavaScript',
+    'Java',
+    'Python',
+    'C++',
+    'HTML',
+    'CSS',
+    'React',
+    'Angular',
+    'Vue.js',
+    'Node.js',
+    'PHP',
+    'Ruby on Rails',
+    '.NET',
+    'Swift',
+    'Kotlin',
+    'Android',
+    'iOS',
+    'Git',
+    'Docker',
+    'Kubernetes',
+    'AWS',
+    'Azure',
+    'Google Cloud Platform',
+    'SQL',
+    'NoSQL',
+    'MongoDB',
+    'Firebase',
+    'RESTful API',
+    'GraphQL',
+    'OAuth',
+    'JWT',
+    'WebSocket',
+    'Microservices',
+    'DevOps',
+    'Agile',
+    'Scrum',
+    'Machine Learning',
+    'Artificial Intelligence',
+    'Data Science',
+    'Natural Language Processing',
+    'Computer Vision',
+    'Big Data',
+    'Blockchain',
+    'Cybersecurity',
+    'IoT',
+    'Virtual Reality'
+  ]);
   const [postTags, setPostTags] = useState([]);
 
   const [previewFile, setPreviewFile] = useState(null);
