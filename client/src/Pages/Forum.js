@@ -71,6 +71,20 @@ const useStyles = makeStyles((theme) => ({
   links: {
     textDecoration: 'none',
     color: 'inherit'
+  },
+  cardContent: {
+    '& pre': {
+      backgroundColor: '#f5f5f5',
+      padding: '10px',
+      overflow: 'auto',
+      fontSize: '14px'
+    },
+    '& blockquote': {
+      borderLeft: '5px solid #ccc',
+      paddingLeft: '10px',
+      marginLeft: 0,
+      fontStyle: 'italic'
+    }
   }
 }));
 
@@ -105,8 +119,12 @@ function ForumCard({ post }) {
   const history = useHistory();
 
   const handleClick = (event) => {
-    // Check if the card area itself is clicked
-    if (!event.target.closest('.no-navigation')) {
+    const clickedElement = event.target;
+
+    if (
+      !clickedElement.closest('.no-navigation') &&
+      clickedElement.tagName !== 'A'
+    ) {
       // Navigate to the home page
       history.push(`/thread/${post._id}`);
     }
@@ -134,7 +152,11 @@ function ForumCard({ post }) {
               <MoreVertIcon />
             </IconButton>
           }
-          title={post.title}
+          title={
+            <Typography style={{ fontSize: '24px', fontWeight: 'bold' }}>
+              {post.title}
+            </Typography>
+          }
           subheader={
             <div className='no-navigation'>
               <Link
@@ -150,6 +172,7 @@ function ForumCard({ post }) {
           <Typography
             variant='body2'
             color='text.secondary'
+            className={classes.cardContent}
             dangerouslySetInnerHTML={{ __html: post.description }}
           />
         </CardContent>

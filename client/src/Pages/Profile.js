@@ -231,8 +231,12 @@ export default function Profile() {
               />
               <div>
                 <Typography variant={'h5'}>{user.username}</Typography>
-                <Typography variant='caption' color='textSecondary'>
-                  {user.displayName}
+                <Typography
+                  variant='caption'
+                  color='textSecondary'
+                  style={{ fontSize: '15px' }}
+                >
+                  @{user.displayName}
                 </Typography>
               </div>
               <Chip

@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { SendRounded } from '@mui/icons-material';
 import { Button, Chip, Dialog, TextField } from '@mui/material';
-import JoditEditor from 'jodit-react';
 import { SnackbarProvider } from 'notistack';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { createForum } from '../Redux/apiCalls';
 
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   joditEditor: {
     width: '100%',
-    height: '300px',
+    height: 'auto',
     border: '1px solid #ccc',
     borderRadius: '4px'
     // margin: theme.spacing(1)
@@ -94,32 +95,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateForum() {
-  // const userToken = useSelector((state) => state?.user?.token);
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['code-block']
+    ]
+  };
 
-  const descriptionConfig = useMemo(
-    () => ({
-      readonly: false,
-      placeholder: 'Enter your description here...',
-      buttons: [
-        'bold',
-        'italic',
-        'ul',
-        'ol',
-        'underline',
-        'font',
-        'link',
-        'unlink',
-        'align',
-        'image',
-        'fontsize',
-        'brush',
-        'redo',
-        'undo',
-        'source'
-      ]
-    }),
-    []
-  );
+  const formats = [
+    'header',
+    'font',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'code-block'
+  ];
   const descriptionEditor = useRef(null);
   const [doubtTitle, setDoubtTitle] = useState('');
   const [attachedFiles, setAttachedFiles] = useState([]);
@@ -206,9 +204,18 @@ export default function CreateForum() {
     setPostTags([]);
   };
 
+  const isContentNotEmpty = (content) => {
+    const cleanedContent = content.replace(/<[^>]*>/g, '').trim();
+    return !!cleanedContent;
+  };
+
   useEffect(() => {
-    setDisableSubmit(doubtTitle.trim() === '' || newDescription.trim() === '');
+    setDisableSubmit(
+      doubtTitle.trim() === '' || !isContentNotEmpty(newDescription)
+    );
   }, [doubtTitle, newDescription]);
+
+  console.log(newDescription);
 
   return (
     <>
@@ -279,11 +286,12 @@ export default function CreateForum() {
             </div>
 
             <div className={classes.joditWrapper}>
-              <JoditEditor
-                config={descriptionConfig}
-                ref={descriptionEditor}
+              <ReactQuill
                 value={newDescription}
-                onChange={(e) => setNewDescription(e)}
+                onChange={setNewDescription}
+                modules={modules}
+                formats={formats}
+                placeholder='Enter your description here...'
                 className={classes.joditEditor}
               />
             </div>

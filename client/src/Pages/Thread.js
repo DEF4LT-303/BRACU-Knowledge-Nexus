@@ -12,8 +12,9 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import StarIcon from '@mui/icons-material/Star';
 import { Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import JoditEditor from 'jodit-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import DeleteDialog from '../Components/DeleteDialog';
@@ -126,8 +127,22 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   doubt_description_wrapper: {
-    width: '70% !important',
-    margin: '0.1rem 2rem !important'
+    width: 'auto !important',
+    margin: '0.1rem 2rem !important',
+    '& pre': {
+      backgroundColor: '#555',
+      padding: '10px',
+      overflow: 'auto',
+      fontSize: '14px',
+      borderRadius: '0.3rem',
+      color: '#fff'
+    },
+    '& blockquote': {
+      borderLeft: '5px solid #ccc',
+      paddingLeft: '10px',
+      marginLeft: 0,
+      fontStyle: 'italic'
+    }
   },
 
   doubt_tags_wrapper: {
@@ -263,26 +278,34 @@ export function Thread() {
     state.forums.forums.find((forum) => forum._id === forumId)
   );
 
-  const commentConfig = useMemo(
-    () => ({
-      readonly: false,
-      placeholder: 'Enter your comment here...',
-      buttons: [
-        'bold',
-        'italic',
-        'ul',
-        'ol',
-        'link',
-        'underline',
-        'font',
-        'align',
-        'fontsize',
-        'redo',
-        'undo'
-      ]
-    }),
-    []
-  );
+  const isContentNotEmpty = (content) => {
+    const cleanedContent = content.replace(/<[^>]*>/g, '').trim();
+    return !!cleanedContent;
+  };
+
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['code-block']
+    ]
+  };
+
+  const formats = [
+    'header',
+    'font',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'code-block'
+  ];
 
   return (
     <Content>
@@ -445,7 +468,7 @@ export function Thread() {
               <div className='right_hand_side'>
                 <div className='btn_group'>
                   <Button
-                    disabled={!reply.length}
+                    disabled={!isContentNotEmpty(reply)}
                     size='small'
                     startIcon={<ReplyIcon />}
                     className={`custom_btn black_dull ${classes.doubt_action_btn}`}
@@ -458,10 +481,17 @@ export function Thread() {
             </div>
             <div className='comment_editor_outer'>
               <div className='comment_editor_wrapper'>
-                <JoditEditor
-                  config={commentConfig}
+                <ReactQuill
                   value={reply}
-                  onChange={(e) => setReply(e)}
+                  onChange={(e) => {
+                    setReply(e);
+
+                    console.log(e);
+                  }}
+                  modules={modules}
+                  formats={formats}
+                  placeholder='Reply...'
+                  className={classes.joditEditor}
                 />
               </div>
             </div>
