@@ -18,8 +18,8 @@ function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
       {'Copyright © '}
-      <Link color='inherit' href='https://react.school'>
-        React School
+      <Link color='inherit' href='https://knowledge-nexus-lime.vercel.app/'>
+        Knowledge Nexus
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -28,6 +28,17 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
+  logo: {
+    width: '100%',
+    maxWidth: '500px',
+    height: '50vh'
+  },
+  imgWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+    // height: '300px'
+  },
   icon: {
     marginRight: theme.spacing(2)
   },
@@ -109,7 +120,13 @@ export function Home() {
   return (
     <React.Fragment>
       <main>
-        {/* Hero unit */}
+        <Content>
+          <Container maxWidth='sm'>
+            <footer className={classes.imgWrapper}>
+              <img src='img/default.png' alt='Logo' className={classes.logo} />
+            </footer>
+          </Container>
+        </Content>
         <div className={classes.heroContent}>
           <Content>
             <Container maxWidth='sm'>
@@ -207,7 +224,7 @@ export function Home() {
       <footer className={classes.footer}>
         <Content>
           <Typography variant='h6' align='center' gutterBottom>
-            Footer
+            BRAC University
           </Typography>
           <Typography
             variant='subtitle1'
@@ -215,7 +232,7 @@ export function Home() {
             color='textSecondary'
             component='p'
           >
-            Footer Content
+            Knowledge Nexus
           </Typography>
           <Copyright />
         </Content>

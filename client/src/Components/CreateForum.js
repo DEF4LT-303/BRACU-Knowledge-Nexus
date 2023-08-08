@@ -1,15 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { SendRounded } from '@mui/icons-material';
-import {
-  Button,
-  Chip,
-  CircularProgress,
-  Dialog,
-  TextField
-} from '@mui/material';
-import JoditEditor from 'jodit-react';
+import { Button, Chip, Dialog, TextField } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { createForum } from '../Redux/apiCalls';
 
@@ -47,7 +42,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     width: '60%',
     margin: theme.spacing(1),
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    }
   },
 
   btnGroup: {
@@ -75,7 +73,11 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     '&.active': {
       backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white
+      color: theme.palette.common.white,
+      '&:hover': {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.common.white
+      }
     }
   },
   joditWrapper: {
@@ -85,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   joditEditor: {
     width: '100%',
-    height: '300px',
+    height: 'auto',
     border: '1px solid #ccc',
     borderRadius: '4px'
     // margin: theme.spacing(1)
@@ -93,37 +95,82 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CreateForum() {
-  // const userToken = useSelector((state) => state?.user?.token);
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['code-block']
+    ]
+  };
 
-  const descriptionConfig = useMemo(
-    () => ({
-      readonly: false,
-      placeholder: 'Enter your description here...',
-      buttons: [
-        'bold',
-        'italic',
-        'ul',
-        'ol',
-        'underline',
-        'font',
-        'link',
-        'unlink',
-        'align',
-        'image',
-        'fontsize',
-        'brush',
-        'redo',
-        'undo'
-      ]
-    }),
-    []
-  );
+  const formats = [
+    'header',
+    'font',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'code-block'
+  ];
   const descriptionEditor = useRef(null);
   const [doubtTitle, setDoubtTitle] = useState('');
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [newDescription, setNewDescription] = useState('');
 
-  const [tags, setTags] = useState(['Python', 'C++']);
+  const [tags, setTags] = useState([
+    'JavaScript',
+    'Java',
+    'Python',
+    'C++',
+    'HTML',
+    'CSS',
+    'React',
+    'Angular',
+    'Vue.js',
+    'Node.js',
+    'PHP',
+    'Ruby on Rails',
+    '.NET',
+    'Swift',
+    'Kotlin',
+    'Android',
+    'iOS',
+    'Git',
+    'Docker',
+    'Kubernetes',
+    'AWS',
+    'Azure',
+    'Google Cloud Platform',
+    'SQL',
+    'NoSQL',
+    'MongoDB',
+    'Firebase',
+    'RESTful API',
+    'GraphQL',
+    'OAuth',
+    'JWT',
+    'WebSocket',
+    'Microservices',
+    'DevOps',
+    'Agile',
+    'Scrum',
+    'Machine Learning',
+    'Artificial Intelligence',
+    'Data Science',
+    'Natural Language Processing',
+    'Computer Vision',
+    'Big Data',
+    'Blockchain',
+    'Cybersecurity',
+    'IoT',
+    'Virtual Reality'
+  ]);
   const [postTags, setPostTags] = useState([]);
 
   const [previewFile, setPreviewFile] = useState(null);
@@ -138,7 +185,10 @@ export default function CreateForum() {
   const user = useSelector((state) => state.user.currentUser);
 
   const handleSubmit = async () => {
-    // TODO: Add your logic here for handling the "submit" button click
+    if (doubtTitle.trim() === '') {
+      return; // Return early if the title is empty
+    }
+
     try {
       await createForum(dispatch, {
         title: doubtTitle,
@@ -149,7 +199,23 @@ export default function CreateForum() {
     } catch (err) {
       console.log(err);
     }
+
+    setDoubtTitle('');
+    setPostTags([]);
   };
+
+  const isContentNotEmpty = (content) => {
+    const cleanedContent = content.replace(/<[^>]*>/g, '').trim();
+    return !!cleanedContent;
+  };
+
+  useEffect(() => {
+    setDisableSubmit(
+      doubtTitle.trim() === '' || !isContentNotEmpty(newDescription)
+    );
+  }, [doubtTitle, newDescription]);
+
+  console.log(newDescription);
 
   return (
     <>
@@ -191,9 +257,7 @@ export default function CreateForum() {
                 <Button
                   disabled={disableSubmit}
                   onClick={handleSubmit}
-                  endIcon={
-                    disableSubmit ? <CircularProgress /> : <SendRounded />
-                  }
+                  endIcon={<SendRounded />}
                   className={classes.customBtn}
                 >
                   {status}
@@ -222,11 +286,12 @@ export default function CreateForum() {
             </div>
 
             <div className={classes.joditWrapper}>
-              <JoditEditor
-                config={descriptionConfig}
-                ref={descriptionEditor}
+              <ReactQuill
                 value={newDescription}
-                onChange={(e) => setNewDescription(e)}
+                onChange={setNewDescription}
+                modules={modules}
+                formats={formats}
+                placeholder='Enter your description here...'
                 className={classes.joditEditor}
               />
             </div>

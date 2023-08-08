@@ -6,10 +6,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { deleteUser } from '../Redux/apiCalls';
+import { deleteForum, deleteUser } from '../Redux/apiCalls';
 import { logout } from '../Redux/userRedux';
 
-export default function DeletePeopleDialog({ ids, render, onSave }) {
+export default function DeleteDialog({ ids, render, onSave, entityName }) {
   const [open, setOpen] = useState(false);
 
   const user = useSelector((state) => state.user.currentUser);
@@ -29,18 +29,27 @@ export default function DeletePeopleDialog({ ids, render, onSave }) {
     onSave && onSave();
 
     for (const id of ids) {
-      try {
-        await deleteUser(id, dispatch);
-
-        if (user._id === id) {
-          dispatch(logout());
-
-          history.push('/home');
-        } else {
-          history.push('/people');
+      if (entityName === 'Forum') {
+        try {
+          await deleteForum(id, dispatch);
+          history.push('/forum');
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
+      } else {
+        try {
+          await deleteUser(id, dispatch);
+
+          if (user._id === id) {
+            dispatch(logout());
+
+            history.push('/home');
+          } else {
+            history.push('/people');
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
 
@@ -55,9 +64,9 @@ export default function DeletePeopleDialog({ ids, render, onSave }) {
         onClose={handleClose}
         aria-labelledby='form-dialog-title'
       >
-        <DialogTitle id='form-dialog-title'>Delete Users</DialogTitle>
+        <DialogTitle id='form-dialog-title'>Delete {entityName}</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete {ids.length} User
+          Are you sure you want to delete the {entityName}
           {ids.length > 1 && 's'}?
         </DialogContent>
         <DialogActions>

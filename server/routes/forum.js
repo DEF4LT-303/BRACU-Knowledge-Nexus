@@ -18,7 +18,9 @@ router.post('/', verifyTokenAuth, async (req, res) => {
 // Get all forum posts
 router.get('/', async (req, res) => {
   try {
-    const forumPosts = await Forum.find().populate('creator', '-passowrd');
+    const forumPosts = await Forum.find()
+      .populate('creator', '-passowrd')
+      .sort({ createdAt: -1 });
     res.status(200).json(forumPosts);
   } catch (err) {
     res.status(500).json(err);

@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
+import Alert from '@mui/material/Alert';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Link as RouterLink, useLocation } from 'react-router-dom';
@@ -71,6 +72,7 @@ function ResponsiveDrawer(props) {
   const { pathname } = useLocation();
   const isHome = false; // pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const hideAppBar = pathname === '/login' || pathname === '/register';
 
@@ -86,6 +88,10 @@ function ResponsiveDrawer(props) {
 
   const handleClick = () => {
     dispatch(logout());
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
   };
 
   /* Modifying the source code from the template example to use the react router pathname hook to set
@@ -157,6 +163,19 @@ function ResponsiveDrawer(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
+      {showAlert && (
+        <Alert
+          severity='success'
+          style={{
+            position: 'fixed',
+            bottom: '10px',
+            left: '10px',
+            zIndex: '9999'
+          }}
+        >
+          You have been logged out successfully!
+        </Alert>
+      )}
       <div
         style={{
           height: '64px',

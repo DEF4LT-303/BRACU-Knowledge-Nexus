@@ -12,7 +12,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import DeletePeopleDialog from '../Components/DeletePeopleDialog';
+import DeleteDialog from '../Components/DeleteDialog';
 import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
 
@@ -231,8 +231,12 @@ export default function Profile() {
               />
               <div>
                 <Typography variant={'h5'}>{user.username}</Typography>
-                <Typography variant='caption' color='textSecondary'>
-                  {user.displayName}
+                <Typography
+                  variant='caption'
+                  color='textSecondary'
+                  style={{ fontSize: '15px' }}
+                >
+                  @{user.displayName}
                 </Typography>
               </div>
               <Chip
@@ -256,8 +260,9 @@ export default function Profile() {
                     </Button>
                   )}
                 />
-                <DeletePeopleDialog
+                <DeleteDialog
                   ids={[user._id]}
+                  entityName={'User'}
                   render={(open) => (
                     <Button
                       variant='outlined'

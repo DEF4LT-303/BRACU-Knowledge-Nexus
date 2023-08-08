@@ -12,10 +12,12 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import StarIcon from '@mui/icons-material/Star';
 import { Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import JoditEditor from 'jodit-react';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
 
 const useStyles = makeStyles((theme) => ({
@@ -125,15 +127,29 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   doubt_description_wrapper: {
-    width: '70% !important',
-    margin: '0.1rem 2rem !important'
+    width: 'auto !important',
+    margin: '0.1rem 2rem !important',
+    '& pre': {
+      backgroundColor: '#555',
+      padding: '10px',
+      overflow: 'auto',
+      fontSize: '14px',
+      borderRadius: '0.3rem',
+      color: '#fff'
+    },
+    '& blockquote': {
+      borderLeft: '5px solid #ccc',
+      paddingLeft: '10px',
+      marginLeft: 0,
+      fontStyle: 'italic'
+    }
   },
 
   doubt_tags_wrapper: {
     gap: '0.5rem',
     margin: '0.7rem 0',
     display: 'flex',
-    flexwrap: 'wrap'
+    flexWrap: 'wrap'
   },
   sectionWrapper_3: {
     display: 'flex',
@@ -228,8 +244,6 @@ const threadPosts = [
   }
 ];
 
-const createdAt = '2023-07-28T12:34:56.789Z';
-const tags = ['C++', 'Python'];
 const replies = [
   {
     id: 1,
@@ -264,26 +278,34 @@ export function Thread() {
     state.forums.forums.find((forum) => forum._id === forumId)
   );
 
-  const commentConfig = useMemo(
-    () => ({
-      readonly: false,
-      placeholder: 'Enter your comment here...',
-      buttons: [
-        'bold',
-        'italic',
-        'ul',
-        'ol',
-        'link',
-        'underline',
-        'font',
-        'align',
-        'fontsize',
-        'redo',
-        'undo'
-      ]
-    }),
-    []
-  );
+  const isContentNotEmpty = (content) => {
+    const cleanedContent = content.replace(/<[^>]*>/g, '').trim();
+    return !!cleanedContent;
+  };
+
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['code-block']
+    ]
+  };
+
+  const formats = [
+    'header',
+    'font',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'code-block'
+  ];
 
   return (
     <Content>
@@ -318,15 +340,19 @@ export function Thread() {
                 )}
 
                 {(user?._id === thread.creator._id || admin) && (
-                  <Button
-                    onClick={() => setEdit(true)}
-                    style={{ width: '125px' }}
-                    startIcon={<DeleteIcon />}
-                    variant='outlined'
-                    width='100%'
-                  >
-                    Delete
-                  </Button>
+                  <DeleteDialog
+                    ids={[thread._id]}
+                    entityName={'Forum'}
+                    render={(open) => (
+                      <Button
+                        variant='outlined'
+                        startIcon={<DeleteIcon />}
+                        onClick={open}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  />
                 )}
               </div>
             </div>
@@ -369,38 +395,39 @@ export function Thread() {
 
                   <div className={classes.doubt_posted_time}>
                     {Math.floor(
-                      Math.abs(Date.now() - Date.parse(createdAt)) / (1000 * 60)
+                      Math.abs(Date.now() - Date.parse(thread.createdAt)) /
+                        (1000 * 60)
                     ) < 60
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60)
                         )} minutes ago`
                       : Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60)
                         ) < 24
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60)
                         )} Hours ago`
                       : Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24)
                         ) < 30
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24)
                         )} Days ago`
                       : Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24 * 30)
                         ) < 12
                       ? `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24 * 30)
                         )} Months ago`
                       : `created ${Math.floor(
-                          Math.abs(Date.now() - Date.parse(createdAt)) /
+                          Math.abs(Date.now() - Date.parse(thread.createdAt)) /
                             (1000 * 60 * 60 * 24 * 30 * 12)
                         )} Years ago`}
                   </div>
@@ -415,7 +442,7 @@ export function Thread() {
               </div>
 
               <div className={classes.doubt_tags_wrapper}>
-                {tags?.map((tag, idx) => (
+                {thread.tags?.map((tag, idx) => (
                   <Chip
                     key={idx}
                     label={tag}
@@ -441,7 +468,7 @@ export function Thread() {
               <div className='right_hand_side'>
                 <div className='btn_group'>
                   <Button
-                    disabled={!reply.length}
+                    disabled={!isContentNotEmpty(reply)}
                     size='small'
                     startIcon={<ReplyIcon />}
                     className={`custom_btn black_dull ${classes.doubt_action_btn}`}
@@ -454,10 +481,17 @@ export function Thread() {
             </div>
             <div className='comment_editor_outer'>
               <div className='comment_editor_wrapper'>
-                <JoditEditor
-                  config={commentConfig}
+                <ReactQuill
                   value={reply}
-                  onChange={(e) => setReply(e)}
+                  onChange={(e) => {
+                    setReply(e);
+
+                    console.log(e);
+                  }}
+                  modules={modules}
+                  formats={formats}
+                  placeholder='Reply...'
+                  className={classes.joditEditor}
                 />
               </div>
             </div>
@@ -515,50 +549,68 @@ export function Thread() {
                             </IconButton>
                           </div>
                           {Math.floor(
-                            Math.abs(Date.now() - Date.parse(createdAt)) /
+                            Math.abs(
+                              Date.now() - Date.parse(thread.createdAt)
+                            ) /
                               (1000 * 60)
                           ) < 60 ? (
                             <div className={classes.doubt_posted_time}>
                               {`created ${Math.floor(
-                                Math.abs(Date.now() - Date.parse(createdAt)) /
+                                Math.abs(
+                                  Date.now() - Date.parse(thread.createdAt)
+                                ) /
                                   (1000 * 60)
                               )} minutes ago`}
                             </div>
                           ) : Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60)
                             ) < 24 ? (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60)
                             )} Hours ago`}</div>
                           ) : Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24)
                             ) < 30 ? (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24)
                             )} Days ago`}</div>
                           ) : Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24 * 30)
                             ) < 12 ? (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24 * 30)
                             )} Months ago`}</div>
                           ) : (
                             <div
                               className={classes.doubt_posted_time}
                             >{`created ${Math.floor(
-                              Math.abs(Date.now() - Date.parse(createdAt)) /
+                              Math.abs(
+                                Date.now() - Date.parse(thread.createdAt)
+                              ) /
                                 (1000 * 60 * 60 * 24 * 30 * 12)
                             )} Years ago`}</div>
                           )}

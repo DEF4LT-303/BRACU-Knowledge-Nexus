@@ -3,6 +3,9 @@ import {
   createForumFailure,
   createForumStart,
   createForumSuccess,
+  deleteForumFailure,
+  deleteForumStart,
+  deleteForumSuccess,
   getForumFailure,
   getForumStart,
   getForumSuccess,
@@ -141,5 +144,15 @@ export const updateForum = async (id, dispatch) => {
     dispatch(updateForumSuccess(res.data));
   } catch (err) {
     dispatch(updateFailure());
+  }
+};
+
+export const deleteForum = async (id, dispatch) => {
+  dispatch(deleteForumStart());
+  try {
+    await userRequest.delete(`/forums/${id}`);
+    dispatch(deleteForumSuccess(id));
+  } catch (err) {
+    dispatch(deleteForumFailure());
   }
 };
