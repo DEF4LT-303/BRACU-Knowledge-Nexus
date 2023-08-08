@@ -14,7 +14,6 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MuiAlert from '@material-ui/lab/Alert';
 import PropTypes from 'prop-types';
@@ -22,7 +21,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import DeletePeopleDialog from '../Components/DeletePeopleDialog';
-import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
 import { getUsers } from '../Redux/apiCalls';
 import { remove, selectLoading, selectPeople } from '../Redux/peopleRedux';
@@ -258,27 +256,11 @@ export default function People() {
       <div className={classes.root}>
         <Toolbar>
           <div edge='start' className={classes.grow} />
-          <PeopleDialog
-            edge='end'
-            onSave={() => {
-              setSnackOpen('User added');
-            }}
-            render={(open) => (
-              <Button
-                edge='end'
-                color='primary'
-                variant='contained'
-                startIcon={<AddIcon />}
-                onClick={open}
-              >
-                Add Person
-              </Button>
-            )}
-          />
           {selected.length > 0 && (
             <Tooltip title={'Delete'}>
               <DeletePeopleDialog
                 ids={selected}
+                entityName={'User'}
                 onSave={() => {
                   dispatch(remove(selected));
 

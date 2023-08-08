@@ -50,6 +50,20 @@ const forumSlice = createSlice({
     getForumFailure: (state) => {
       state.isFetching = false;
       state.error = true;
+    },
+    deleteForumStart: (state) => {
+      state.isFetching = true;
+      state.error = false; // Reset error to false when starting delete
+    },
+    deleteForumSuccess: (state, action) => {
+      const removedIds = action.payload;
+      state.forums = state.forums.filter((forums) => {
+        return !removedIds.includes(forums.id);
+      });
+    },
+    deleteForumFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
     }
   }
 });
@@ -64,7 +78,10 @@ export const {
   createForumStart,
   createForumSuccess,
   getForumFailure,
-  getForumByIdSuccess
+  getForumByIdSuccess,
+  deleteForumStart,
+  deleteForumSuccess,
+  deleteForumFailure
 } = forumSlice.actions;
 
 export default forumSlice.reducer;

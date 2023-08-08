@@ -268,6 +268,7 @@ export default function Profile() {
                   />
                   <DeletePeopleDialog
                     ids={[user._id]}
+                    entityName={'User'}
                     render={(open) => (
                       <Button
                         variant='outlined'

@@ -16,6 +16,7 @@ import JoditEditor from 'jodit-react';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
+import DeletePeopleDialog from '../Components/DeletePeopleDialog';
 import Content from '../Dashboard/Content';
 
 const useStyles = makeStyles((theme) => ({
@@ -316,15 +317,19 @@ export function Thread() {
                 )}
 
                 {(user?._id === thread.creator._id || admin) && (
-                  <Button
-                    onClick={() => setEdit(true)}
-                    style={{ width: '125px' }}
-                    startIcon={<DeleteIcon />}
-                    variant='outlined'
-                    width='100%'
-                  >
-                    Delete
-                  </Button>
+                  <DeletePeopleDialog
+                    ids={[thread._id]}
+                    entityName={'Forum'}
+                    render={(open) => (
+                      <Button
+                        variant='outlined'
+                        startIcon={<DeleteIcon />}
+                        onClick={open}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  />
                 )}
               </div>
             </div>
