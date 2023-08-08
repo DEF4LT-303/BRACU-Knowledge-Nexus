@@ -16,7 +16,7 @@ import JoditEditor from 'jodit-react';
 import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import DeletePeopleDialog from '../Components/DeletePeopleDialog';
+import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
 
 const useStyles = makeStyles((theme) => ({
@@ -317,7 +317,7 @@ export function Thread() {
                 )}
 
                 {(user?._id === thread.creator._id || admin) && (
-                  <DeletePeopleDialog
+                  <DeleteDialog
                     ids={[thread._id]}
                     entityName={'Forum'}
                     render={(open) => (

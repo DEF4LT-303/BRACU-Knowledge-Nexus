@@ -33,6 +33,8 @@
     "react-typewriter-effect": "^1.1.0",
     "recharts": "^2.0.0-beta.1",
     "redux-persist": "^6.0.0",
+    "slate": "^0.94.1",
+    "slate-react": "^0.98.1",
     "styled-components": "^5.2.0",
     "typewriter-effect": "^2.20.1"
   },

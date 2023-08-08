@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import DeletePeopleDialog from '../Components/DeletePeopleDialog';
+import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
 import { getUsers } from '../Redux/apiCalls';
 import { remove, selectLoading, selectPeople } from '../Redux/peopleRedux';
@@ -258,7 +258,7 @@ export default function People() {
           <div edge='start' className={classes.grow} />
           {selected.length > 0 && (
             <Tooltip title={'Delete'}>
-              <DeletePeopleDialog
+              <DeleteDialog
                 ids={selected}
                 entityName={'User'}
                 onSave={() => {

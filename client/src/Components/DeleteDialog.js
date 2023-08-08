@@ -9,12 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { deleteForum, deleteUser } from '../Redux/apiCalls';
 import { logout } from '../Redux/userRedux';
 
-export default function DeletePeopleDialog({
-  ids,
-  render,
-  onSave,
-  entityName
-}) {
+export default function DeleteDialog({ ids, render, onSave, entityName }) {
   const [open, setOpen] = useState(false);
 
   const user = useSelector((state) => state.user.currentUser);

@@ -13,7 +13,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import DeletePeopleDialog from '../Components/DeletePeopleDialog';
+import DeleteDialog from '../Components/DeleteDialog';
 import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
 
@@ -266,7 +266,7 @@ export default function Profile() {
                       </Button>
                     )}
                   />
-                  <DeletePeopleDialog
+                  <DeleteDialog
                     ids={[user._id]}
                     entityName={'User'}
                     render={(open) => (

@@ -114,7 +114,8 @@ export default function CreateForum() {
         'fontsize',
         'brush',
         'redo',
-        'undo'
+        'undo',
+        'source'
       ]
     }),
     []
@@ -206,8 +207,8 @@ export default function CreateForum() {
   };
 
   useEffect(() => {
-    setDisableSubmit(doubtTitle.trim() === '');
-  }, [doubtTitle]);
+    setDisableSubmit(doubtTitle.trim() === '' || newDescription.trim() === '');
+  }, [doubtTitle, newDescription]);
 
   return (
     <>
