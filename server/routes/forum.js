@@ -19,7 +19,7 @@ router.post('/', verifyTokenAuth, async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const forumPosts = await Forum.find()
-      .populate('creator', '-passowrd')
+      .populate('creator', '-password')
       .sort({ createdAt: -1 });
     res.status(200).json(forumPosts);
   } catch (err) {
