@@ -99,9 +99,15 @@ export default function CreateForum() {
     toolbar: [
       [{ header: '1' }, { header: '2' }, { font: [] }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' }
+      ],
       ['link'],
-      ['code-block']
+      ['code-block'],
+      [{ color: [] }]
     ]
   };
 
@@ -116,7 +122,9 @@ export default function CreateForum() {
     'list',
     'bullet',
     'link',
-    'code-block'
+    'code-block',
+    'color',
+    'indent'
   ];
   const descriptionEditor = useRef(null);
   const [doubtTitle, setDoubtTitle] = useState('');
