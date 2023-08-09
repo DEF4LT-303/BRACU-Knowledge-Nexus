@@ -143,7 +143,7 @@ function ForumCard({ post }) {
                 className='no-navigation'
                 sx={{ bgcolor: red[500] }}
                 aria-label='forum'
-                src={post.creator.photo}
+                src={post.creator?.photo}
               ></Avatar>
             </Link>
           }
@@ -163,7 +163,7 @@ function ForumCard({ post }) {
                 to={`/userprofile/${post.creator?._id}`}
                 className={classes.links}
               >
-                @{post.creator.displayName}
+                @{post.creator?.displayName}
               </Link>
             </div>
           }
