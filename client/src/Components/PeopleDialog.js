@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -27,9 +28,8 @@ export default function PeopleDialog({ data, render, onSave }) {
   const [gender, setGender] = useState(data && data.gender);
   const [githubLink, setGithubLink] = useState(data && data.githubLink);
   const [linkedInLink, setLinkedInLink] = useState(data && data.linkedInLink);
-  const [technicalSkills, setTechnicalSkills] = useState(
-    data && data.technicalSkills
-  );
+  const [technicalSkills, setTechnicalSkills] = useState([]);
+  const [skillInput, setSkillInput] = useState('');
 
   const genders = ['Male', 'Female'];
 
@@ -49,6 +49,19 @@ export default function PeopleDialog({ data, render, onSave }) {
     setOpen(false);
   };
 
+  const handleSkillAdd = () => {
+    if (skillInput.trim() !== '') {
+      setTechnicalSkills([...technicalSkills, skillInput]);
+      setSkillInput('');
+    }
+  };
+
+  const handleSkillDelete = (index) => {
+    const newSkills = [...technicalSkills];
+    newSkills.splice(index, 1);
+    setTechnicalSkills(newSkills);
+  };
+
   const handleSave = async () => {
     const updatedUserData = {
       username: name,
@@ -58,10 +71,7 @@ export default function PeopleDialog({ data, render, onSave }) {
       gender: gender,
       githubLink: githubLink,
       linkedInLink: linkedInLink,
-      technicalSkills:
-        typeof technicalSkills === 'string' && technicalSkills.trim() !== ''
-          ? technicalSkills.split(',').map((skill) => skill.trim())
-          : []
+      technicalSkills: technicalSkills
     };
 
     try {
@@ -125,22 +135,27 @@ export default function PeopleDialog({ data, render, onSave }) {
               setDisplayName(e.target.value);
             }}
           />
-          <FormControl fullWidth>
-            <InputLabel id='gender-label'>Gender</InputLabel>
-            <Select
-              autoFocus
-              margin='dense'
-              labelId='gender-label'
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-            >
-              {genders.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <div style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+            <FormControl fullWidth variant='outlined'>
+              <InputLabel shrink id='gender-label'>
+                Gender
+              </InputLabel>
+              <Select
+                autoFocus
+                margin='dense'
+                labelId='gender-label'
+                label='Gender'
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                {genders.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
           <TextField
             autoFocus
             margin='dense'
@@ -173,16 +188,48 @@ export default function PeopleDialog({ data, render, onSave }) {
               setLinkedInLink(e.target.value);
             }}
           />
-          <TextField
-            autoFocus
-            margin='dense'
-            label='Technical Skills'
-            fullWidth
-            value={technicalSkills}
-            onChange={(e) => {
-              setTechnicalSkills(e.target.value);
-            }}
-          />
+          <div style={{ marginTop: '1rem' }}>
+            <TextField
+              id='technical-skills-input'
+              label='Technical Skills'
+              fullWidth
+              value={skillInput}
+              variant='outlined'
+              onChange={(e) => {
+                setSkillInput(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSkillAdd();
+                }
+              }}
+              InputProps={{
+                startAdornment: (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap', // Prevent chips from wrapping
+                      gap: '4px',
+                      maxWidth: '100%',
+                      flexShrink: 0,
+                      marginTop: '0.5rem',
+                      marginBottom: '0.5rem'
+                    }}
+                  >
+                    {technicalSkills.map((skill, index) => (
+                      <Chip
+                        key={index}
+                        label={skill}
+                        color='primary'
+                        onDelete={() => handleSkillDelete(index)}
+                      />
+                    ))}
+                  </div>
+                )
+              }}
+            />
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color='primary'>
