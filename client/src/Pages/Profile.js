@@ -236,7 +236,7 @@ export default function Profile() {
                   color='textSecondary'
                   style={{ fontSize: '15px' }}
                 >
-                  @{user.displayName}
+                  @{user.displayName || user.username}
                 </Typography>
               </div>
               <Chip

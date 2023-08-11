@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import CreateForum from '../Components/CreateForum';
 import Content from '../Dashboard/Content';
-import { getForums } from '../Redux/apiCalls';
+import { getForums, getUsers } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -163,7 +163,7 @@ function ForumCard({ post }) {
                 to={`/userprofile/${post.creator?._id}`}
                 className={classes.links}
               >
-                @{post.creator?.displayName}
+                @{post.creator?.displayName || 'deletd_user'}
               </Link>
             </div>
           }
@@ -209,6 +209,10 @@ export function Forum() {
 
   useEffect(() => {
     getForums(dispatch);
+  }, [dispatch]);
+
+  useEffect(() => {
+    getUsers(dispatch);
   }, [dispatch]);
 
   const forums = useSelector((state) => state.forums.forums);

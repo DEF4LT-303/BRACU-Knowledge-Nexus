@@ -326,7 +326,7 @@ export function Thread() {
             </Button>
             <div className={classes.right_hand_side}>
               <div className={classes.spacer}>
-                {user?._id == thread?.creator._id && (
+                {user?._id == thread?.creator?._id && (
                   <Button
                     onClick={() => setEdit(true)}
                     // className={classes.custom_btn}
@@ -339,7 +339,7 @@ export function Thread() {
                   </Button>
                 )}
 
-                {(user?._id === thread.creator._id || admin) && (
+                {(user?._id === thread.creator?._id || admin) && (
                   <DeleteDialog
                     ids={[thread._id]}
                     entityName={'Forum'}
@@ -377,9 +377,9 @@ export function Thread() {
             <div className={classes.doubt_main_wrapper}>
               <div className={classes.owner_info_outer}>
                 <div className={classes.owner_info_wrapper}>
-                  <Avatar src={thread.creator.photo} />
+                  <Avatar src={thread.creator?.photo} />
                   <div onClick={null} className={classes.doubt_owner_name}>
-                    {thread.creator.username}
+                    {thread.creator?.username || 'Deleted User'}
                   </div>
 
                   <div className='owner_reputation'>
@@ -389,7 +389,7 @@ export function Thread() {
                       style={{ fontFamily: 'Segoe UI', fontWeight: 500 }}
                       startIcon={<StarIcon />}
                     >
-                      {thread.creator.reputation}
+                      {thread.creator?.reputation || 0}
                     </Button>
                   </div>
 
