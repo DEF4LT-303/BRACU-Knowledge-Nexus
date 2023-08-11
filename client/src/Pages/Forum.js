@@ -136,14 +136,14 @@ function ForumCard({ post }) {
         <CardHeader
           avatar={
             <Link
-              to={`/userprofile/${post.creator._id}`}
+              to={`/userprofile/${post.creator?._id}`}
               className={classes.links}
             >
               <Avatar
                 className='no-navigation'
                 sx={{ bgcolor: red[500] }}
                 aria-label='forum'
-                src={post.creator.photo}
+                src={post.creator?.photo}
               ></Avatar>
             </Link>
           }
@@ -160,10 +160,10 @@ function ForumCard({ post }) {
           subheader={
             <div className='no-navigation'>
               <Link
-                to={`/userprofile/${post.creator._id}`}
+                to={`/userprofile/${post.creator?._id}`}
                 className={classes.links}
               >
-                @{post.creator.displayName}
+                @{post.creator?.displayName}
               </Link>
             </div>
           }
