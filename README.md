@@ -23,7 +23,7 @@ DB_CONNECT = YourMongodbURI
 PASS_SEC = YourSecret
 JWT_SEC = YourSecret
 ```
-- Run `npm i` at both `server/` and `client/` folders. **[Note: You may require to run it with --force flag]**
+- Run `npm i` at both `server/` and `client/` folders. **[Note: You may need to run it with the --force flag]**
 - Run `npm start` to start the project in both `server/` and `client/` folder.
 
 ## Features
