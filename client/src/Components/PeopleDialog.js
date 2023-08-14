@@ -1,4 +1,11 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import {
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -12,6 +19,7 @@ import { updateOtherUser, updateUser } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   tagsInput: {
+    marginTop: 8,
     display: 'flex',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
@@ -22,6 +30,11 @@ const useStyles = makeStyles((theme) => ({
     '&:focus-within': {
       border: `1px solid ${theme.palette.primary.main}`
     }
+  },
+  customSubtitle: {
+    color: theme.palette.text.secondary,
+    fontSize: theme.typography.subtitle1.fontSize,
+    fontWeight: theme.typography.subtitle1.fontWeight
   },
   input: {
     flex: 1,
@@ -37,38 +50,39 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     padding: 0,
-    margin: 8
-  },
-  tag: {
-    width: 'auto',
-    height: 32,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#fff',
-    padding: '0 8px',
-    fontSize: 14,
-    listStyle: 'none',
-    borderRadius: 6,
-    margin: '0 8px 8px 0',
-    background: '#0052cc',
-    '& .tag-title': {
-      marginTop: 3
-    },
-    '& .tag-close-icon': {
-      display: 'block',
-      width: 16,
-      height: 16,
-      lineHeight: '16px',
-      textAlign: 'center',
-      fontSize: 14,
-      marginLeft: 8,
-      color: '#0052cc',
-      borderRadius: '50%',
-      background: '#fff',
-      cursor: 'pointer'
-    }
+    margin: 8,
+    gap: '5px'
   }
+  // tag: {
+  //   width: 'auto',
+  //   height: 32,
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   color: '#fff',
+  //   padding: '0 8px',
+  //   fontSize: 14,
+  //   listStyle: 'none',
+  //   borderRadius: 6,
+  //   margin: '0 8px 8px 0',
+  //   background: '#0052cc',
+  //   '& .tag-title': {
+  //     marginTop: 3
+  //   },
+  //   '& .tag-close-icon': {
+  //     display: 'block',
+  //     width: 16,
+  //     height: 16,
+  //     lineHeight: '16px',
+  //     textAlign: 'center',
+  //     fontSize: 14,
+  //     marginLeft: 8,
+  //     color: '#0052cc',
+  //     borderRadius: '50%',
+  //     background: '#fff',
+  //     cursor: 'pointer'
+  //   }
+  // }
 }));
 
 export default function PeopleDialog({ data, render, onSave }) {
@@ -251,18 +265,23 @@ export default function PeopleDialog({ data, render, onSave }) {
               setLinkedInLink(e.target.value);
             }}
           />
+          <Typography
+            variant='subtitle2'
+            style={{ marginTop: '1rem' }}
+            className={classes.customSubtitle}
+          >
+            Technical Skills
+          </Typography>
           <div className={classes.tagsInput}>
             <ul className={classes.tagsList}>
               {technicalSkills.map((tag, index) => (
-                <li key={index} className={classes.tag}>
-                  <span className={classes.tagTitle}>{tag}</span>
-                  <span
-                    className='tag-close-icon'
-                    onClick={() => handleSkillDelete(index)}
-                  >
-                    x
-                  </span>
-                </li>
+                <Chip
+                  color='primary'
+                  key={index}
+                  label={tag}
+                  onDelete={() => handleSkillDelete(index)}
+                  className={classes.tag}
+                />
               ))}
             </ul>
             <input
