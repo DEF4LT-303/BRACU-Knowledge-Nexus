@@ -1,16 +1,79 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateOtherUser, updateUser } from '../Redux/apiCalls';
 
+const useStyles = makeStyles((theme) => ({
+  tagsInput: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    width: '100%',
+    padding: '0 8px',
+    border: '1px solid #ced4da',
+    borderRadius: 4,
+    '&:focus-within': {
+      border: `1px solid ${theme.palette.primary.main}`
+    }
+  },
+  input: {
+    flex: 1,
+    border: 'none',
+    height: 46,
+    fontSize: 14,
+    padding: '4px 0 0 0',
+    '&:focus': {
+      outline: 'transparent'
+    }
+  },
+  tagsList: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    padding: 0,
+    margin: 8
+  },
+  tag: {
+    width: 'auto',
+    height: 32,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#fff',
+    padding: '0 8px',
+    fontSize: 14,
+    listStyle: 'none',
+    borderRadius: 6,
+    margin: '0 8px 8px 0',
+    background: '#0052cc',
+    '& .tag-title': {
+      marginTop: 3
+    },
+    '& .tag-close-icon': {
+      display: 'block',
+      width: 16,
+      height: 16,
+      lineHeight: '16px',
+      textAlign: 'center',
+      fontSize: 14,
+      marginLeft: 8,
+      color: '#0052cc',
+      borderRadius: '50%',
+      background: '#fff',
+      cursor: 'pointer'
+    }
+  }
+}));
+
 export default function PeopleDialog({ data, render, onSave }) {
+  const classes = useStyles();
+
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -76,7 +139,7 @@ export default function PeopleDialog({ data, render, onSave }) {
 
     try {
       if (data._id === currentUser._id) {
-        console.log('Updating user:', data._id, currentUser._id);
+        // console.log('Updating user:', data._id, currentUser._id);
         await updateUser(data._id, updatedUserData, dispatch);
       } else {
         updateOtherUser(data._id, updatedUserData, dispatch);
@@ -188,46 +251,31 @@ export default function PeopleDialog({ data, render, onSave }) {
               setLinkedInLink(e.target.value);
             }}
           />
-          <div style={{ marginTop: '1rem' }}>
-            <TextField
-              id='technical-skills-input'
-              label='Technical Skills'
-              fullWidth
+          <div className={classes.tagsInput}>
+            <ul className={classes.tagsList}>
+              {technicalSkills.map((tag, index) => (
+                <li key={index} className={classes.tag}>
+                  <span className={classes.tagTitle}>{tag}</span>
+                  <span
+                    className='tag-close-icon'
+                    onClick={() => handleSkillDelete(index)}
+                  >
+                    x
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <input
+              className={classes.input}
+              type='text'
               value={skillInput}
-              variant='outlined'
-              onChange={(e) => {
-                setSkillInput(e.target.value);
-              }}
-              onKeyDown={(e) => {
+              onChange={(e) => setSkillInput(e.target.value)}
+              onKeyPress={(e) => {
                 if (e.key === 'Enter') {
-                  e.preventDefault();
                   handleSkillAdd();
                 }
               }}
-              InputProps={{
-                startAdornment: (
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexWrap: 'wrap', // Prevent chips from wrapping
-                      gap: '4px',
-                      maxWidth: '100%',
-                      flexShrink: 0,
-                      marginTop: '0.5rem',
-                      marginBottom: '0.5rem'
-                    }}
-                  >
-                    {technicalSkills.map((skill, index) => (
-                      <Chip
-                        key={index}
-                        label={skill}
-                        color='primary'
-                        onDelete={() => handleSkillDelete(index)}
-                      />
-                    ))}
-                  </div>
-                )
-              }}
+              placeholder='Press enter to add skills...'
             />
           </div>
         </DialogContent>
