@@ -28,20 +28,20 @@ router.get('/', async (req, res) => {
 });
 
 
-// Update a forum post
+// Update a reply
 router.put('/:id', verifyTokenAuth, async (req, res) => {
   try {
-    const updatedForumPost = await Forum.findByIdAndUpdate(
+    const updatedReply = await Reply.findByIdAndUpdate(
       req.params.id,
       {
         $set: req.body
       },
       { new: true }
     );
-    if (!updatedForumPost) {
-      return res.status(404).json({ message: 'Forum post not found' });
+    if (!updatedReply) {
+      return res.status(404).json({ message: 'Reply not found' });
     }
-    res.status(200).json(updatedForumPost);
+    res.status(200).json(updatedReply);
   } catch (err) {
     res.status(500).json(err);
   }
