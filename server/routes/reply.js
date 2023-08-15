@@ -47,14 +47,14 @@ router.put('/:id', verifyTokenAuth, async (req, res) => {
   }
 });
 
-// Delete a forum post
+// Delete a reply
 router.delete('/:id', verifyTokenAuth, async (req, res) => {
   try {
-    const deletedForumPost = await Forum.findByIdAndDelete(req.params.id);
-    if (!deletedForumPost) {
-      return res.status(404).json({ message: 'Forum post not found' });
+    const deletedReply = await Reply.findByIdAndDelete(req.params.id);
+    if (!deletedReply) {
+      return res.status(404).json({ message: 'Reply not found' });
     }
-    res.status(200).json({ message: 'Forum post has been deleted' });
+    res.status(200).json({ message: 'Reply has been deleted' });
   } catch (err) {
     res.status(500).json(err);
   }
