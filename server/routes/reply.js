@@ -27,21 +27,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a single forum post by ID
-router.get('/find/:id', async (req, res) => {
-  try {
-    const forumPost = await Forum.findById(req.params.id).populate(
-      'creator',
-      '-passowrd'
-    );
-    if (!forumPost) {
-      return res.status(404).json({ message: 'Forum post not found' });
-    }
-    res.status(200).json(forumPost);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
 // Update a forum post
 router.put('/:id', verifyTokenAuth, async (req, res) => {
