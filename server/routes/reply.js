@@ -15,13 +15,13 @@ router.post('/', verifyTokenAuth, async (req, res) => {
   }
 });
 
-// Get all reply
+// Get all replies
 router.get('/', async (req, res) => {
   try {
-    const reply = await Reply.find()
+    const replies = await Reply.find()
       .populate('creator', '-password')
       .sort({ createdAt: -1 });
-    res.status(200).json(reply);
+    res.status(200).json(replies);
   } catch (err) {
     res.status(500).json(err);
   }
