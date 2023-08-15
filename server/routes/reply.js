@@ -15,13 +15,13 @@ router.post('/', verifyTokenAuth, async (req, res) => {
   }
 });
 
-// Get all forum posts
+// Get all reply
 router.get('/', async (req, res) => {
   try {
-    const forumPosts = await Forum.find()
+    const reply = await Reply.find()
       .populate('creator', '-password')
       .sort({ createdAt: -1 });
-    res.status(200).json(forumPosts);
+    res.status(200).json(reply);
   } catch (err) {
     res.status(500).json(err);
   }
