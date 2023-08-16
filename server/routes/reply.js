@@ -3,7 +3,7 @@ const { verify, verifyTokenAuth, verifyTokenAdmin } = require('./verifyToken');
 
 const router = require('express').Router();
 
-// Create a new reply 
+// Create a new reply
 router.post('/', verifyTokenAuth, async (req, res) => {
   const newReply = new Reply(req.body);
 
@@ -26,7 +26,6 @@ router.get('/', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 // Update a reply
 router.put('/:id', verifyTokenAuth, async (req, res) => {
