@@ -35,6 +35,8 @@ function Copyright() {
   );
 }
 
+// TODO - add searh bar functons
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -250,6 +252,7 @@ export function Forum() {
           <Box fontWeight='fontWeightBold' letterSpacing={2}>
             Forum
           </Box>
+          {/* //TODO: Search Bar component */}
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12}>
