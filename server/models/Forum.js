@@ -41,14 +41,9 @@ const forumSchema = new mongoose.Schema({
     default: []
   },
 
-  downVotes: {
-    type: Array,
-    default: []
-  },
-
-  comments: {
-    type: Array,
-    default: []
+  replies: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Reply'
   }
 });
 
