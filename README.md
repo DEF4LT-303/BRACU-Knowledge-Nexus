@@ -1,3 +1,11 @@
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+    <a>
+    <img src="https://www.mangoitsolutions.com/wp-content/uploads/2022/01/becomeamernstackdeveloper-mobile-300x279.png" alt="Logo" width="400" height="400">
+    </a>
+</div>
+
 # BRACU Knowledge Nexus
 
 Welcome to the BRACU Knowledge Nexus project! This is a web-based platform that provides users with the ability to share resources, as well as engage in conversations with fellow users. It also includes user account management functionalities, such as user registration, login, profile update, along with features like post creation, upvoting and downvoting mechanisms, discussion threads, and search functionality.
