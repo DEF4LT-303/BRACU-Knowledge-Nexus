@@ -1,6 +1,5 @@
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
-import Badge from '@material-ui/core/Badge';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -14,7 +13,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Alert from '@mui/material/Alert';
 import React, { useState } from 'react';
@@ -216,11 +214,11 @@ function ResponsiveDrawer(props) {
               setCurrentTheme={setCurrentTheme}
               currentTheme={currentTheme}
             />
-            {user && (
+            {/* {user && (
               <Badge badgeContent={4} color='primary'>
                 <MailIcon />
               </Badge>
-            )}
+            )} */}
             {user && (
               <IconButton
                 component={Link}

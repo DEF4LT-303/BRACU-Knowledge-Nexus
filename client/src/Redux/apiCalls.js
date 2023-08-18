@@ -22,6 +22,9 @@ import {
   updateStart
 } from './peopleRedux';
 import {
+  findUserFailure,
+  findUserStart,
+  findUserSuccess,
   loginFailure,
   loginStart,
   loginSuccess,
@@ -96,12 +99,12 @@ export const updateOtherUser = async (id, user, dispatch) => {
 };
 
 export const findUser = async (id, dispatch) => {
-  dispatch(getUsersStart());
+  dispatch(findUserStart());
   try {
     const res = await publicRequest.get(`/users/find/${id}`);
-    await dispatch(getUsersSuccess(res.data));
+    await dispatch(findUserSuccess(res.data));
   } catch (err) {
-    dispatch(getUsersFailure());
+    dispatch(findUserFailure());
   }
 };
 
@@ -197,6 +200,5 @@ export const deleteForum = async (id, dispatch) => {
 //     dispatch(deleteReplyFailure());
 //   }
 // };
-
 
 //TODO - Feedback API functions
