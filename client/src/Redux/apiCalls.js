@@ -68,7 +68,7 @@ export const register = async (dispatch, user) => {
 export const getUsers = async (dispatch) => {
   dispatch(getUsersStart());
   try {
-    const res = await userRequest.get('/users');
+    const res = await publicRequest.get('/users');
     await dispatch(getUsersSuccess(res.data));
   } catch (err) {
     dispatch(getUsersFailure());
@@ -98,7 +98,7 @@ export const updateOtherUser = async (id, user, dispatch) => {
 export const findUser = async (id, dispatch) => {
   dispatch(getUsersStart());
   try {
-    const res = await userRequest.get(`/users/find/${id}`);
+    const res = await publicRequest.get(`/users/find/${id}`);
     await dispatch(getUsersSuccess(res.data));
   } catch (err) {
     dispatch(getUsersFailure());
