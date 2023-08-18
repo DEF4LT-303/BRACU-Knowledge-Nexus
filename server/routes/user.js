@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const CryptoJS = require('crypto-js');
 const { verify, verifyTokenAuth, verifyTokenAdmin } = require('./verifyToken');
 
 const router = require('express').Router();
@@ -37,7 +38,7 @@ router.delete('/:id', verifyTokenAuth, async (req, res) => {
 });
 
 // Get User
-router.get('/find/:id', verifyTokenAdmin, async (req, res) => {
+router.get('/find/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const { password, ...others } = user._doc;
@@ -48,7 +49,7 @@ router.get('/find/:id', verifyTokenAdmin, async (req, res) => {
 });
 
 // Get All Users
-router.get('/', verifyTokenAdmin, async (req, res) => {
+router.get('/', async (req, res) => {
   const query = req.query.new;
   try {
     let users;

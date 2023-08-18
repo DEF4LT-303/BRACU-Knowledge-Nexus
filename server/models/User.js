@@ -68,14 +68,14 @@ const userSchema = new mongoose.Schema({
     default: 'student'
   },
 
-  // isAdmin: {
-  //   type: Boolean,
-  //   default: false
-  // },
-
   posts: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Forum'
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+      }
+    ],
+    default: []
   },
 
   favourites: {
