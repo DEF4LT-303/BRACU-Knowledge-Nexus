@@ -158,5 +158,45 @@ export const deleteForum = async (id, dispatch) => {
 };
 
 //TODO - Reply API functions
+// export const createReply = async (dispatch, reply) => {
+//   dispatch(createReplyStart());
+//   try {
+//     const res = await userRequest.post('/replies', reply);
+//     dispatch(createReplySuccess(res.data));
+//   } catch (err) {
+//     dispatch(createReplyFailure());
+//   }
+// };
+
+// export const getReply = async (dispatch) => {
+//   dispatch(getReplyStart());
+//   try {
+//     const res = await publicRequest.get('/replies');
+//     await dispatch(getReplySuccess(res.data));
+//   } catch (err) {
+//     dispatch(getReplyFailure());
+//   }
+// };
+
+// export const updateReply = async (id, dispatch) => {
+//   dispatch(updateReplyStart());
+//   try {
+//     const res = await userRequest.put(`/replies/${id}`);
+//     dispatch(updateReplySuccess(res.data));
+//   } catch (err) {
+//     dispatch(updateFailure());
+//   }
+// };
+
+// export const deleteReply = async (id, dispatch) => {
+//   dispatch(deleteReplyStart());
+//   try {
+//     await userRequest.delete(`/replies/${id}`);
+//     dispatch(deleteReplySuccess(id));
+//   } catch (err) {
+//     dispatch(deleteReplyFailure());
+//   }
+// };
+
 
 //TODO - Feedback API functions
