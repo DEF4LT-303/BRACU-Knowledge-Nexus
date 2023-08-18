@@ -10,16 +10,17 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import DeleteDialog from '../Components/DeleteDialog';
 import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
+import { getUsers } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright © '}
+      {'Copyright Â© '}
       <Link color='inherit' href='https://react.school/'></Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -189,8 +190,18 @@ export function SkillsCard({ title, skills }) {
 }
 
 export default function Profile() {
-  const user = useSelector((state) => state.user.currentUser);
+  const Currentuser = useSelector((state) => state.user.currentUser);
   const loading = useSelector((state) => state.user.isFetching);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getUsers(dispatch);
+  }, [dispatch]);
+
+  const user = useSelector((state) =>
+    state.people.list.find((person) => person._id === Currentuser?._id)
+  );
 
   const classes = useStyles();
 
@@ -277,7 +288,10 @@ export default function Profile() {
             </div>
           </div>
           <div className={classes.summaryCards}>
-            <SummaryCard title={'Posts'} value={user.materialCount} />
+            <SummaryCard
+              title={'Posts'}
+              value={user.posts ? user.posts.length : 0}
+            />
             <SummaryCard title={'Favorites'} value={user.favourites.length} />
             <SummaryCard title={'Reputation'} value={user.reputation} />
           </div>
