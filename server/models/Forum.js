@@ -43,7 +43,8 @@ const forumSchema = new mongoose.Schema({
 
   replies: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Reply'
+    ref: 'Reply',
+    default: null
   }
 });
 
