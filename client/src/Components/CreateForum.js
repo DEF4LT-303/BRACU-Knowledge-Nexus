@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { createForum } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
@@ -188,6 +189,7 @@ export default function CreateForum() {
   const [status, setStaus] = useState('Post');
 
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
 
   const user = useSelector((state) => state.user.currentUser);
@@ -198,18 +200,22 @@ export default function CreateForum() {
     }
 
     try {
+      setDisableSubmit(true);
+      setStaus('Posting');
       await createForum(dispatch, {
         title: doubtTitle,
         description: newDescription,
         tags: postTags,
         creator: user?._id
       });
+      setStaus('Posted');
     } catch (err) {
       console.log(err);
     }
 
     setDoubtTitle('');
     setPostTags([]);
+    setDisableSubmit(false);
   };
 
   const isContentNotEmpty = (content) => {
@@ -222,8 +228,6 @@ export default function CreateForum() {
       doubtTitle.trim() === '' || !isContentNotEmpty(newDescription)
     );
   }, [doubtTitle, newDescription]);
-
-  console.log(newDescription);
 
   return (
     <>

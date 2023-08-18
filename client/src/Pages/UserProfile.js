@@ -10,12 +10,13 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import DeleteDialog from '../Components/DeleteDialog';
 import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
+import { getUsers } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -192,6 +193,11 @@ export function SkillsCard({ title, skills }) {
 export default function Profile() {
   const location = useLocation();
   const userId = location.pathname.split('/')[2];
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getUsers(dispatch);
+  }, [dispatch]);
 
   const user = useSelector((state) =>
     state.people.list.find((person) => person._id === userId)

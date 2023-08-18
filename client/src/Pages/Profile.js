@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import DeleteDialog from '../Components/DeleteDialog';
 import PeopleDialog from '../Components/PeopleDialog';
 import Content from '../Dashboard/Content';
-import { getUsers } from '../Redux/apiCalls';
+import { findUser } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -190,22 +190,18 @@ export function SkillsCard({ title, skills }) {
 }
 
 export default function Profile() {
-  const Currentuser = useSelector((state) => state.user.currentUser);
+  const user = useSelector((state) => state.user.currentUser);
   const loading = useSelector((state) => state.user.isFetching);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getUsers(dispatch);
-  }, [dispatch]);
-
-  const user = useSelector((state) =>
-    state.people.list.find((person) => person._id === Currentuser?._id)
-  );
+    findUser(user?._id, dispatch);
+  }, [dispatch, user?._id]);
 
   const classes = useStyles();
 
-  const roleLabel = user.role.toUpperCase();
+  const roleLabel = user?.role.toUpperCase();
 
   if (loading) {
     return (

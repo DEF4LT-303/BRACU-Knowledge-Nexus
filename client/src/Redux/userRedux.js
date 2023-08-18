@@ -78,7 +78,8 @@ export const {
   findUserSuccess,
   registrationFailure,
   registrationStart,
-  registrationSuccess
+  registrationSuccess,
+  findUserFailure
 } = userSlice.actions;
 
 export default userSlice.reducer;

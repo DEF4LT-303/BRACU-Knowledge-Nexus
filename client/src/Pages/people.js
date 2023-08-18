@@ -177,6 +177,8 @@ export default function People() {
   const [snackOpen, setSnackOpen] = React.useState(false);
   const dispatch = useDispatch();
 
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   useEffect(() => {
     getUsers(dispatch);
   }, [dispatch]);
@@ -330,7 +332,11 @@ export default function People() {
                               ) {
                                 return;
                               }
-                              history.push(`/userprofile/${row._id}`);
+                              if (currentUser._id === row._id) {
+                                history.push(`/profile`);
+                              } else {
+                                history.push(`/userprofile/${row._id}`);
+                              }
                             }}
                             key={`person-${row._id}`}
                             selected={isItemSelected}
