@@ -23,6 +23,8 @@ import { Link, useHistory } from 'react-router-dom';
 import CreateForum from '../Components/CreateForum';
 import Content from '../Dashboard/Content';
 import { getForums, getUsers } from '../Redux/apiCalls';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
 
 function Copyright() {
   return (
@@ -208,16 +210,18 @@ export function Forum() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
   const loading = useSelector((state) => state.forums.isFetching);
+  const forums = useSelector((state) => state.forums.forums);
+
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   useEffect(() => {
     getForums(dispatch);
-  }, [dispatch]);
-
-  useEffect(() => {
     getUsers(dispatch);
   }, [dispatch]);
 
-  const forums = useSelector((state) => state.forums.forums);
+  const filteredForums = forums.filter((forum) =>
+    forum.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -234,12 +238,25 @@ export function Forum() {
           <Box fontWeight='fontWeightBold' letterSpacing={2}>
             Forum
           </Box>
-          {/* //TODO: Search Bar component */}
         </Typography>
+        
+        {/* Add Search Bar */}
+        <TextField
+          label='Search by title'
+          variant='outlined'
+          fullWidth
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          InputProps={{
+            startAdornment: <SearchIcon />,
+          }}
+          style={{ marginBottom: '16px' }}
+        />
+
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Grid container spacing={3}>
-              {forums.map((post) => (
+              {filteredForums.map((post) => (
                 <Grid item xs={12} key={post.id}>
                   <ForumCard post={post} />
                 </Grid>
