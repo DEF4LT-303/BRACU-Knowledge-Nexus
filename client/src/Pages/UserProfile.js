@@ -20,7 +20,7 @@ import Content from '../Dashboard/Content';
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright © '}
+      {'Copyright Â© '}
       <Link color='inherit' href='https://react.school/'></Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -288,7 +288,10 @@ export default function Profile() {
             </div>
           </div>
           <div className={classes.summaryCards}>
-            <SummaryCard title={'Posts'} value={user.materialCount} />
+            <SummaryCard
+              title={'Posts'}
+              value={user.posts ? user.posts.length : 0}
+            />
             <SummaryCard title={'Favorites'} value={user.favourites.length} />
             <SummaryCard title={'Reputation'} value={user.reputation} />
           </div>

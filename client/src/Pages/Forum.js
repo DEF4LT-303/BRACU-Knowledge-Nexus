@@ -121,6 +121,7 @@ function AddForum() {
 function ForumCard({ post }) {
   const classes = useStyles();
   const history = useHistory();
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const handleClick = (event) => {
     const clickedElement = event.target;
@@ -139,17 +140,28 @@ function ForumCard({ post }) {
       <CardActionArea onClick={handleClick} disableRipple>
         <CardHeader
           avatar={
-            <Link
-              to={`/userprofile/${post.creator?._id}`}
-              className={classes.links}
-            >
-              <Avatar
-                className='no-navigation'
-                sx={{ bgcolor: red[500] }}
-                aria-label='forum'
-                src={post.creator?.photo}
-              ></Avatar>
-            </Link>
+            currentUser?._id === post?.creator?._id ? (
+              <Link to={`/profile`} className={classes.links}>
+                <Avatar
+                  className='no-navigation'
+                  sx={{ bgcolor: red[500] }}
+                  aria-label='forum'
+                  src={post.creator?.photo}
+                />
+              </Link>
+            ) : (
+              <Link
+                to={`/userprofile/${post.creator?._id}`}
+                className={classes.links}
+              >
+                <Avatar
+                  className='no-navigation'
+                  sx={{ bgcolor: red[500] }}
+                  aria-label='forum'
+                  src={post.creator?.photo}
+                />
+              </Link>
+            )
           }
           action={
             <IconButton aria-label='settings' className='no-navigation'>
@@ -163,12 +175,18 @@ function ForumCard({ post }) {
           }
           subheader={
             <div className='no-navigation'>
-              <Link
-                to={`/userprofile/${post.creator?._id}`}
-                className={classes.links}
-              >
-                @{post.creator?.displayName || 'deletd_user'}
-              </Link>
+              {currentUser?._id === post?.creator?._id ? (
+                <Link to={`/profile`} className={classes.links}>
+                  @{post.creator?.displayName || 'deletd_user'}
+                </Link>
+              ) : (
+                <Link
+                  to={`/userprofile/${post.creator?._id}`} // TODO: Use profile link for author
+                  className={classes.links}
+                >
+                  @{post.creator?.displayName || 'deletd_user'}
+                </Link>
+              )}
             </div>
           }
         />
