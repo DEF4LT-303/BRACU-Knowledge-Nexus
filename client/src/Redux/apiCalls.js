@@ -140,10 +140,10 @@ export const getForums = async (dispatch) => {
   }
 };
 
-export const updateForum = async (id, dispatch) => {
+export const updateForum = async (id, forum, dispatch) => {
   dispatch(updateForumStart());
   try {
-    const res = await userRequest.put(`/forums/${id}`);
+    const res = await userRequest.put(`/forums/${id}`, forum);
     dispatch(updateForumSuccess(res.data));
   } catch (err) {
     dispatch(updateFailure());
@@ -161,15 +161,16 @@ export const deleteForum = async (id, dispatch) => {
 };
 
 //TODO - Reply API functions
-// export const createReply = async (dispatch, reply) => {
-//   dispatch(createReplyStart());
-//   try {
-//     const res = await userRequest.post('/replies', reply);
-//     dispatch(createReplySuccess(res.data));
-//   } catch (err) {
-//     dispatch(createReplyFailure());
-//   }
-// };
+export const createReply = async (reply) => {
+  try {
+    const res = await userRequest.post(`/replies`, reply);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    console.error('Failed to create reply:', err);
+    throw err;
+  }
+};
 
 // export const getReply = async (dispatch) => {
 //   dispatch(getReplyStart());

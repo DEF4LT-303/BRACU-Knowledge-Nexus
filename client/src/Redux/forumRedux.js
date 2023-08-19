@@ -25,9 +25,13 @@ const forumSlice = createSlice({
       state.error = false; // Reset error to false when starting update
     },
     updateForumSuccess: (state, action) => {
+      state.list = state.list.map((forums) => {
+        if (forums.id === action.payload.id) {
+          return action.payload;
+        }
+        return forums;
+      });
       state.isFetching = false;
-      state.forums = action.payload;
-      state.error = false; // Reset error to false on successful update
     },
     updateForumFailure: (state) => {
       state.isFetching = false;

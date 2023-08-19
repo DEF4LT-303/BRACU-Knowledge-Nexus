@@ -8,11 +8,12 @@ import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import Content from '../Dashboard/Content';
+import { getForums, getUsers } from '../Redux/apiCalls';
 
 function Copyright() {
   return (
@@ -113,9 +114,15 @@ const cards = [
 
 export function Home() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   // const user = false; // TODO: set user selector
   const user = useSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    getForums(dispatch);
+    getUsers(dispatch);
+  }, [dispatch]);
 
   return (
     <React.Fragment>

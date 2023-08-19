@@ -42,9 +42,13 @@ const forumSchema = new mongoose.Schema({
   },
 
   replies: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Reply',
-    default: null
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Reply'
+      }
+    ],
+    default: []
   }
 });
 
