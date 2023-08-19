@@ -263,7 +263,7 @@ export function Forum() {
         
         {/* Add Search Bar */}
         <TextField
-          label='Search by title or name'
+          label='Search by title, name or content'
           variant='outlined'
           fullWidth
           value={searchQuery}
