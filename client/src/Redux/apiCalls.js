@@ -172,6 +172,16 @@ export const createReply = async (reply) => {
   }
 };
 
+export const getReplies = async () => {
+  try {
+    const res = await publicRequest.get('/replies');
+    return res.data;
+  } catch (err) {
+    console.error('Failed to get replies:', err);
+    throw err;
+  }
+};
+
 // export const getReply = async (dispatch) => {
 //   dispatch(getReplyStart());
 //   try {

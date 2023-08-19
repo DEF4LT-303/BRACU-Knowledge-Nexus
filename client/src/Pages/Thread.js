@@ -12,14 +12,14 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import StarIcon from '@mui/icons-material/Star';
 import { Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
-import { createReply, updateForum } from '../Redux/apiCalls';
+import { createReply, getForums, updateForum } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -282,6 +282,10 @@ export function Thread() {
     'code-block'
   ];
 
+  useEffect(() => {
+    getForums(dispatch);
+  }, [thread?.replies]);
+
   return (
     <Content>
       <div className={classes.container}>
@@ -458,8 +462,6 @@ export function Thread() {
                   value={reply}
                   onChange={(e) => {
                     setReply(e);
-
-                    console.log(e);
                   }}
                   modules={modules}
                   formats={formats}
