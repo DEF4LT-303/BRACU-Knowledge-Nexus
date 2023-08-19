@@ -238,8 +238,9 @@ export function Forum() {
   }, [dispatch]);
 
   const filteredForums = forums.filter((forum) =>
-    forum.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  forum.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
+  forum.creator.username.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
+    );
 
   if (loading) {
     return (
@@ -260,7 +261,7 @@ export function Forum() {
         
         {/* Add Search Bar */}
         <TextField
-          label='Search by title'
+          label='Search by title or name'
           variant='outlined'
           fullWidth
           value={searchQuery}
