@@ -15,10 +15,11 @@ import IconButton from '@mui/material/IconButton';
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
+import { createReply, updateForum } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -203,62 +204,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const threadPosts = [
-  {
-    id: 1,
-    author: 'John Doe',
-    avatar:
-      'https://w0.peakpx.com/wallpaper/342/700/HD-wallpaper-ken-kaneki-anime-ken-kaneki-tokyo-ghoul-thumbnail.jpg',
-    content:
-      'This is the first thread post. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in imperdiet nisi. Curabitur fringilla eleifend massa, non faucibus odio malesuada quis.',
-    replies: [
-      {
-        id: 1,
-        author: 'Jane Smith',
-        avatar:
-          'https://www.thedailymeal.com/img/gallery/13-delicious-things-you-can-make-with-bananas/l-intro-1673458653.jpg',
-        content: 'Reply 1 to the first post.'
-      },
-      {
-        id: 2,
-        author: 'Mike Johnson',
-        avatar: '/avatars/avatar3.jpg',
-        content: 'Reply 2 to the first post.'
-      }
-    ]
-  },
-  {
-    id: 2,
-    author: 'Jane Smith',
-    avatar: '/avatars/avatar2.jpg',
-    content:
-      'This is the second thread post. Aenean sed facilisis mi. Nullam tincidunt sapien sit amet tellus eleifend, quis aliquet felis fermentum.',
-    replies: [
-      {
-        id: 3,
-        author: 'John Doe',
-        avatar: '/avatars/avatar1.jpg',
-        content: 'Reply to the second post.'
-      }
-    ]
-  }
-];
-
-const replies = [
-  {
-    id: 1,
-    author: 'Jane Smith',
-    avatar: '/avatars/avatar2.jpg',
-    content: 'Reply 1 to the first post.'
-  },
-  {
-    id: 2,
-    author: 'Mike Johnson',
-    avatar: '/avatars/avatar3.jpg',
-    content: 'Reply 2 to the first post.'
-  }
-];
-
 export function Thread() {
   const user = useSelector((state) => state.user.currentUser);
   const admin = user?.role === 'admin';
@@ -272,11 +217,41 @@ export function Thread() {
   const history = useHistory();
   const classes = useStyles();
   const location = useLocation();
+  const dispatch = useDispatch();
   const forumId = location.pathname.split('/')[2];
 
   const thread = useSelector((state) =>
     state.forums.forums.find((forum) => forum._id === forumId)
   );
+
+  const handleReplySubmit = async () => {
+    try {
+      if (reply.trim() === '') {
+        return;
+      }
+
+      const newReplyData = {
+        creator: user?._id,
+        reply: reply,
+        replyToPost: thread?._id
+      };
+
+      const newReply = await createReply(newReplyData);
+
+      const updatedForum = await updateForum(
+        thread?._id,
+        {
+          ...thread,
+          replies: [...thread.replies, newReply]
+        },
+        dispatch
+      );
+
+      setReply('');
+    } catch (error) {
+      console.error('Failed to create reply:', error);
+    }
+  };
 
   const isContentNotEmpty = (content) => {
     const cleanedContent = content.replace(/<[^>]*>/g, '').trim();
@@ -460,9 +435,7 @@ export function Thread() {
                   startIcon={<ChatIcon />}
                   className={`custom_btn black ${classes.doubt_action_btn}`}
                 >{`Comments: ${
-                  !threadPosts[0].replies.length
-                    ? 0
-                    : threadPosts[0].replies.length
+                  !thread.replies ? 0 : thread.replies.length
                 }`}</Button>
               </div>
               <div className='right_hand_side'>
@@ -472,7 +445,7 @@ export function Thread() {
                     size='small'
                     startIcon={<ReplyIcon />}
                     className={`custom_btn black_dull ${classes.doubt_action_btn}`}
-                    onClick={null}
+                    onClick={handleReplySubmit}
                   >
                     Add Reply
                   </Button>
@@ -497,133 +470,138 @@ export function Thread() {
             </div>
             <div className='display_replies_outer'>
               <div className='display_replies_wrapper'>
-                {threadPosts[0].replies.map((reply, idx) => (
-                  <div key={idx} className='single_reply_outer'>
-                    <div className='single_reply_wrapper'>
-                      <div className={classes.owner_info_outer}>
-                        <div className={classes.owner_info_wrapper}>
-                          <Avatar src={reply.avatar} />
-                          <div
-                            onClick={null}
-                            className={classes.doubt_owner_name}
-                          >
-                            {reply.author}
-                          </div>
-
-                          <div className='owner_reputation'>
-                            <Button
-                              size='small'
-                              className='custom_btn m-0 black_dull doubt_owner_reputation'
-                              style={{
-                                fontFamily: 'Segoe UI',
-                                fontWeight: 500
-                              }}
-                              startIcon={<StarIcon />}
-                            >
-                              5
-                            </Button>
-                          </div>
-
-                          <div className={classes.reply_action_outer}>
-                            <IconButton onClick={null}>
-                              <ArrowDropUpIcon
-                                className={`${
-                                  -1 === -1 ? 'black_dull' : 'black'
-                                }`}
-                              />
-                            </IconButton>
+                {thread.replies &&
+                  thread.replies.map((reply, idx) => (
+                    <div key={idx} className='single_reply_outer'>
+                      <div className='single_reply_wrapper'>
+                        <div className={classes.owner_info_outer}>
+                          <div className={classes.owner_info_wrapper}>
+                            <Avatar src={reply.creator.photo} />
                             <div
-                              style={{
-                                fontFamily: 'Segoe UI',
-                                fontWeight: 500
-                              }}
+                              onClick={null}
+                              className={classes.doubt_owner_name}
                             >
-                              {null ? 0 : 3}
+                              {reply.creator.username || 'Deleted User'}
                             </div>
-                            <IconButton onClick={null}>
-                              <ArrowDropDownIcon
-                                className={`${
-                                  -1 === -1 ? 'black_dull' : 'black'
-                                }`}
-                              />
-                            </IconButton>
-                          </div>
-                          {Math.floor(
-                            Math.abs(
-                              Date.now() - Date.parse(thread.createdAt)
-                            ) /
-                              (1000 * 60)
-                          ) < 60 ? (
-                            <div className={classes.doubt_posted_time}>
-                              {`created ${Math.floor(
+
+                            <div className='owner_reputation'>
+                              <Button
+                                size='small'
+                                className='custom_btn m-0 black_dull doubt_owner_reputation'
+                                style={{
+                                  fontFamily: 'Segoe UI',
+                                  fontWeight: 500
+                                }}
+                                startIcon={<StarIcon />}
+                              >
+                                {reply.creator.reputation || 0}
+                              </Button>
+                            </div>
+
+                            <div className={classes.reply_action_outer}>
+                              <IconButton onClick={null}>
+                                <ArrowDropUpIcon
+                                  className={`${
+                                    -1 === -1 ? 'black_dull' : 'black'
+                                  }`}
+                                />
+                              </IconButton>
+                              <div
+                                style={{
+                                  fontFamily: 'Segoe UI',
+                                  fontWeight: 500
+                                }}
+                              >
+                                {reply.upvotes || 0}
+                              </div>
+                              <IconButton onClick={null}>
+                                <ArrowDropDownIcon
+                                  className={`${
+                                    -1 === -1 ? 'black_dull' : 'black'
+                                  }`}
+                                />
+                              </IconButton>
+                            </div>
+                            {Math.floor(
+                              Math.abs(
+                                Date.now() - Date.parse(reply.createdAt)
+                              ) /
+                                (1000 * 60)
+                            ) < 60 ? (
+                              <div className={classes.doubt_posted_time}>
+                                {`created ${Math.floor(
+                                  Math.abs(
+                                    Date.now() - Date.parse(reply.createdAt)
+                                  ) /
+                                    (1000 * 60)
+                                )} minutes ago`}
+                              </div>
+                            ) : Math.floor(
                                 Math.abs(
-                                  Date.now() - Date.parse(thread.createdAt)
+                                  Date.now() - Date.parse(reply.createdAt)
                                 ) /
-                                  (1000 * 60)
-                              )} minutes ago`}
-                            </div>
-                          ) : Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60)
-                            ) < 24 ? (
-                            <div
-                              className={classes.doubt_posted_time}
-                            >{`created ${Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60)
-                            )} Hours ago`}</div>
-                          ) : Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60 * 24)
-                            ) < 30 ? (
-                            <div
-                              className={classes.doubt_posted_time}
-                            >{`created ${Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60 * 24)
-                            )} Days ago`}</div>
-                          ) : Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60 * 24 * 30)
-                            ) < 12 ? (
-                            <div
-                              className={classes.doubt_posted_time}
-                            >{`created ${Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60 * 24 * 30)
-                            )} Months ago`}</div>
-                          ) : (
-                            <div
-                              className={classes.doubt_posted_time}
-                            >{`created ${Math.floor(
-                              Math.abs(
-                                Date.now() - Date.parse(thread.createdAt)
-                              ) /
-                                (1000 * 60 * 60 * 24 * 30 * 12)
-                            )} Years ago`}</div>
-                          )}
+                                  (1000 * 60 * 60)
+                              ) < 24 ? (
+                              <div
+                                className={classes.doubt_posted_time}
+                              >{`created ${Math.floor(
+                                Math.abs(
+                                  Date.now() - Date.parse(reply.createdAt)
+                                ) /
+                                  (1000 * 60 * 60)
+                              )} Hours ago`}</div>
+                            ) : Math.floor(
+                                Math.abs(
+                                  Date.now() - Date.parse(reply.createdAt)
+                                ) /
+                                  (1000 * 60 * 60 * 24)
+                              ) < 30 ? (
+                              <div
+                                className={classes.doubt_posted_time}
+                              >{`created ${Math.floor(
+                                Math.abs(
+                                  Date.now() - Date.parse(reply.createdAt)
+                                ) /
+                                  (1000 * 60 * 60 * 24)
+                              )} Days ago`}</div>
+                            ) : Math.floor(
+                                Math.abs(
+                                  Date.now() - Date.parse(reply.createdAt)
+                                ) /
+                                  (1000 * 60 * 60 * 24 * 30)
+                              ) < 12 ? (
+                              <div
+                                className={classes.doubt_posted_time}
+                              >{`created ${Math.floor(
+                                Math.abs(
+                                  Date.now() - Date.parse(reply.createdAt)
+                                ) /
+                                  (1000 * 60 * 60 * 24 * 30)
+                              )} Months ago`}</div>
+                            ) : (
+                              <div
+                                className={classes.doubt_posted_time}
+                              >{`created ${Math.floor(
+                                Math.abs(
+                                  Date.now() - Date.parse(reply.createdAt)
+                                ) /
+                                  (1000 * 60 * 60 * 24 * 30 * 12)
+                              )} Years ago`}</div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className={classes.doubt_description_outer}>
-                        <div className={classes.doubt_description_wrapper}>
-                          {reply.content}
+                        <div className={classes.doubt_description_outer}>
+                          <div className={classes.doubt_description_wrapper}>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: reply.reply
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>
