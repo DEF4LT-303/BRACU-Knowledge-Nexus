@@ -7,11 +7,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SearchIcon from '@material-ui/icons/Search';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ChatIcon from '@mui/icons-material/Chat';
 import CreateIcon from '@mui/icons-material/Create';
@@ -23,8 +25,6 @@ import { Link, useHistory } from 'react-router-dom';
 import CreateForum from '../Components/CreateForum';
 import Content from '../Dashboard/Content';
 import { getForums, getUsers } from '../Redux/apiCalls';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
 
 function Copyright() {
   return (
@@ -210,7 +210,7 @@ function ForumCard({ post }) {
               <ChatIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.downvotes || 0}
+              {post?.replies.length || 0}
             </Typography>
           </div>
           <div className='no-navigation'>
@@ -237,11 +237,13 @@ export function Forum() {
     getUsers(dispatch);
   }, [dispatch]);
 
-  const filteredForums = forums.filter((forum) =>
-  forum.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
-  forum.creator.username.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by user name
-  forum.description.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
-  
+  const filteredForums = forums.filter(
+    (forum) =>
+      forum.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
+      forum.creator.username
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) || // Search by user name
+      forum.description.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
   );
 
   if (loading) {
@@ -260,7 +262,7 @@ export function Forum() {
             Forum
           </Box>
         </Typography>
-        
+
         {/* Add Search Bar */}
         <TextField
           label='Search by title, name or content'
@@ -269,7 +271,7 @@ export function Forum() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{
-            startAdornment: <SearchIcon />,
+            startAdornment: <SearchIcon />
           }}
           style={{ marginBottom: '16px' }}
         />

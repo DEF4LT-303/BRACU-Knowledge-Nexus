@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { createForum } from '../Redux/apiCalls';
+import { createForum, getForums } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -209,6 +209,7 @@ export default function CreateForum() {
         creator: user?._id
       });
       setStaus('Posted');
+      getForums(dispatch);
     } catch (err) {
       console.log(err);
     }
