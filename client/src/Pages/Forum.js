@@ -237,11 +237,13 @@ export function Forum() {
     getUsers(dispatch);
   }, [dispatch]);
 
-  const filteredForums = forums.filter((forum) =>
-  forum.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
-  forum.creator.username.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by user name
-  forum.description.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
-  
+  const filteredForums = forums.filter(
+    (forum) =>
+      forum.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
+      forum.creator.username
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) || // Search by user name
+      forum.description.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
   );
 
   if (loading) {
