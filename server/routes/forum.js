@@ -1,6 +1,4 @@
 const Forum = require('../models/Forum');
-const User = require('../models/User');
-const Reply = require('../models/Reply');
 const { verify, verifyTokenAuth, verifyTokenAdmin } = require('./verifyToken');
 
 const router = require('express').Router();
@@ -87,40 +85,11 @@ router.delete('/:id', verifyTokenAuth, async (req, res) => {
   const forumID = req.params.id;
 
   try {
-    const forum = await Forum.findById(forumID);
-    if (!forum) {
-      return res.status(404).json('Forum not found.');
+    const deletedForumPost = await Forum.findByIdAndDelete(req.params.id);
+    if (!deletedForumPost) {
+      return res.status(404).json({ message: 'Forum post not found' });
     }
-
-    const isAdmin = req.user.role === 'admin';
-    const isCreator = forum.creator.toString() === req.user.id;
-
-    if (!isAdmin && !isCreator) {
-      return res.status(403).json('You are not allowed to delete this forum.');
-    }
-
-    await Promise.all(
-      forum.replies.map(async (reply) => {
-        await Reply.findByIdAndDelete(reply._id);
-      })
-    );
-
-    if (isCreator) {
-      await User.findByIdAndUpdate(req.user.id, {
-        $pull: { posts: forumID },
-        $inc: { postsCount: -1 }
-      }).exec();
-    }
-
-    if (isAdmin && !isCreator) {
-      await User.findByIdAndUpdate(forum.creator, {
-        $pull: { posts: forumID },
-        $inc: { postsCount: -1 }
-      }).exec();
-    }
-
-    await Forum.deleteOne({ _id: forumID });
-    return res.status(200).json('Forum deleted.');
+    res.status(200).json({ message: 'Forum post has been deleted' });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);

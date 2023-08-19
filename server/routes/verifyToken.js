@@ -26,7 +26,7 @@ const verifyTokenAuth = (req, res, next) => {
       req.method === 'GET' ||
       req.method === 'POST' ||
       req.method === 'PUT' ||
-      (req.method === 'DELETE' && !req.params.id)
+      req.method === 'DELETE'
     ) {
       return next();
     }
