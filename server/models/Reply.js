@@ -20,6 +20,10 @@ const replySchema = new mongoose.Schema({
   upVotes: {
     type: Array,
     default: []
+  },
+  downVotes: {
+    type: Array,
+    default: []
   }
 });
 
