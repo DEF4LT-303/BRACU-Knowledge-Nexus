@@ -213,3 +213,31 @@ export const getReplies = async () => {
 // };
 
 //TODO - Feedback API functions
+export const createFeedback = async (reply) => {
+  try {
+    const res = await userRequest.post(`/feedback`, reply);
+    return res.data;
+  } catch (err) {
+    console.error('Failed to create feedback:', err);
+    throw err;
+  }
+};
+
+export const getFeedback = async () => {
+  try {
+    const res = await userRequest.get('/feedback');
+    return res.data;
+  } catch (err) {
+    console.error('Failed to get feedback:', err);
+    throw err;
+  }
+};
+
+export const deleteFeedback = async (id) => {
+  try {
+    await userRequest.delete(`/feedback/${id}`);
+  } catch (err) {
+    console.error('Failed to delete feedback:', err);
+    throw err;
+  }
+};
