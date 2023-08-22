@@ -99,6 +99,10 @@ function AddForum() {
     setOpen(true);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div
       style={{
@@ -113,7 +117,7 @@ function AddForum() {
       <Fab color='primary' aria-label='create forum' onClick={handleClick}>
         <CreateIcon />
       </Fab>
-      {open && <CreateForum />}
+      {open && <CreateForum onClose={handleClose} />}
     </div>
   );
 }
