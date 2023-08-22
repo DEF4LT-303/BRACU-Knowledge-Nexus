@@ -17,6 +17,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { useSelector } from 'react-redux';
 import Components from './Components/Components';
+import FeedbackPage from './Components/Feedback';
 import Profile from './Pages/Profile';
 import { Register } from './Pages/Register';
 import Settings from './Pages/Settings';
@@ -77,6 +78,13 @@ export default function App() {
                       currentTheme={currentTheme}
                       setCurrentTheme={setCurrentTheme}
                     />
+                  </Route>
+                  <Route path='/feedback'>
+                    {!user ? (
+                      <Redirect to='/login' />
+                    ) : (
+                      <FeedbackPage userEmail={user?.email} />
+                    )}
                   </Route>
                   <Route path='/'>
                     <Home />
