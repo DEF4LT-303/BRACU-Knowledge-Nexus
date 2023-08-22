@@ -2,6 +2,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -22,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
-import { getUsers } from '../Redux/apiCalls';
+import { getUsers, updateOtherUser } from '../Redux/apiCalls';
 import { remove, selectLoading, selectPeople } from '../Redux/peopleRedux';
 import { SummaryCard } from './Profile';
 
@@ -194,6 +196,14 @@ export default function People() {
   }
 
   if (error) return `Error! ${error.message}`;
+
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      await updateOtherUser(userId, { role: newRole }, dispatch);
+    } catch (error) {
+      console.error('Error updating user role:', error);
+    }
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -368,7 +378,19 @@ export default function People() {
                               {row.username}
                             </TableCell>
                             <TableCell align='right'>{row._id}</TableCell>
-                            <TableCell align='right'>{row.role}</TableCell>
+                            <TableCell align='right'>
+                              <Select
+                                value={row.role}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  handleRoleChange(row._id, e.target.value);
+                                }}
+                              >
+                                <MenuItem value='student'>Student</MenuItem>
+                                <MenuItem value='faculty'>Faculty</MenuItem>
+                                <MenuItem value='admin'>Admin</MenuItem>
+                              </Select>
+                            </TableCell>
                           </TableRow>
                         );
                       })}

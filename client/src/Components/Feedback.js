@@ -1,21 +1,45 @@
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, Snackbar, TextField, Typography } from '@material-ui/core';
+import { Alert } from '@mui/material';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Content from '../Dashboard/Content';
+import { createFeedback } from '../Redux/apiCalls';
 
 export default function FeedbackPage({ userEmail }) {
   const [feedback, setFeedback] = useState('');
+  const [isSuccessAlertOpen, setIsSuccessAlertOpen] = useState(false);
+  const user = useSelector((state) => state.user.currentUser);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here, you can handle the submission of feedback, including the user's email
-    // You can use the userEmail prop here
 
-    // For demonstration purposes, let's just log the feedback to the console
-    console.log('Feedback:', feedback);
+    try {
+      const newFeedback = {
+        description: feedback,
+        creator: user?._id
+      };
+
+      await createFeedback(newFeedback);
+      console.log('Feedback submitted successfully');
+      setIsSuccessAlertOpen(true);
+
+      setFeedback('');
+    } catch (error) {
+      console.error('Failed to submit feedback:', error);
+    }
   };
 
   return (
     <Content>
+      <Snackbar
+        open={isSuccessAlertOpen}
+        autoHideDuration={5000}
+        onClose={() => setIsSuccessAlertOpen(false)}
+      >
+        <Alert onClose={() => setIsSuccessAlertOpen(false)} severity='success'>
+          Feedback submitted successfully!
+        </Alert>
+      </Snackbar>
       <Typography variant='h4'>Feedback</Typography>
       <Typography variant='body1'>We'd love to hear your feedback!</Typography>
       <form onSubmit={handleSubmit}>

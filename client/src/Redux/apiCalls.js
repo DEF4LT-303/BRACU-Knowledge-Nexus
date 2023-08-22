@@ -213,9 +213,9 @@ export const getReplies = async () => {
 // };
 
 //TODO - Feedback API functions
-export const createFeedback = async (reply) => {
+export const createFeedback = async (feedback) => {
   try {
-    const res = await userRequest.post(`/feedback`, reply);
+    const res = await userRequest.post(`/feedback`, feedback);
     return res.data;
   } catch (err) {
     console.error('Failed to create feedback:', err);

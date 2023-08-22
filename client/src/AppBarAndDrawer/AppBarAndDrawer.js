@@ -115,7 +115,10 @@ function ResponsiveDrawer(props) {
             ? [
                 { text: 'profile', icon: 'person' },
                 ...(user.role === 'admin'
-                  ? [{ text: 'people', icon: 'people' }]
+                  ? [
+                      { text: 'people', icon: 'people' },
+                      { text: 'feedbacks', icon: 'feedbacks' }
+                    ]
                   : [])
                 // { text: 'components', icon: 'apps' }
               ]
