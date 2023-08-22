@@ -5,27 +5,15 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
+import Footer from '../Components/Footer';
 import Content from '../Dashboard/Content';
-
-function Copyright() {
-  return (
-    <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright © '}
-      <Link color='inherit' href='https://knowledge-nexus-lime.vercel.app/'>
-        Knowledge Nexus
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { getForums, getUsers } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -113,9 +101,15 @@ const cards = [
 
 export function Home() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   // const user = false; // TODO: set user selector
   const user = useSelector((state) => state.user.currentUser);
+
+  useEffect(() => {
+    getForums(dispatch);
+    getUsers(dispatch);
+  }, [dispatch]);
 
   return (
     <React.Fragment>
@@ -221,22 +215,7 @@ export function Home() {
         </Content>
       </main>
       {/* Footer */}
-      <footer className={classes.footer}>
-        <Content>
-          <Typography variant='h6' align='center' gutterBottom>
-            BRAC University
-          </Typography>
-          <Typography
-            variant='subtitle1'
-            align='center'
-            color='textSecondary'
-            component='p'
-          >
-            Knowledge Nexus
-          </Typography>
-          <Copyright />
-        </Content>
-      </footer>
+      <Footer />
       {/* End footer */}
     </React.Fragment>
   );

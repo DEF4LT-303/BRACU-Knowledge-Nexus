@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { createForum } from '../Redux/apiCalls';
+import { createForum, getForums, updateForum } from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function CreateForum() {
+export default function CreateForum({ forumToEdit, onClose }) {
   const modules = {
     toolbar: [
       [{ header: '1' }, { header: '2' }, { font: [] }],
@@ -127,10 +127,6 @@ export default function CreateForum() {
     'color',
     'indent'
   ];
-  const descriptionEditor = useRef(null);
-  const [doubtTitle, setDoubtTitle] = useState('');
-  const [attachedFiles, setAttachedFiles] = useState([]);
-  const [newDescription, setNewDescription] = useState('');
 
   const [tags, setTags] = useState([
     'JavaScript',
@@ -180,17 +176,34 @@ export default function CreateForum() {
     'IoT',
     'Virtual Reality'
   ]);
+
+  const [forumId, setForumId] = useState(null);
+
   const [postTags, setPostTags] = useState([]);
+  const descriptionEditor = useRef(null);
+  const [doubtTitle, setDoubtTitle] = useState('');
+  const [attachedFiles, setAttachedFiles] = useState([]);
+  const [newDescription, setNewDescription] = useState('');
 
   const [previewFile, setPreviewFile] = useState(null);
   const [openPreview, setOpenPreview] = useState(false);
 
   const [disableSubmit, setDisableSubmit] = useState(false);
-  const [status, setStaus] = useState('Post');
+  const [open, setOpen] = useState(true);
+  const [status, setStaus] = useState(forumToEdit ? 'Update' : 'Post');
 
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+
+  useEffect(() => {
+    if (forumToEdit) {
+      setForumId(forumToEdit._id);
+      setDoubtTitle(forumToEdit.title);
+      setNewDescription(forumToEdit.description);
+      setPostTags(forumToEdit.tags);
+    }
+  }, [forumToEdit]);
 
   const user = useSelector((state) => state.user.currentUser);
 
@@ -201,21 +214,34 @@ export default function CreateForum() {
 
     try {
       setDisableSubmit(true);
-      setStaus('Posting');
-      await createForum(dispatch, {
-        title: doubtTitle,
-        description: newDescription,
-        tags: postTags,
-        creator: user?._id
-      });
-      setStaus('Posted');
+      setStaus(forumId ? 'Updating' : 'Posting'); // Update status based on forumId
+      if (forumId) {
+        await updateForum(
+          forumId,
+          {
+            title: doubtTitle,
+            description: newDescription,
+            tags: postTags
+          },
+          dispatch
+        );
+      } else {
+        await createForum(dispatch, {
+          title: doubtTitle,
+          description: newDescription,
+          tags: postTags,
+          creator: user?._id
+        });
+      }
+      setStaus(forumId ? 'Updated' : 'Posted');
+      setDisableSubmit(true);
+      getForums(dispatch);
     } catch (err) {
       console.log(err);
     }
 
-    setDoubtTitle('');
-    setPostTags([]);
-    setDisableSubmit(false);
+    setOpen(false); // Close the dialog
+    onClose();
   };
 
   const isContentNotEmpty = (content) => {
@@ -260,7 +286,8 @@ export default function CreateForum() {
               <div className={classes.btnGroup}>
                 <Button
                   onClick={() => {
-                    window.location.href = '/forum';
+                    setOpen(false);
+                    onClose();
                   }}
                   className={classes.customBtn}
                 >
