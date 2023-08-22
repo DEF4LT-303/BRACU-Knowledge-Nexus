@@ -35,6 +35,9 @@ const userRoute = require('./routes/user');
 const forumRoute = require('./routes/forum');
 const replyRoute = require('./routes/reply');
 
+const feedbackRoute = require('./routes/feedback');
+
+
 dotenv.config();
 
 mongoose
@@ -47,6 +50,7 @@ app.use('/api/users', userRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/forums', forumRoute);
 app.use('/api/replies', replyRoute);
+app.use('/api/feedback', feedbackRoute);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`)
