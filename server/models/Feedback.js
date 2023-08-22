@@ -15,6 +15,10 @@ const feedbackSchema = new mongoose.Schema({
     required: [true, 'A Feedback must have a creator']
   },
 
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  }
 });
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);
