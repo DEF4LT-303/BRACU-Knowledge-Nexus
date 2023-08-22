@@ -18,6 +18,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import CreateForum from '../Components/CreateForum';
 import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
 import { createReply, getForums, updateForum } from '../Redux/apiCalls';
@@ -227,10 +228,12 @@ export function Thread() {
   const admin = user?.role === 'admin';
 
   const [disableDelete, setDisableDelete] = useState(false);
-  const [edit, setEdit] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const [requestedDoubt, setRequestedDoubt] = useState(null);
   const [reply, setReply] = useState('');
+
+  const [selectedThread, setSelectedThread] = useState(null);
 
   const history = useHistory();
   const classes = useStyles();
@@ -274,6 +277,10 @@ export function Thread() {
   const isContentNotEmpty = (content) => {
     const cleanedContent = content.replace(/<[^>]*>/g, '').trim();
     return !!cleanedContent;
+  };
+
+  const handleEditForum = (thread) => {
+    setSelectedThread(thread);
   };
 
   const upVote = async () => {
@@ -374,6 +381,14 @@ export function Thread() {
 
   return (
     <Content>
+      <div>
+        {selectedThread && (
+          <CreateForum
+            forumToEdit={selectedThread}
+            onClose={() => setSelectedThread(null)}
+          />
+        )}
+      </div>
       <div className={classes.container}>
         <Paper
           className={classes.paper}
@@ -393,7 +408,7 @@ export function Thread() {
               <div className={classes.spacer}>
                 {user?._id == thread?.creator?._id && (
                   <Button
-                    onClick={() => setEdit(true)}
+                    onClick={() => handleEditForum(thread)}
                     // className={classes.custom_btn}
                     style={{ width: '125px' }}
                     startIcon={<EditIcon />}
