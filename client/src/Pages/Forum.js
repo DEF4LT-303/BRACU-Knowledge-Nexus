@@ -208,7 +208,7 @@ function ForumCard({ post }) {
               <ArrowDropUpIcon />
             </IconButton>
             <Typography variant='body2' color='text.secondary'>
-              {post.upVotes.length}
+              {post.upVotes.length - post.downVotes.length || 0}
             </Typography>
             <IconButton aria-label='replies' className={classes.icon}>
               <ChatIcon />
