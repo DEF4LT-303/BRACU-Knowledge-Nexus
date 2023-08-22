@@ -18,6 +18,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { useSelector } from 'react-redux';
 import Components from './Components/Components';
 import FeedbackPage from './Components/Feedback';
+import { Feedback } from './Pages/Feedbacks';
 import Profile from './Pages/Profile';
 import { Register } from './Pages/Register';
 import Settings from './Pages/Settings';
@@ -72,6 +73,9 @@ export default function App() {
                   </Route>
                   <Route path='/components'>
                     {!user ? <Redirect to='/login' /> : <Components />}
+                  </Route>
+                  <Route path='/feedbacks'>
+                    {!user && admin ? <Redirect to='/login' /> : <Feedback />}
                   </Route>
                   <Route path='/settings'>
                     <Settings

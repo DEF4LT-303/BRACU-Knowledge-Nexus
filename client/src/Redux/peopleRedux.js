@@ -55,7 +55,7 @@ export const peopleSlice = createSlice({
     update: (state, action) => {
       state.list = state.list.map((person) => {
         if (person.id === action.payload.id) {
-          return action.payload;
+          return { ...person, ...action.payload };
         }
         return person;
       });

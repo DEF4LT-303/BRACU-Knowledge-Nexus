@@ -243,11 +243,11 @@ export function Forum() {
 
   const filteredForums = forums.filter(
     (forum) =>
-      forum.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
-      forum.creator.username
+      forum?.title.toLowerCase().includes(searchQuery.toLowerCase()) || // Search by title
+      forum.creator?.username
         .toLowerCase()
         .includes(searchQuery.toLowerCase()) || // Search by user name
-      forum.description.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
+      forum?.description.toLowerCase().includes(searchQuery.toLowerCase()) // Search by user name
   );
 
   if (loading) {
