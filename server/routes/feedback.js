@@ -15,3 +15,16 @@ router.post('/', verifyTokenAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// Get all Feedback posts
+router.get('/',verifyTokenAdmin, async (req, res) => {
+    try {
+      const feedbackPosts = await Feedback.find()
+        .populate('creator', '-password')
+        .sort({ createdAt: -1 });
+      res.status(200).json(feedbackPosts);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+  
