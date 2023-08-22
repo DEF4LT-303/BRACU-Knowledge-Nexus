@@ -41,6 +41,11 @@ const forumSchema = new mongoose.Schema({
     default: []
   },
 
+  downVotes: {
+    type: Array,
+    default: []
+  },
+
   replies: {
     type: [
       {
