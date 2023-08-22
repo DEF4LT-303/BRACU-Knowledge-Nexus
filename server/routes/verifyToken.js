@@ -17,7 +17,7 @@ const verify = (req, res, next) => {
 const verifyTokenAuth = (req, res, next) => {
   verify(req, res, () => {
     // Allow access for admins without checking the id
-    if (req.user.role === 'admin') {
+    if (req.user?.role === 'admin') {
       return next();
     }
 
@@ -44,7 +44,7 @@ const verifyTokenAuth = (req, res, next) => {
 
 const verifyTokenAdmin = (req, res, next) => {
   verify(req, res, () => {
-    if (req.user.role === 'admin') {
+    if (req.user?.role === 'admin') {
       next();
     } else {
       res.status(403).json('You are not allowed!');

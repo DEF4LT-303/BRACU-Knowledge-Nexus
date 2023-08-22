@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -16,8 +17,7 @@ import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
-import CreateForum from '../Components/CreateForum';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
 import { createReply, getForums, updateForum } from '../Redux/apiCalls';
@@ -202,6 +202,23 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
       alignItems: 'center'
     }
+  },
+
+  vote_buttons: {
+    color: theme.palette.text.secondary,
+    transition: 'color 0.3s',
+
+    '&:hover': {
+      color: theme.palette.primary.main
+    }
+  },
+
+  upvoted: {
+    color: theme.palette.success.main // Change color for upvoted state
+  },
+
+  downvoted: {
+    color: theme.palette.error.main // Change color for downvoted state
   }
 }));
 
@@ -210,12 +227,10 @@ export function Thread() {
   const admin = user?.role === 'admin';
 
   const [disableDelete, setDisableDelete] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   const [requestedDoubt, setRequestedDoubt] = useState(null);
   const [reply, setReply] = useState('');
-
-  const [selectedThread, setSelectedThread] = useState(null);
 
   const history = useHistory();
   const classes = useStyles();
@@ -261,8 +276,72 @@ export function Thread() {
     return !!cleanedContent;
   };
 
-  const handleEditForum = (thread) => {
-    setSelectedThread(thread);
+  const upVote = async () => {
+    const isUserInUpVotes = thread.upVotes.includes(user?._id);
+    try {
+      let updatedUpVotes = [...thread.upVotes];
+      let updatedDownVotes = [...thread.downVotes];
+
+      if (isUserInUpVotes) {
+        updatedUpVotes = updatedUpVotes.filter(
+          (userId) => userId !== user?._id
+        );
+      } else {
+        updatedUpVotes.push(user?._id);
+        updatedDownVotes = updatedDownVotes.filter(
+          (userId) => userId !== user?._id
+        );
+      }
+
+      const updatedForum = await updateForum(
+        thread?._id,
+        {
+          ...thread,
+          upVotes: updatedUpVotes,
+          downVotes: updatedDownVotes
+        },
+        dispatch
+      );
+
+      // setUserHasUpvoted(!userHasUpvoted);
+      // setUserHasDownvoted(false);
+    } catch (error) {
+      console.error('Failed to upvote:', error);
+    }
+  };
+
+  const downVote = async () => {
+    const isUserInDownVotes = thread.downVotes.includes(user?._id);
+    try {
+      let updatedUpVotes = [...thread.upVotes];
+      let updatedDownVotes = [...thread.downVotes];
+
+      if (isUserInDownVotes) {
+        updatedDownVotes = updatedDownVotes.filter(
+          (userId) => userId !== user?._id
+        );
+      } else {
+        updatedDownVotes.push(user?._id);
+        updatedUpVotes = updatedUpVotes.filter(
+          (userId) => userId !== user?._id
+        );
+      }
+
+      const updatedForum = await updateForum(
+        thread?._id,
+        {
+          ...thread,
+          upVotes: updatedUpVotes,
+          downVotes: updatedDownVotes
+        },
+        dispatch
+      );
+
+      // setUserHasDownvoted(!userHasDownvoted);
+      // setUserHasUpvoted(false);
+    } catch (error) {
+      console.error('Failed to downvote:', error);
+    }
   };
 
   const modules = {
@@ -295,14 +374,6 @@ export function Thread() {
 
   return (
     <Content>
-      <div>
-        {selectedThread && (
-          <CreateForum
-            forumToEdit={selectedThread}
-            onClose={() => setSelectedThread(null)}
-          />
-        )}
-      </div>
       <div className={classes.container}>
         <Paper
           className={classes.paper}
@@ -322,7 +393,7 @@ export function Thread() {
               <div className={classes.spacer}>
                 {user?._id == thread?.creator?._id && (
                   <Button
-                    onClick={() => handleEditForum(thread)}
+                    onClick={() => setEdit(true)}
                     // className={classes.custom_btn}
                     style={{ width: '125px' }}
                     startIcon={<EditIcon />}
@@ -359,11 +430,27 @@ export function Thread() {
 
           <div className={classes.sectionWrapper_2}>
             <div className={classes.votes_wrapper}>
-              <Button disabled={!user} onClick={null}>
+              <Button
+                disabled={!user}
+                onClick={upVote}
+                className={`${classes.vote_buttons} ${
+                  thread?.upVotes?.includes(user?._id) ? classes.upvoted : ''
+                }`}
+              >
                 <ArrowDropUpIcon style={{ scale: '1.5' }} />
               </Button>
-              <div className={classes.vote_count}>{thread.upVotes.length}</div>
-              <Button disabled={!user} onClick={null}>
+              <div className={classes.vote_count}>
+                {thread.upVotes.length - thread.downVotes.length}
+              </div>
+              <Button
+                disabled={!user}
+                onClick={downVote}
+                className={`${classes.vote_buttons} ${
+                  thread?.downVotes?.includes(user?._id)
+                    ? classes.downvoted
+                    : ''
+                }`}
+              >
                 <ArrowDropDownIcon style={{ scale: '1.5' }} />
               </Button>
             </div>
@@ -459,15 +546,26 @@ export function Thread() {
               </div>
               <div className='right_hand_side'>
                 <div className='btn_group'>
-                  <Button
-                    disabled={!isContentNotEmpty(reply)}
-                    size='small'
-                    startIcon={<ReplyIcon />}
-                    className={`custom_btn black_dull ${classes.doubt_action_btn}`}
-                    onClick={handleReplySubmit}
-                  >
-                    Add Reply
-                  </Button>
+                  {user ? (
+                    <Button
+                      disabled={!isContentNotEmpty(reply)}
+                      size='small'
+                      startIcon={<ReplyIcon />}
+                      className={`custom_btn black_dull ${classes.doubt_action_btn}`}
+                      onClick={handleReplySubmit}
+                    >
+                      Add Reply
+                    </Button>
+                  ) : (
+                    <Link
+                      to={`/login`}
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      <Typography style={{ margin: '10px' }}>
+                        Login to Reply
+                      </Typography>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -480,6 +578,7 @@ export function Thread() {
                   }}
                   modules={modules}
                   formats={formats}
+                  readOnly={!user}
                   placeholder='Reply...'
                   className={classes.joditEditor}
                 />
@@ -528,9 +627,7 @@ export function Thread() {
                                   fontFamily: 'Segoe UI',
                                   fontWeight: 500
                                 }}
-                              >
-                                {reply.upvotes || 0}
-                              </div>
+                              ></div>
                               <IconButton onClick={null}>
                                 <ArrowDropDownIcon
                                   className={`${
