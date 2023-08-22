@@ -38,3 +38,4 @@ router.delete('/:id', verifyTokenAdmin, async (req, res) => {
     }
   });
   
+  module.exports = router;
