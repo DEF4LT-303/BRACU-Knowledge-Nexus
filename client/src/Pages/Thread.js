@@ -12,7 +12,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import ReplyIcon from '@mui/icons-material/Reply';
 import StarIcon from '@mui/icons-material/Star';
 import { Paper } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -21,7 +20,12 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import CreateForum from '../Components/CreateForum';
 import DeleteDialog from '../Components/DeleteDialog';
 import Content from '../Dashboard/Content';
-import { createReply, getForums, updateForum } from '../Redux/apiCalls';
+import {
+  createReply,
+  getForums,
+  updateForum,
+  updateOtherUser
+} from '../Redux/apiCalls';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -283,6 +287,26 @@ export function Thread() {
     setSelectedThread(thread);
   };
 
+  const EMA_ALPHA = 0.02;
+  const initial = thread?.creator?.reputation;
+
+  const updateReputation = async (reputationChange, initial) => {
+    const currentReputation = initial;
+    const newReputation =
+      currentReputation + EMA_ALPHA * (reputationChange - currentReputation);
+
+    // Ensure the new reputation stays within the range of 0 to 5
+    const clampedReputation = Math.max(0, Math.min(5, newReputation));
+
+    const roundedReputation = Math.round(clampedReputation * 100) / 100;
+
+    updateOtherUser(
+      thread.creator?._id,
+      { reputation: roundedReputation },
+      dispatch
+    );
+  };
+
   const upVote = async () => {
     const isUserInUpVotes = thread.upVotes.includes(user?._id);
     try {
@@ -299,6 +323,8 @@ export function Thread() {
           (userId) => userId !== user?._id
         );
       }
+
+      updateReputation(isUserInUpVotes ? -1 : 1, initial);
 
       const updatedForum = await updateForum(
         thread?._id,
@@ -333,6 +359,8 @@ export function Thread() {
           (userId) => userId !== user?._id
         );
       }
+
+      updateReputation(isUserInDownVotes ? 1 : -1, initial);
 
       const updatedForum = await updateForum(
         thread?._id,
@@ -629,7 +657,7 @@ export function Thread() {
                               </Button>
                             </div>
 
-                            <div className={classes.reply_action_outer}>
+                            {/* <div className={classes.reply_action_outer}>
                               <IconButton onClick={null}>
                                 <ArrowDropUpIcon
                                   className={`${
@@ -650,7 +678,7 @@ export function Thread() {
                                   }`}
                                 />
                               </IconButton>
-                            </div>
+                            </div> */}
                             {Math.floor(
                               Math.abs(
                                 Date.now() - Date.parse(reply.createdAt)
