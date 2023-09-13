@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Fade from 'react-reveal/Fade';
 import { Link as RouterLink } from 'react-router-dom';
@@ -48,13 +48,21 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     alignItems: 'center',
-    gap: '50px'
+    flexDirection: 'column',
+    gap: '50px',
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row'
+    }
   },
   imgContainer: {
     height: '500px',
-    width: '40px',
+    width: '80%',
     position: 'relative',
-    flex: 1
+    flex: 1,
+    [theme.breakpoints.up('sm')]: {
+      height: '400px',
+      width: '200px'
+    }
   },
   image: {
     objectFit: 'contain',
@@ -65,10 +73,20 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px'
+    gap: '10px',
+    textAlign: 'center',
+    [theme.breakpoints.up('sm')]: {
+      textAlign: 'left'
+    }
   },
   gap: {
     marginTop: '100px'
+  },
+  font: {
+    fontSize: '14px',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '16px'
+    }
   }
 }));
 
@@ -76,13 +94,26 @@ export function Home() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // const user = false; // TODO: set user selector
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   const user = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     getForums(dispatch);
     getUsers(dispatch);
   }, [dispatch]);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768);
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -153,17 +184,13 @@ export function Home() {
           <Fade left>
             <div className={classes.container}>
               <div className={classes.imgContainer}>
-                <img
-                  className={classes.image}
-                  src='https://img.freepik.com/free-vector/flat-design-lake-scenery_23-2149161405.jpg?w=2000'
-                  alt='img'
-                />
+                <img className={classes.image} src='img/nexus.png' alt='img' />
               </div>
               <div className={classes.textContainer}>
                 <Typography variant='h4'>
                   What is BRACU Knowledge Nexus?
                 </Typography>
-                <Typography variant='body1'>
+                <Typography variant='body1' className={classes.font}>
                   BRACU Knowledge Nexus is a platform for sharing knowledge and
                   meaningful discussions. It is a place where you can share your
                   thoughts and ideas with others. You can also ask questions and
@@ -176,17 +203,60 @@ export function Home() {
           </Fade>
 
           <Fade right>
-            <div className={`${classes.container} ${classes.gap}`}>
-              <div className={classes.textContainer}>
-                <Typography variant='h4'>Share or browse forums.</Typography>
-                <Typography variant='body1'>
-                  Browse through the forums and find the ones that interest you.
-                  Or create your own forum and share your thoughts with others
-                  like you.
-                </Typography>
+            {!isMobile ? (
+              <div className={`${classes.container} ${classes.gap}`}>
+                <div className={classes.textContainer}>
+                  <Typography variant='h4'>Share or browse forums.</Typography>
+                  <Typography variant='body1' className={classes.font}>
+                    Browse through the forums and find the ones that interest
+                    you. Or create your own forum and share your thoughts with
+                    others like you.
+                  </Typography>
+                </div>
+                <div className={classes.imgContainer}>
+                  <img
+                    className={classes.image}
+                    src='img/Forum.png'
+                    alt='img'
+                  />
+                </div>
               </div>
+            ) : (
+              <div className={`${classes.container} ${classes.gap}`}>
+                <div className={classes.imgContainer}>
+                  <img
+                    className={classes.image}
+                    src='img/Forum.png'
+                    alt='img'
+                  />
+                </div>
+                <div className={classes.textContainer}>
+                  <Typography variant='h4'>Share or browse forums.</Typography>
+                  <Typography variant='body1' className={classes.font}>
+                    Browse through the forums and find the ones that interest
+                    you. Or create your own forum and share your thoughts with
+                    others like you.
+                  </Typography>
+                </div>
+              </div>
+            )}
+          </Fade>
+
+          <Fade left>
+            <div className={`${classes.container} ${classes.gap}`}>
               <div className={classes.imgContainer}>
-                <img className={classes.image} src='img/forum.png' alt='img' />
+                <img
+                  className={classes.image}
+                  src='img/Profile.png'
+                  alt='img'
+                />
+              </div>
+              <div className={classes.textContainer}>
+                <Typography variant='h4'>Customize your profile.</Typography>
+                <Typography variant='body1' className={classes.font}>
+                  Customize user profile and display your skills and
+                  information.
+                </Typography>
               </div>
             </div>
           </Fade>

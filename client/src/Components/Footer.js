@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1)
   },
   listItem: {
-    marginBottom: theme.spacing(0.5)
+    marginBottom: theme.spacing(0.5),
+    textDecoration: 'none',
+    color: theme.palette.text.secondary
   },
   bottom: {
     borderTop: `1px solid ${theme.palette.divider}`,
@@ -56,7 +58,11 @@ function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
       {'Copyright © '}
-      <Link color='inherit' href='https://knowledge-nexus-lime.vercel.app/'>
+      <Link
+        color='inherit'
+        href='https://knowledge-nexus-lime.vercel.app/'
+        style={{ textDecoration: 'none', color: 'inherit' }}
+      >
         Knowledge Nexus.
       </Link>{' '}
       All Rights Reserved. {new Date().getFullYear()}
