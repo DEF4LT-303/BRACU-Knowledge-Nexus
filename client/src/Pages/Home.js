@@ -183,7 +183,11 @@ export function Home() {
           <Fade left>
             <div className={classes.container}>
               <div className={classes.imgContainer}>
-                <img className={classes.image} src='img/Nexus.png' alt='img' />
+                <img
+                  className={classes.image}
+                  src='img/Nexus.png'
+                  alt='Nexus'
+                />
               </div>
               <div className={classes.textContainer}>
                 <Typography variant='h4'>
@@ -215,7 +219,7 @@ export function Home() {
                   <img
                     className={classes.image}
                     src='img/Forum.png'
-                    alt='img'
+                    alt='Forum'
                   />
                 </div>
               </div>
@@ -225,7 +229,7 @@ export function Home() {
                   <img
                     className={classes.image}
                     src='img/Forum.png'
-                    alt='img'
+                    alt='Forum'
                   />
                 </div>
                 <div className={classes.textContainer}>
@@ -245,8 +249,8 @@ export function Home() {
               <div className={classes.imgContainer}>
                 <img
                   className={classes.image}
-                  src='img/Profile.png'
-                  alt='img'
+                  src='img/UserProfile.png'
+                  alt='Profile'
                 />
               </div>
               <div className={classes.textContainer}>
