@@ -249,7 +249,7 @@ export function Home() {
               <div className={classes.imgContainer}>
                 <img
                   className={classes.image}
-                  src='img/UserProfile.png'
+                  src='img/Profile.png'
                   alt='Profile'
                 />
               </div>
