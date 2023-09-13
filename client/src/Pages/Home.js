@@ -183,7 +183,7 @@ export function Home() {
           <Fade left>
             <div className={classes.container}>
               <div className={classes.imgContainer}>
-                <img className={classes.image} src='img/nexus.png' alt='img' />
+                <img className={classes.image} src='img/Nexus.png' alt='img' />
               </div>
               <div className={classes.textContainer}>
                 <Typography variant='h4'>
@@ -192,10 +192,9 @@ export function Home() {
                 <Typography variant='body1' className={classes.font}>
                   BRACU Knowledge Nexus is a platform for sharing knowledge and
                   meaningful discussions. It is a place where you can share your
-                  thoughts and ideas with others. You can also ask questions and
-                  get answers from others. You can also share your knowledge by
-                  answering questions. You can also upvote and downvote answers
-                  and questions. You can also comment on answers and questions.
+                  thoughts and ideas with others. Ask questions and get answers
+                  from others. Find people with similar interests. Connect with
+                  the HUB.
                 </Typography>
               </div>
             </div>
@@ -254,7 +253,7 @@ export function Home() {
                 <Typography variant='h4'>Customize your profile.</Typography>
                 <Typography variant='body1' className={classes.font}>
                   Customize user profile and display your skills and
-                  information.
+                  information. Build up reputation and get recongnized.
                 </Typography>
               </div>
             </div>
