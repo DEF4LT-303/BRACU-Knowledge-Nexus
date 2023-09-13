@@ -145,7 +145,6 @@ export function Home() {
                 color='textSecondary'
                 paragraph
               >
-                {/* A place for sharing thoughts and meaningful discussions. */}
                 <Typewriter
                   options={{
                     strings: [
