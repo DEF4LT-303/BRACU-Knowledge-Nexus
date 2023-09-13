@@ -1,14 +1,11 @@
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Fade from 'react-reveal/Fade';
 import { Link as RouterLink } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 import Footer from '../Components/Footer';
@@ -37,20 +34,6 @@ const useStyles = makeStyles((theme) => ({
   heroButtons: {
     marginTop: theme.spacing(4)
   },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8)
-  },
-  card: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  cardMedia: {
-    paddingTop: '56.25%' // 16:9
-  },
-  cardContent: {
-    flexGrow: 1
-  },
   description: {
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
@@ -61,55 +44,76 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6)
+  },
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    gap: '50px',
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row'
+    }
+  },
+  imgContainer: {
+    height: '500px',
+    width: '80%',
+    position: 'relative',
+    flex: 1,
+    [theme.breakpoints.up('sm')]: {
+      height: '400px',
+      width: '200px'
+    }
+  },
+  image: {
+    objectFit: 'contain',
+    height: '100%',
+    width: '100%'
+  },
+  textContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    textAlign: 'center',
+    [theme.breakpoints.up('sm')]: {
+      textAlign: 'left'
+    }
+  },
+  gap: {
+    marginTop: '100px'
+  },
+  font: {
+    fontSize: '14px',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '16px'
+    }
   }
 }));
-
-const cards = [
-  {
-    name: 'Login',
-    description: 'Log in or register users for your app.',
-    img: 'Login.PNG',
-    path: 'login'
-  },
-  {
-    name: 'Profile',
-    description: "A profile dashboard page for viewing a user's data",
-    img: 'Profile.PNG',
-    path: 'profile'
-  },
-  {
-    name: 'Forum',
-    description:
-      'A detailed analysis of business revenue with actions and integrated expense adding.',
-    img: 'Dashboard.PNG',
-    path: 'forum'
-  },
-  {
-    name: 'Redux Table',
-    description:
-      'A functioning CRUD table to add, delete and edit multiple users.',
-    img: 'Crud.PNG',
-    path: 'people'
-  },
-  {
-    name: 'Components',
-    description: 'View all components built for this theme.',
-    img: 'components.PNG',
-    path: 'components'
-  }
-];
 
 export function Home() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // const user = false; // TODO: set user selector
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
   const user = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     getForums(dispatch);
     getUsers(dispatch);
   }, [dispatch]);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768);
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -177,41 +181,85 @@ export function Home() {
           </Content>
         </div>
         <Content>
-          <Container className={classes.cardGrid} maxWidth='md'>
-            {/* End hero unit */}
-            <Grid container spacing={4}>
-              {cards.map((card) => (
-                <Grid item key={card.name} xs={12} sm={6} md={4}>
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.cardMedia}
-                      image={`img/${card.img}`}
-                      title='Image title'
-                    />
-                    <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant='h5' component='h2'>
-                        {card.name}
-                      </Typography>
-                      <Typography className={classes.description}>
-                        {card.description}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button
-                        color='secondary'
-                        variant='outlined'
-                        component={RouterLink}
-                        to={`/${card.path}`}
-                        fullWidth
-                      >
-                        View
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Container>
+          <Fade left>
+            <div className={classes.container}>
+              <div className={classes.imgContainer}>
+                <img className={classes.image} src='img/nexus.png' alt='img' />
+              </div>
+              <div className={classes.textContainer}>
+                <Typography variant='h4'>
+                  What is BRACU Knowledge Nexus?
+                </Typography>
+                <Typography variant='body1' className={classes.font}>
+                  BRACU Knowledge Nexus is a platform for sharing knowledge and
+                  meaningful discussions. It is a place where you can share your
+                  thoughts and ideas with others. You can also ask questions and
+                  get answers from others. You can also share your knowledge by
+                  answering questions. You can also upvote and downvote answers
+                  and questions. You can also comment on answers and questions.
+                </Typography>
+              </div>
+            </div>
+          </Fade>
+
+          <Fade right>
+            {!isMobile ? (
+              <div className={`${classes.container} ${classes.gap}`}>
+                <div className={classes.textContainer}>
+                  <Typography variant='h4'>Share or browse forums.</Typography>
+                  <Typography variant='body1' className={classes.font}>
+                    Browse through the forums and find the ones that interest
+                    you. Or create your own forum and share your thoughts with
+                    others like you.
+                  </Typography>
+                </div>
+                <div className={classes.imgContainer}>
+                  <img
+                    className={classes.image}
+                    src='img/Forum.png'
+                    alt='img'
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className={`${classes.container} ${classes.gap}`}>
+                <div className={classes.imgContainer}>
+                  <img
+                    className={classes.image}
+                    src='img/Forum.png'
+                    alt='img'
+                  />
+                </div>
+                <div className={classes.textContainer}>
+                  <Typography variant='h4'>Share or browse forums.</Typography>
+                  <Typography variant='body1' className={classes.font}>
+                    Browse through the forums and find the ones that interest
+                    you. Or create your own forum and share your thoughts with
+                    others like you.
+                  </Typography>
+                </div>
+              </div>
+            )}
+          </Fade>
+
+          <Fade left>
+            <div className={`${classes.container} ${classes.gap}`}>
+              <div className={classes.imgContainer}>
+                <img
+                  className={classes.image}
+                  src='img/Profile.png'
+                  alt='img'
+                />
+              </div>
+              <div className={classes.textContainer}>
+                <Typography variant='h4'>Customize your profile.</Typography>
+                <Typography variant='body1' className={classes.font}>
+                  Customize user profile and display your skills and
+                  information.
+                </Typography>
+              </div>
+            </div>
+          </Fade>
         </Content>
       </main>
       {/* Footer */}
