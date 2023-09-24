@@ -1,3 +1,4 @@
+import { Switch } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +20,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Link as RouterLink, useLocation } from 'react-router-dom';
 import { logout } from '../Redux/userRedux';
-import PalettePicker from '../Theme/PalettePicker';
 
 export const drawerWidth = 240;
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-      backgroundColor: `#${theme.palette.primary[300].substring(1)}77`
+      backgroundColor: `#${theme.palette.primary[300]}`
     }
   },
   menuButton: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResponsiveDrawer(props) {
-  const { container, setCurrentTheme, currentTheme } = props;
+  const { container, check, change } = props;
   const classes = useStyles();
   const theme = useTheme();
   const { pathname } = useLocation();
@@ -213,10 +213,18 @@ function ResponsiveDrawer(props) {
               BRACU Knowledge Nexus
             </Typography>
             <div style={{ flexGrow: 1 }}></div>
-            <PalettePicker
+            <Switch
+              defaultChecked
+              color='default'
+              inputProps={{ 'aria-label': 'checkbox with default color' }}
+              onChange={change}
+              checked={check}
+            />
+
+            {/* <PalettePicker
               setCurrentTheme={setCurrentTheme}
               currentTheme={currentTheme}
-            />
+            /> */}
             {/* {user && (
               <Badge badgeContent={4} color='primary'>
                 <MailIcon />
