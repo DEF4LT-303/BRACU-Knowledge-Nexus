@@ -13,10 +13,10 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-
     justifyContent: 'center',
+    // height: '100%',
     padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.dialog.main
   },
   wrapper: {
     width: '100%',
@@ -44,6 +44,23 @@ const useStyles = makeStyles((theme) => ({
     width: '60%',
     margin: theme.spacing(1),
     padding: theme.spacing(1),
+    '& .MuiOutlinedInput-input::placeholder': {
+      color: theme.palette.fontColor.main
+    },
+    '& input': {
+      color: theme.palette.fontColor.main
+    },
+    '& .MuiInputLabel-root': {
+      color: theme.palette.fontColor.main
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: theme.palette.secondary.main
+      }
+      // '&:hover fieldset': {
+      //   borderColor: theme.palette.secondary.main
+      // }
+    },
     [theme.breakpoints.down('sm')]: {
       width: '100%'
     }
@@ -58,7 +75,11 @@ const useStyles = makeStyles((theme) => ({
   customBtn: {
     minWidth: '100px',
     height: '40px',
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
+    '&:disabled': {
+      color: `${theme.palette.fontColor.main} !important`,
+      cursor: 'not-allowed'
+    }
   },
 
   postDoubtsTagsWrapper: {
@@ -72,12 +93,14 @@ const useStyles = makeStyles((theme) => ({
   homePostTags: {
     margin: theme.spacing(1),
     cursor: 'pointer',
+    backgroundColor: `${theme.palette.secondary.main} !important`,
+    color: `${theme.palette.fontColor.main} !important`,
     '&.active': {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
+      backgroundColor: `${theme.palette.primary.main} !important`,
+      color: `${theme.palette.common.white} !important`,
       '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white
+        backgroundColor: `${theme.palette.primary.main} !important`,
+        color: `${theme.palette.common.white} !important`
       }
     }
   },
@@ -90,8 +113,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     border: '1px solid #ccc',
-    borderRadius: '4px'
-    // margin: theme.spacing(1)
+    borderRadius: '4px',
+    '& .ql-editor': {
+      color: theme.palette.fontColor.main
+    },
+    '& .ql-editor::placeholder': {
+      color: `${theme.palette.fontColor.main} !important`
+    }
   }
 }));
 

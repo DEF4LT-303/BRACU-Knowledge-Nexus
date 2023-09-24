@@ -46,6 +46,9 @@ export default function App() {
       background: {
         default: darkMode ? '#121212' : '#f7f7f7',
         paper: darkMode ? '#1c1c1c' : '#fff'
+      },
+      dialog: {
+        main: darkMode ? '#1c1c1c' : '#fff'
       }
     }
   });

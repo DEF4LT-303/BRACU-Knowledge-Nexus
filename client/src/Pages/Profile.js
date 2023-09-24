@@ -20,7 +20,7 @@ import { findUser } from '../Redux/apiCalls';
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright Â© '}
+      {'Copyright © '}
       <Link color='inherit' href='https://react.school/'></Link>{' '}
       {new Date().getFullYear()}
       {'.'}
