@@ -41,6 +41,8 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     height: 46,
     fontSize: 14,
+    color: theme.palette.text.primary,
+    background: 'transparent',
     padding: '4px 0 0 0',
     '&:focus': {
       outline: 'transparent'
@@ -53,36 +55,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 8,
     gap: '5px'
   }
-  // tag: {
-  //   width: 'auto',
-  //   height: 32,
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   color: '#fff',
-  //   padding: '0 8px',
-  //   fontSize: 14,
-  //   listStyle: 'none',
-  //   borderRadius: 6,
-  //   margin: '0 8px 8px 0',
-  //   background: '#0052cc',
-  //   '& .tag-title': {
-  //     marginTop: 3
-  //   },
-  //   '& .tag-close-icon': {
-  //     display: 'block',
-  //     width: 16,
-  //     height: 16,
-  //     lineHeight: '16px',
-  //     textAlign: 'center',
-  //     fontSize: 14,
-  //     marginLeft: 8,
-  //     color: '#0052cc',
-  //     borderRadius: '50%',
-  //     background: '#fff',
-  //     cursor: 'pointer'
-  //   }
-  // }
 }));
 
 export default function PeopleDialog({ data, render, onSave }) {

@@ -13,10 +13,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',
-
     justifyContent: 'center',
     padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.dialog.main
   },
   wrapper: {
     width: '100%',
@@ -35,15 +34,38 @@ const useStyles = makeStyles((theme) => ({
   section: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
   },
   customPostInputField: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    width: '60%',
-    margin: theme.spacing(1),
+    width: '100%',
+    // margin: theme.spacing(1),
     padding: theme.spacing(1),
+    borderColor: 'red',
+    '& .MuiOutlinedInput-input::placeholder': {
+      color: theme.palette.fontColor.main
+    },
+    '& input': {
+      color: theme.palette.fontColor.main
+    },
+    '& .MuiInputLabel-root': {
+      color: theme.palette.fontColor.main
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: theme.palette.primary.main
+      }
+      // '&:hover fieldset': {
+      //   borderColor: theme.palette.secondary.main
+      // }
+    },
     [theme.breakpoints.down('sm')]: {
       width: '100%'
     }
@@ -52,13 +74,20 @@ const useStyles = makeStyles((theme) => ({
   btnGroup: {
     display: 'flex',
     alignItems: 'right',
-    justifyContent: 'flex-end',
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(3.5),
+    [theme.breakpoints.down('sm')]: {
+      marginTop: theme.spacing(0.1)
+    }
   },
+
   customBtn: {
     minWidth: '100px',
     height: '40px',
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
+    '&:disabled': {
+      color: `${theme.palette.fontColor.main} !important`,
+      cursor: 'not-allowed'
+    }
   },
 
   postDoubtsTagsWrapper: {
@@ -72,12 +101,14 @@ const useStyles = makeStyles((theme) => ({
   homePostTags: {
     margin: theme.spacing(1),
     cursor: 'pointer',
+    backgroundColor: `${theme.palette.secondary.main} !important`,
+    color: `${theme.palette.fontColor.main} !important`,
     '&.active': {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.common.white,
+      backgroundColor: `${theme.palette.primary.main} !important`,
+      color: `${theme.palette.common.white} !important`,
       '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white
+        backgroundColor: `${theme.palette.primary.main} !important`,
+        color: `${theme.palette.common.white} !important`
       }
     }
   },
@@ -90,8 +121,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     border: '1px solid #ccc',
-    borderRadius: '4px'
-    // margin: theme.spacing(1)
+    borderRadius: '4px',
+    '& .ql-editor': {
+      color: theme.palette.fontColor.main
+    },
+    '& .ql-editor.ql-blank::before': {
+      color: theme.palette.fontColor.main
+    }
   }
 }));
 
@@ -255,14 +291,23 @@ export default function CreateForum({ forumToEdit, onClose }) {
     );
   }, [doubtTitle, newDescription]);
 
+  const handleClose = () => {
+    setOpen(false);
+    onClose();
+  };
+
   return (
     <>
       <SnackbarProvider maxSnack={3} />
       <Dialog
         disableEnforceFocus
-        fullScreen
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={true}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxWidth: '80%' // Set the maximum width as desired
+          }
+        }}
       >
         <div className={classes.container}>
           <div className={classes.wrapper}>

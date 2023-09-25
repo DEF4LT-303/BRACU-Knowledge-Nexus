@@ -21,7 +21,7 @@ import { getUsers } from '../Redux/apiCalls';
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright Â© '}
+      {'Copyright © '}
       <Link color='inherit' href='https://react.school/'></Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -82,12 +82,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     flexGrow: 1,
     padding: theme.spacing(3),
-    background: '#f0f0f0',
+    backgroundColor: theme.palette.secondary.main,
     borderRadius: '5px'
   },
   cardTitle: {
     marginBottom: theme.spacing(1),
     display: 'inline-block',
+    color: theme.palette.fontColor.main,
     borderBottom: `2px solid ${theme.palette.primary.main}`,
     paddingBottom: theme.spacing(0.1),
     fontWeight: 'bold'
@@ -117,8 +118,7 @@ const useStyles = makeStyles((theme) => ({
   linkTitle: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(-1),
-    fontWeight: 'bold',
-    color: '#000'
+    fontWeight: 'bold'
   },
   link: {
     color: theme.palette.primary.main,

@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
 import {
   Redirect,
@@ -11,10 +10,12 @@ import { Forum } from './Pages/Forum';
 import { Home } from './Pages/Home';
 import { SignIn } from './Pages/SignIn';
 import People from './Pages/people';
-import { useTheme } from './theme';
 
 import DateFnsUtils from '@date-io/date-fns';
+import { blue } from '@material-ui/core/colors';
+import { ThemeProvider, createTheme } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Components from './Components/Components';
 import FeedbackPage from './Components/Feedback';
@@ -27,9 +28,40 @@ import UserProfile from './Pages/UserProfile';
 import { DataProvider } from './Providers/DataProvider';
 
 export default function App() {
-  const [currentTheme, setCurrentTheme] = useTheme();
+  // const [currentTheme, setCurrentTheme] = useTheme();
+  const [darkMode, setDarkMode] = useState(false);
 
-  // const user = true; // TODO: set user selector
+  const theme = createTheme({
+    palette: {
+      type: darkMode ? 'dark' : 'light',
+      primary: {
+        main: darkMode ? '#54c0e6' : blue[500]
+      },
+      secondary: {
+        main: darkMode ? '#434343' : '#f0f0f0',
+        secondary: darkMode ? '#3f3f3f' : '#e9ecef'
+      },
+      fontColor: {
+        main: darkMode ? '#dedede' : '#3c3c3c'
+      },
+      background: {
+        default: darkMode ? '#121212' : '#f7f7f7',
+        paper: darkMode ? '#1c1c1c' : '#fff'
+      },
+      dialog: {
+        main: darkMode ? '#1c1c1c' : '#fff'
+      },
+      paper: {
+        main: darkMode ? '#282828' : '#1772cd07',
+        secondary: darkMode ? '#b5e2fa' : '#1773cf23'
+      },
+      codeblock: {
+        main: darkMode ? '#575757' : '#dee2e6',
+        secondary: darkMode ? '#575757' : '#f5f5f5'
+      }
+    }
+  });
+
   const user = useSelector((state) => state.user.currentUser);
 
   const admin = user?.role === 'admin';
@@ -37,13 +69,13 @@ export default function App() {
   return (
     <>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ThemeProvider theme={currentTheme}>
+        <ThemeProvider theme={theme}>
           <DataProvider>
             <Router>
               <div>
                 <AppBarAndDrawer
-                  currentTheme={currentTheme}
-                  setCurrentTheme={setCurrentTheme}
+                  check={darkMode}
+                  change={() => setDarkMode(!darkMode)}
                 />
 
                 <Switch>
@@ -79,8 +111,8 @@ export default function App() {
                   </Route>
                   <Route path='/settings'>
                     <Settings
-                      currentTheme={currentTheme}
-                      setCurrentTheme={setCurrentTheme}
+                    // currentTheme={currentTheme}
+                    // setCurrentTheme={setCurrentTheme}
                     />
                   </Route>
                   <Route path='/feedback'>

@@ -16,10 +16,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import Alert from '@mui/material/Alert';
 import React, { useState } from 'react';
+import DarkModeToggle from 'react-dark-mode-toggle';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Link as RouterLink, useLocation } from 'react-router-dom';
 import { logout } from '../Redux/userRedux';
-import PalettePicker from '../Theme/PalettePicker';
 
 export const drawerWidth = 240;
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-      backgroundColor: `#${theme.palette.primary[300].substring(1)}77`
+      backgroundColor: 'rgba(84, 192, 230, 0.3) !important'
     }
   },
   menuButton: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResponsiveDrawer(props) {
-  const { container, setCurrentTheme, currentTheme } = props;
+  const { container, check, change } = props;
   const classes = useStyles();
   const theme = useTheme();
   const { pathname } = useLocation();
@@ -213,10 +213,7 @@ function ResponsiveDrawer(props) {
               BRACU Knowledge Nexus
             </Typography>
             <div style={{ flexGrow: 1 }}></div>
-            <PalettePicker
-              setCurrentTheme={setCurrentTheme}
-              currentTheme={currentTheme}
-            />
+            <DarkModeToggle onChange={change} checked={check} size={60} />
             {/* {user && (
               <Badge badgeContent={4} color='primary'>
                 <MailIcon />

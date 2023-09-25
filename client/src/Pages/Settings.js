@@ -1,17 +1,12 @@
-import React from "react";
-import Content from "../Dashboard/Content";
-import Typography from "@material-ui/core/Typography";
-import PalettePicker from "../Theme/PalettePicker";
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import Content from '../Dashboard/Content';
 
 export default function ({ currentTheme, setCurrentTheme }) {
   return (
     <Content>
-      <Typography variant="h3"> Settings </Typography>
-      <Typography variant="h6"> Theme Color </Typography>
-      <PalettePicker
-        currentTheme={currentTheme}
-        setCurrentTheme={setCurrentTheme}
-      />
+      <Typography variant='h3'> Coming soon </Typography>
+      <Typography variant='h6'> Nothing to see here yet </Typography>
     </Content>
   );
 }
