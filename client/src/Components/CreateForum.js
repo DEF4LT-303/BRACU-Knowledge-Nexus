@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    // height: '100%',
     padding: theme.spacing(2),
     backgroundColor: theme.palette.dialog.main
   },
@@ -35,15 +34,21 @@ const useStyles = makeStyles((theme) => ({
   section: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
   },
   customPostInputField: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    width: '60%',
-    margin: theme.spacing(1),
+    width: '100%',
+    // margin: theme.spacing(1),
     padding: theme.spacing(1),
+    borderColor: 'red',
     '& .MuiOutlinedInput-input::placeholder': {
       color: theme.palette.fontColor.main
     },
@@ -55,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderColor: theme.palette.secondary.main
+        borderColor: theme.palette.primary.main
       }
       // '&:hover fieldset': {
       //   borderColor: theme.palette.secondary.main
@@ -69,9 +74,12 @@ const useStyles = makeStyles((theme) => ({
   btnGroup: {
     display: 'flex',
     alignItems: 'right',
-    justifyContent: 'flex-end',
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(3.5),
+    [theme.breakpoints.down('sm')]: {
+      marginTop: theme.spacing(0.1)
+    }
   },
+
   customBtn: {
     minWidth: '100px',
     height: '40px',
@@ -283,15 +291,15 @@ export default function CreateForum({ forumToEdit, onClose }) {
     );
   }, [doubtTitle, newDescription]);
 
+  const handleClose = () => {
+    setOpen(false);
+    onClose();
+  };
+
   return (
     <>
       <SnackbarProvider maxSnack={3} />
-      <Dialog
-        disableEnforceFocus
-        fullScreen
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={true}
-      >
+      <Dialog disableEnforceFocus open={true} onClose={handleClose}>
         <div className={classes.container}>
           <div className={classes.wrapper}>
             <div className={classes.section}>
