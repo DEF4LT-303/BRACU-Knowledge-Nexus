@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContent: {
     '& pre': {
-      backgroundColor: '#f5f5f5',
+      backgroundColor: theme.palette.codeblock.secondary,
       padding: '10px',
       overflow: 'auto',
       fontSize: '14px'
@@ -89,6 +89,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: 0,
       fontStyle: 'italic'
     }
+  },
+  fabIcon: {
+    backgroundColor: `${theme.palette.primary.main} !important`
   }
 }));
 
@@ -114,7 +117,11 @@ function AddForum() {
       }}
     >
       {/* You can customize the Fab component as needed */}
-      <Fab color='primary' aria-label='create forum' onClick={handleClick}>
+      <Fab
+        className={useStyles().fabIcon}
+        aria-label='create forum'
+        onClick={handleClick}
+      >
         <CreateIcon />
       </Fab>
       {open && <CreateForum onClose={handleClose} />}

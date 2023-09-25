@@ -38,7 +38,8 @@ export default function App() {
         main: darkMode ? '#54c0e6' : blue[500]
       },
       secondary: {
-        main: darkMode ? '#434343' : '#f0f0f0'
+        main: darkMode ? '#434343' : '#f0f0f0',
+        secondary: darkMode ? '#3f3f3f' : '#e9ecef'
       },
       fontColor: {
         main: darkMode ? '#dedede' : '#3c3c3c'
@@ -49,6 +50,14 @@ export default function App() {
       },
       dialog: {
         main: darkMode ? '#1c1c1c' : '#fff'
+      },
+      paper: {
+        main: darkMode ? '#282828' : '#1772cd07',
+        secondary: darkMode ? '#b5e2fa' : '#1773cf23'
+      },
+      codeblock: {
+        main: darkMode ? '#575757' : '#dee2e6',
+        secondary: darkMode ? '#575757' : '#f5f5f5'
       }
     }
   });

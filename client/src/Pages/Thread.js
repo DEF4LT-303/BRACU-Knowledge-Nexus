@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-    backgroundColor: '#1772cd07',
+    backgroundColor: `${theme.palette.paper.main} !important`,
     borderRadius: '0.3rem',
     width: '100%'
   },
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Segoe UI',
     fontWeight: 600,
     fontSize: 'large',
-    color: '#000000'
+    color: theme.palette.fontColor.main
   },
 
   votes_wrapper: {
@@ -100,7 +100,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
     fontWeight: 600,
     fontSize: 'larger',
-    margin: '0.1rem 0'
+    margin: '0.1rem 0',
+    color: theme.palette.fontColor.main
   },
   owner_info_wrapper: {
     display: 'flex',
@@ -112,13 +113,14 @@ const useStyles = makeStyles((theme) => ({
   doubt_owner_name: {
     fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif !important',
     fontSize: 'medium !important',
-    fontWeight: '500 !important'
+    fontWeight: '500 !important',
+    color: theme.palette.fontColor.main
   },
-  doubt_posted_time: {
-    fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif !important',
-    fontSize: 'medium !important'
-    // fontWeight: '500 !important'
-  },
+  // doubt_posted_time: {
+  //   fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif !important',
+  //   fontSize: 'medium !important',
+  //   fontWeight: '500 !important'
+  // },
   doubt_main_wrapper: {
     display: 'flex',
     flexDirection: 'column',
@@ -126,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
   },
   doubt_description_outer: {
     width: '100% !important',
-    backgroundColor: 'rgba(0, 0, 0, 0.03) !important',
+    backgroundColor: theme.palette.secondary.secondary,
     borderRadius: '0.3rem !important',
     padding: '0.1rem',
     [theme.breakpoints.down('sm')]: {
@@ -136,13 +138,14 @@ const useStyles = makeStyles((theme) => ({
   doubt_description_wrapper: {
     width: 'auto !important',
     margin: '0.1rem 2rem !important',
+    color: theme.palette.fontColor.main,
     '& pre': {
-      backgroundColor: '#555',
+      backgroundColor: theme.palette.codeblock.main,
       padding: '10px',
       overflow: 'auto',
       fontSize: '14px',
       borderRadius: '0.3rem',
-      color: '#fff'
+      color: theme.palette.fontColor.main
     },
     '& blockquote': {
       borderLeft: '5px solid #ccc',
@@ -170,11 +173,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between !important',
     alignItems: 'center',
     width: '100% !important',
-    backgroundColor: '#1773cf23 !important'
+    backgroundColor: theme.palette.paper.secondary
   },
   doubt_action_btn: {
     fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
     fontWeight: '600',
+    color: '#000000 !important',
+    '&:disabled': {
+      color: '#000000 !important',
+      opacity: '0.5 !important'
+    },
     '&:hover': {
       backgroundColor: 'transparent'
     }
@@ -187,7 +195,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   customChip: {
-    backgroundColor: '#1772cd27 !important',
+    backgroundColor: theme.palette.paper.secondary,
     color: '#000000 !important'
   },
   custom_btn: {
@@ -196,6 +204,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   doubt_posted_time: {
+    color: `${theme.palette.fontColor.main} !important`,
     [theme.breakpoints.down('sm')]: {
       wordWrap: 'break-word',
       marginTop: theme.spacing(1)
@@ -206,6 +215,19 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center'
+    }
+  },
+
+  joditEditor: {
+    width: '100%',
+    height: 'auto',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    '& .ql-editor': {
+      color: theme.palette.fontColor.main
+    },
+    '& .ql-editor.ql-blank::before': {
+      color: theme.palette.fontColor.main
     }
   },
 
@@ -418,11 +440,7 @@ export function Thread() {
         )}
       </div>
       <div className={classes.container}>
-        <Paper
-          className={classes.paper}
-          style={{ backgroundColor: '#1772cd07' }}
-          elevation={0}
-        >
+        <Paper className={classes.paper} elevation={0}>
           <div className={classes.sectionWrapper}>
             <Button
               onClick={() => history.push('/forum')}
@@ -613,7 +631,7 @@ export function Thread() {
               </div>
             </div>
             <div className='comment_editor_outer'>
-              <div className='comment_editor_wrapper'>
+              <div className={classes.joditEditor}>
                 <ReactQuill
                   value={reply}
                   onChange={(e) => {
