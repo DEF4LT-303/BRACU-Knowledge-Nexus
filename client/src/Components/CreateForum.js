@@ -125,8 +125,8 @@ const useStyles = makeStyles((theme) => ({
     '& .ql-editor': {
       color: theme.palette.fontColor.main
     },
-    '& .ql-editor::placeholder': {
-      color: `${theme.palette.fontColor.main} !important`
+    '& .ql-editor.ql-blank::before': {
+      color: theme.palette.fontColor.main
     }
   }
 }));
@@ -299,7 +299,16 @@ export default function CreateForum({ forumToEdit, onClose }) {
   return (
     <>
       <SnackbarProvider maxSnack={3} />
-      <Dialog disableEnforceFocus open={true} onClose={handleClose}>
+      <Dialog
+        disableEnforceFocus
+        open={true}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxWidth: '80%' // Set the maximum width as desired
+          }
+        }}
+      >
         <div className={classes.container}>
           <div className={classes.wrapper}>
             <div className={classes.section}>
