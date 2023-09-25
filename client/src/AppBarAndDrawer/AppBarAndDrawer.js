@@ -1,4 +1,3 @@
-import { Switch } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,6 +16,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import Alert from '@mui/material/Alert';
 import React, { useState } from 'react';
+import DarkModeToggle from 'react-dark-mode-toggle';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Link as RouterLink, useLocation } from 'react-router-dom';
 import { logout } from '../Redux/userRedux';
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-      backgroundColor: `#${theme.palette.primary[300]}`
+      backgroundColor: 'rgba(84, 192, 230, 0.3) !important'
     }
   },
   menuButton: {
@@ -213,18 +213,7 @@ function ResponsiveDrawer(props) {
               BRACU Knowledge Nexus
             </Typography>
             <div style={{ flexGrow: 1 }}></div>
-            <Switch
-              defaultChecked
-              color='default'
-              inputProps={{ 'aria-label': 'checkbox with default color' }}
-              onChange={change}
-              checked={check}
-            />
-
-            {/* <PalettePicker
-              setCurrentTheme={setCurrentTheme}
-              currentTheme={currentTheme}
-            /> */}
+            <DarkModeToggle onChange={change} checked={check} size={60} />
             {/* {user && (
               <Badge badgeContent={4} color='primary'>
                 <MailIcon />
